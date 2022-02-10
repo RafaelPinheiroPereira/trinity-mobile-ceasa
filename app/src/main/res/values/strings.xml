@@ -1,0 +1,31 @@
+<resources>
+    <string name="app_name">RM Alimentos</string>
+    <string name="login">Login</string>
+    <string name="username">Matrícula</string>
+    <string name="password">Senha</string>
+    <string name="todo">TODO</string>
+    <string name="employee_file_not_found_message_alert">O arquivo: PdaVendedor.txt não foi encontrado.\n
+        Diretório da aplicação: Armazenamento Interno/TRINITY_MOBILE</string>
+    <string name="title_activity_home">HomeActivity</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="first_fragment_label">First Fragment</string>
+    <string name="second_fragment_label">Second Fragment</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+    <string name="routes">Rotas</string>
+
+    <string name="hello_first_fragment">Hello first fragment</string>
+    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+    <string name="open_drawer">Aberto</string>
+    <string name="close_drawer">Fechado</string>
+    <string name="upload">Importação</string>
+    <string name="donwload">Exportação</string>
+    <string name="clients">Clientes</string>
+    <string name="exit">Sair</string>
+    <string name="request">Pedidos</string>
+
+
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="ok">Ok</string>
+    <string name="action_search">Pesquisar nome,razão social,código,cnpj...</string>
+</resources>
