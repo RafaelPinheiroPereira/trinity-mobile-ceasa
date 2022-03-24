@@ -47,7 +47,7 @@ public class HomeAdapter extends RecyclerView.Adapter<MyViewHolder> implements F
   public void onBindViewHolder(@NonNull final MyViewHolder holder, final int position) {
 
       holder.txtClientId.setText(String.format("%05d", clientsFiltereds.get(position).getId()));
-      holder.txtNameFantasy.setText(clientsFiltereds.get(position).getName());
+      holder.txtName.setText(clientsFiltereds.get(position).getName());
 
 
   }
@@ -97,11 +97,10 @@ public class HomeAdapter extends RecyclerView.Adapter<MyViewHolder> implements F
 
   public class MyViewHolder extends RecyclerView.ViewHolder implements OnClickListener {
 
-    @BindView(R.id.txt_adress)
-    public TextView txtAdress;
+
 
     @BindView(R.id.txt_fantasy_name)
-    public TextView txtNameFantasy;
+    public TextView txtName;
 
     @BindView(R.id.txt_client_id)
     public TextView txtClientId;

@@ -80,8 +80,6 @@ public class HomeFragment extends Fragment
 
   DialogFragment dialogDateSaleFragment = new DateSalePickerDialog();
 
-  ArrayAdapter routesAdapter;
-
   HomeAdapter homeAdapter;
 
   private SearchView searchView = null;
@@ -264,8 +262,6 @@ public class HomeFragment extends Fragment
   private void setAdapter() {
     LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
     rcvHome.setLayoutManager(linearLayoutManager);
-    routesAdapter =
-        new ArrayAdapter(getContext(), android.R.layout.simple_list_item_1, new ArrayList());
     homeAdapter = new HomeAdapter(getActivity(), new ArrayList<>());
     rcvHome.setAdapter(homeAdapter);
   }
@@ -360,11 +356,7 @@ public class HomeFragment extends Fragment
   @Override
   public void onLongPressClickListener(final View view, final int position) {}
 
-  @OnItemSelected(R.id.spn_route)
-  void onRouteItemSelected(int position) {
-    setRouteSpinnerPosition(position);
-    loadClientsByGroupChecked();
-  }
+
 
   private void loadClientsByGroupChecked() {
     if (rdAll.isChecked()) {

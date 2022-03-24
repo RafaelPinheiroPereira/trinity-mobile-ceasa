@@ -46,26 +46,19 @@
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:padding="10dp"
+                    android:orientation="vertical">
 
 
                     <TextView
-                        android:id="@+id/txt_cliente_id"
+                        android:id="@+id/txt_cliente_dados"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
-                        android:text="Codigo Cliente"
+                        android:text="Dados do Cliente:"
                         android:textColor="@color/textColorPrimary"
                         android:textSize="14sp" />
 
-                    <TextView
-                        android:id="@+id/txt_name"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:text="Nome Fantasia"
-                        android:textColor="@color/textColorPrimary"
-                        android:textSize="14sp" />
 
                 </LinearLayout>
 
@@ -75,6 +68,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
+                    android:padding="10dp"
                     android:orientation="vertical">
 
                     <com.google.android.material.textfield.TextInputLayout
@@ -97,7 +91,7 @@
                             android:clickable="true"
                             android:editable="false"
                             android:textColor="@android:color/primary_text_light"
-                            android:textSize="14sp" />
+                            android:textSize="18sp" />
                     </com.google.android.material.textfield.TextInputLayout>
                 </LinearLayout>
 
@@ -107,13 +101,17 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="15dp"
+                    android:padding="10dp"
                     android:orientation="horizontal">
 
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
                         style="@style/TextInputLayout"
-                        app:endIconDrawable="@mipmap/ic_clear_black_48dp"
+                        app:endIconDrawable="@mipmap/ic_vender_48"
+                        app:endIconMode="custom"
+                        app:endIconCheckable="true"
+                        app:endIconTint="@color/colorPrimaryDark"
                         android:layout_height="wrap_content">
                         <br.com.app.ceasa.utils.CurrencyEditText
 
@@ -123,7 +121,6 @@
                             android:layout_gravity="center_vertical"
                             android:digits="0123456789."
                             android:hint="Valor Base"
-                            android:enabled="false"
                             android:inputType="number|textMultiLine"
                             android:lines="1"
                             android:maxLength="9"
@@ -147,6 +144,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="15dp"
+                    android:padding="10dp"
                     android:orientation="vertical">
 
                     <com.google.android.material.textfield.TextInputLayout

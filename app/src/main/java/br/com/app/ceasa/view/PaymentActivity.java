@@ -33,11 +33,8 @@ public class PaymentActivity extends AppCompatActivity {
   @BindView(R.id.toolbar)
   Toolbar toolbar;
 
-  @BindView(R.id.txt_cliente_id)
-  TextView txtClientId;
-
-  @BindView(R.id.txt_name)
-  TextView txtName;
+  @BindView(R.id.txt_cliente_dados)
+  TextView dataClient;
 
   @BindView(R.id.cet_price)
   CurrencyEditText cetPrice;
@@ -91,8 +88,7 @@ public class PaymentActivity extends AppCompatActivity {
 
   /*Preeche os text view com os dados do cliente*/
   private void setClientData() {
-    this.txtClientId.setText("COD. : " + this.paymentViewModel.getClient().getId());
-    this.txtName.setText("  Nome: " + this.paymentViewModel.getClient().getName());
+    this.dataClient.setText("CLIENTE: "+this.paymentViewModel.getClient().getId()+" - " + this.paymentViewModel.getClient().getName());
   }
 
   /*Obtem os dados da HomeActivity*/
