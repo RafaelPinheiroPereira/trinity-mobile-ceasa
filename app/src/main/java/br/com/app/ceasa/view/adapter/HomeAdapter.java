@@ -47,14 +47,9 @@ public class HomeAdapter extends RecyclerView.Adapter<MyViewHolder> implements F
   public void onBindViewHolder(@NonNull final MyViewHolder holder, final int position) {
 
       holder.txtClientId.setText(String.format("%05d", clientsFiltereds.get(position).getId()));
-      holder.txtNameFantasy.setText(clientsFiltereds.get(position).getFantasyName());
-    String strAdress =
-            clientsFiltereds.get(position).getAdress().toString() != null
-                    ? clientsFiltereds.get(position).getAdress().getDescription()
-                + ", "
-                    + clientsFiltereds.get(position).getAdress().getNeighborhood()
-            : "";
-    holder.txtAdress.setText(strAdress);
+      holder.txtNameFantasy.setText(clientsFiltereds.get(position).getName());
+
+
   }
 
   public Client getItem(int position) {
@@ -79,7 +74,7 @@ public class HomeAdapter extends RecyclerView.Adapter<MyViewHolder> implements F
                           .filter(
                                   client->
                                           client
-                                                  .getFantasyName()
+                                                  .getName()
                                                   .toLowerCase()
                                                   .contains(constraint.toString().toLowerCase())
                                                   || String.valueOf(client.getId())

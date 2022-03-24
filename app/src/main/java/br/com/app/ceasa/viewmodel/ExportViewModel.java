@@ -6,10 +6,9 @@ import android.content.Context;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
-import br.com.app.ceasa.repository.EmployeeRepository;
+import br.com.app.ceasa.model.entity.Payment;
 import br.com.app.ceasa.repository.FileManagerRepository;
-import br.com.app.ceasa.repository.SaleItemRepository;
-import br.com.app.ceasa.repository.SaleRepository;
+import br.com.app.ceasa.repository.PaymentRepository;
 import br.com.app.ceasa.tasks.ExportDataTask;
 import br.com.app.ceasa.utils.Singleton;
 import io.reactivex.annotations.NonNull;
@@ -18,108 +17,84 @@ import java.util.List;
 
 public class ExportViewModel extends AndroidViewModel {
 
-    Date initialDate;
+  Date initialDate;
 
-    Date finalDate;
+  Date finalDate;
 
-    SaleRepository saleRepository;
+  PaymentRepository paymentRepository;
 
-    SaleItemRepository saleItemRepository;
+  List<Payment> payments;
 
-    EmployeeRepository employeeRepository;
+  Context context;
 
-    List<Sale> sales;
+  ProgressDialog progressDialog;
 
-    Context context;
+  FileManagerRepository fileManagerRepository;
 
-    ProgressDialog progressDialog;
 
-    FileManagerRepository fileManagerRepository;
+  public ExportViewModel(@NonNull final Application application)
+      throws IllegalAccessException, InstantiationException {
+    super(application);
 
-    Employee employee;
+    fileManagerRepository = Singleton.getInstance(FileManagerRepository.class);
+    paymentRepository = new PaymentRepository(application);
+  }
 
-    public ExportViewModel(@NonNull final Application application)
-            throws IllegalAccessException, InstantiationException {
-        super(application);
-        saleRepository = new SaleRepository(application);
-        saleItemRepository = new SaleItemRepository(application);
-        fileManagerRepository = Singleton.getInstance(FileManagerRepository.class);
-        employeeRepository = new EmployeeRepository(application);
+  public void exportData() {
+    new ExportDataTask(this).execute();
+  }
+
+
+  public LiveData<List<Payment>> searchDataToExportByDate() {
+    return this.paymentRepository.findDataToExportByDate(this.getInitialDate(), this.getFinalDate());
+  }
+
+  public Date getInitialDate() {
+    return initialDate;
+  }
+
+  public void setInitialDate(final Date initialDate) {
+    this.initialDate = initialDate;
+  }
+
+  public Date getFinalDate() {
+    return finalDate;
+  }
+
+  public void setFinalDate(final Date finalDate) {
+    this.finalDate = finalDate;
+  }
+
+  public List<Payment> getPayments() {
+    return payments;
+  }
+
+  public void setPayments(final List<Payment> payments) {
+    this.payments = payments;
+  }
+
+  public ProgressDialog getProgressDialog() {
+    if (progressDialog == null) {
+      progressDialog = new ProgressDialog(this.getContext());
     }
 
-    public void exportData() {
-        new ExportDataTask(this).execute();
-    }
+    return progressDialog;
+  }
 
-    public void loadAllSaleItem() {
-        this.getSales()
-                .forEach(
-                        sale->{
-                            sale.setSaleItemList(this.saleItemRepository.findItensToExport(sale.getId()));
-                        });
-    }
+  public Context getContext() {
+    return context;
+  }
 
-    public LiveData<List<Sale>> searchDataToExportByDate() {
-        return this.saleRepository.findDataToExportByDate(this.getInitialDate(), this.getFinalDate());
-    }
+  public void setContext(final Context context) {
+    this.context = context;
+  }
 
-    public Date getInitialDate() {
-        return initialDate;
-    }
+  public FileManagerRepository getFileManagerRepository() {
+    return fileManagerRepository;
+  }
 
-    public void setInitialDate(final Date initialDate) {
-        this.initialDate = initialDate;
-    }
+  public void setFileManagerRepository(final FileManagerRepository fileManagerRepository) {
+    this.fileManagerRepository = fileManagerRepository;
+  }
 
-    public Date getFinalDate() {
-        return finalDate;
-    }
-
-    public void setFinalDate(final Date finalDate) {
-        this.finalDate = finalDate;
-    }
-
-    public List<Sale> getSales() {
-        return sales;
-    }
-
-    public void setSales(final List<Sale> sales) {
-        this.sales = sales;
-    }
-
-    public ProgressDialog getProgressDialog() {
-        if (progressDialog == null) {
-            progressDialog = new ProgressDialog(this.getContext());
-        }
-
-        return progressDialog;
-    }
-
-    public Context getContext() {
-        return context;
-    }
-
-    public void setContext(final Context context) {
-        this.context = context;
-    }
-
-    public FileManagerRepository getFileManagerRepository() {
-        return fileManagerRepository;
-    }
-
-    public void setFileManagerRepository(final FileManagerRepository fileManagerRepository) {
-        this.fileManagerRepository = fileManagerRepository;
-    }
-
-    public Employee findSessionEmployee() {
-        return this.employeeRepository.findSessionEmployee();
-    }
-
-    public Employee getEmployee() {
-        return employee;
-    }
-
-    public void setEmployee(final Employee employee) {
-        this.employee = employee;
-    }
 }

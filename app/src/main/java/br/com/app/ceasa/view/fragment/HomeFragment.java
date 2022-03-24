@@ -21,7 +21,7 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.Spinner;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
@@ -40,7 +40,6 @@ import br.com.app.ceasa.utils.Singleton;
 import br.com.app.ceasa.view.AbstractActivity;
 import br.com.app.ceasa.view.PaymentActivity;
 import br.com.app.ceasa.view.adapter.HomeAdapter;
-import br.com.app.ceasa.view.dialog.ClientDataAlertDialog;
 import br.com.app.ceasa.view.dialog.DateSalePickerDialog;
 import br.com.app.ceasa.viewmodel.HomeViewModel;
 import butterknife.BindView;
@@ -60,9 +59,6 @@ public class HomeFragment extends Fragment
   private HomeViewModel mViewModel;
 
   AbstractActivity abstractActivity;
-
-  @BindView(R.id.spn_route)
-  Spinner routeSpinner;
 
   @BindView(R.id.edt_date_sale)
   EditText edtDateSale;
@@ -130,7 +126,6 @@ public class HomeFragment extends Fragment
   @Override
   public void onStart() {
     super.onStart();
-    loadAllRoutes();
     this.setAdapter();
     this.edtDateSale.setOnClickListener(this);
     this.setDateSaleToday();
@@ -145,36 +140,36 @@ public class HomeFragment extends Fragment
     }
 
     rdAll.setOnCheckedChangeListener(
-            (buttonView, isChecked)->{
-              if (isChecked) {
+        (buttonView, isChecked) -> {
+          if (isChecked) {
 
-                getAllClientsChecked();
-              }
-            });
+            getAllClientsChecked();
+          }
+        });
 
     rdPositives.setOnCheckedChangeListener(
-            (buttonView, isChecked)->{
-              if (isChecked) {
+        (buttonView, isChecked) -> {
+          if (isChecked) {
 
-                  try {
-                      getAllPositived();
-                  } catch (ParseException e) {
-                      e.printStackTrace();
-                  }
-              }
-            });
+            try {
+              getAllPositived();
+            } catch (ParseException e) {
+              e.printStackTrace();
+            }
+          }
+        });
 
     rdNotPositives.setOnCheckedChangeListener(
-            (buttonView, isChecked)->{
-              if (isChecked) {
+        (buttonView, isChecked) -> {
+          if (isChecked) {
 
-                  try {
-                      getAllNotPositived();
-                  } catch (ParseException e) {
-                      e.printStackTrace();
-                  }
-              }
-            });
+            try {
+              getAllNotPositived();
+            } catch (ParseException e) {
+              e.printStackTrace();
+            }
+          }
+        });
   }
 
   @Override
@@ -182,31 +177,31 @@ public class HomeFragment extends Fragment
     inflater.inflate(R.menu.home_menu, menu);
     MenuItem searchItem = menu.findItem(R.id.action_search);
     SearchManager searchManager =
-            (SearchManager) getActivity().getSystemService(Context.SEARCH_SERVICE);
+        (SearchManager) getActivity().getSystemService(Context.SEARCH_SERVICE);
 
     if (searchItem != null) {
       searchView = (SearchView) searchItem.getActionView();
     }
     if (searchView != null) {
       searchView.setSearchableInfo(
-              searchManager.getSearchableInfo(getActivity().getComponentName()));
+          searchManager.getSearchableInfo(getActivity().getComponentName()));
 
       queryTextListener =
-              new SearchView.OnQueryTextListener() {
-                @Override
-                public boolean onQueryTextChange(String query) {
+          new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextChange(String query) {
 
-                  homeAdapter.getFilter().filter(query);
-                  return true;
-                }
+              homeAdapter.getFilter().filter(query);
+              return true;
+            }
 
-                @Override
-                public boolean onQueryTextSubmit(String query) {
-                  Log.i("onQueryTextSubmit", query);
-                  homeAdapter.getFilter().filter(query);
-                  return true;
-                }
-              };
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+              Log.i("onQueryTextSubmit", query);
+              homeAdapter.getFilter().filter(query);
+              return true;
+            }
+          };
       searchView.setOnQueryTextListener(queryTextListener);
     }
     super.onCreateOptionsMenu(menu, inflater);
@@ -225,59 +220,52 @@ public class HomeFragment extends Fragment
     return super.onOptionsItemSelected(item);
   }
 
-    private void getAllNotPositived() throws ParseException {
+  private void getAllNotPositived() throws ParseException {
     int position = this.getRouteSpinnerPosition();
-    Route route = (Route) routesAdapter.getItem(position);
     LiveData<List<Client>> clientListLiveData =
-            mViewModel.getNotPositived(edtDateSale.getText().toString(), route);
+        mViewModel.getNotPositived(edtDateSale.getText().toString());
     clientListLiveData.observe(
-            this,
-            clients->{
-              Collections.sort(clients, Comparator.comparing(Client::getRouteOrder));
-              homeAdapter = new HomeAdapter(getActivity(), clients);
+        this,
+        clients -> {
+          Collections.sort(clients, Comparator.comparing(Client::getOrder));
+          homeAdapter = new HomeAdapter(getActivity(), clients);
 
-              rcvHome.setAdapter(homeAdapter);
-              homeAdapter.setRecyclerViewOnClickListenerHack(this);
-            });
+          rcvHome.setAdapter(homeAdapter);
+          homeAdapter.setRecyclerViewOnClickListenerHack(this);
+        });
   }
 
   private void getAllClientsChecked() {
-    if (this.getRouteSpinnerPosition() != 0) {
-      int position = this.getRouteSpinnerPosition();
-        Route route = (Route) routeSpinner.getItemAtPosition(position);
-      loadAllClientByRoute(route);
-    } else {
-      try {
-        this.loadClientsAll();
-      } catch (ExecutionException e) {
-        e.printStackTrace();
-      } catch (InterruptedException e) {
-        e.printStackTrace();
-      }
+
+    try {
+      this.loadClientsAll();
+    } catch (ExecutionException e) {
+      e.printStackTrace();
+    } catch (InterruptedException e) {
+      e.printStackTrace();
     }
   }
 
-    private void getAllPositived() throws ParseException {
-    int position = this.getRouteSpinnerPosition();
-    Route route = (Route) routesAdapter.getItem(position);
-    LiveData<List<Client>> clientListLiveData =
-            mViewModel.getPositivedClients(edtDateSale.getText().toString(), route);
-    clientListLiveData.observe(
-            this,
-            clients->{
-              Collections.sort(clients, Comparator.comparing(Client::getRouteOrder));
-              homeAdapter = new HomeAdapter(getActivity(), clients);
+  private void getAllPositived() throws ParseException {
 
-              rcvHome.setAdapter(homeAdapter);
-              homeAdapter.setRecyclerViewOnClickListenerHack(this);
-            });
+    LiveData<List<Client>> clientListLiveData =
+        mViewModel.getPositivedClients(edtDateSale.getText().toString());
+    clientListLiveData.observe(
+        this,
+        clients -> {
+          Collections.sort(clients, Comparator.comparing(Client::getOrder));
+          homeAdapter = new HomeAdapter(getActivity(), clients);
+
+          rcvHome.setAdapter(homeAdapter);
+          homeAdapter.setRecyclerViewOnClickListenerHack(this);
+        });
   }
 
   private void setAdapter() {
     LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
     rcvHome.setLayoutManager(linearLayoutManager);
     routesAdapter =
-            new ArrayAdapter(getContext(), android.R.layout.simple_list_item_1, new ArrayList());
+        new ArrayAdapter(getContext(), android.R.layout.simple_list_item_1, new ArrayList());
     homeAdapter = new HomeAdapter(getActivity(), new ArrayList<>());
     rcvHome.setAdapter(homeAdapter);
   }
@@ -288,7 +276,7 @@ public class HomeFragment extends Fragment
         .observe(
             this,
             clients -> {
-              Collections.sort(clients, Comparator.comparing(Client::getRouteOrder));
+              Collections.sort(clients, Comparator.comparing(Client::getOrder));
               homeAdapter = new HomeAdapter(getActivity(), clients);
               rcvHome.setAdapter(homeAdapter);
               homeAdapter.setRecyclerViewOnClickListenerHack(this);
@@ -303,7 +291,7 @@ public class HomeFragment extends Fragment
   private void setDateSaleToday() {
     edtDateSale.setText(
         DateUtils.convertDateToStringInFormat_dd_mm_yyyy(new Date(System.currentTimeMillis())));
-      this.mViewModel.setDateSale(edtDateSale.getText().toString());
+    this.mViewModel.setDateSale(edtDateSale.getText().toString());
   }
 
   @Override
@@ -315,22 +303,6 @@ public class HomeFragment extends Fragment
 
       default:
         break;
-    }
-  }
-  /*Exibir detalhes dos clientes*/
-  private void showClientDetails(final Client client) {
-
-    DialogFragment dialog = new ClientDataAlertDialog(client, getActivity());
-
-    /*Se ainda nao foi instanciado*/
-    if (!dialog.isAdded()) {
-      dialog.show(getParentFragmentManager(), "datePicker");
-    }
-    /*Caso ele já tenha sido instanciado eu removo, isto ocorre devida a baixa performace
-     * do equipamento, uma vez que eh solicitado a exibicao do dialog o mesmo demora e o edit
-     * text possibilita um segundo clique como primeiro ja instaciado */
-    else {
-      getParentFragmentManager().beginTransaction().remove(dialog).commit();
     }
   }
 
@@ -356,31 +328,8 @@ public class HomeFragment extends Fragment
     }
     if (requestCode == TARGET_FRAGMENT_REQUEST_CODE) {
       this.edtDateSale.setText(data.getStringExtra(EXTRA_DATE_SALE));
-        this.mViewModel.setDateSale(edtDateSale.getText().toString());
-        loadClientsByGroupChecked();
-    }
-  }
-
-  private void loadAllRoutes() {
-
-    try {
-
-      this.mViewModel
-          .getAllRoutes()
-          .observe(
-              this,
-              routes -> {
-                routesAdapter =
-                    new ArrayAdapter(getContext(), android.R.layout.simple_list_item_1, routes);
-                routes.add(new Route("Selecionar Rota...", 0L));
-                Collections.sort(routes, Comparator.comparing(Route::getId));
-                routeSpinner.setAdapter(routesAdapter);
-                routeSpinner.setSelection(this.getRouteSpinnerPosition());
-              });
-    } catch (ExecutionException e) {
-      e.printStackTrace();
-    } catch (InterruptedException e) {
-      e.printStackTrace();
+      this.mViewModel.setDateSale(edtDateSale.getText().toString());
+      loadClientsByGroupChecked();
     }
   }
 
@@ -389,7 +338,7 @@ public class HomeFragment extends Fragment
 
     switch (view.getId()) {
       case R.id.img_info:
-        this.showClientDetails(homeAdapter.getItem(position));
+        //abrir tela de pedidos
         break;
       case R.id.btn_sale:
         navigateToSaleActivity(position);
@@ -413,39 +362,26 @@ public class HomeFragment extends Fragment
 
   @OnItemSelected(R.id.spn_route)
   void onRouteItemSelected(int position) {
-      setRouteSpinnerPosition(position);
-      loadClientsByGroupChecked();
+    setRouteSpinnerPosition(position);
+    loadClientsByGroupChecked();
   }
 
-    private void loadClientsByGroupChecked() {
-        if (rdAll.isChecked()) {
-            this.getAllClientsChecked();
-        } else if (rdPositives.isChecked()) {
-            try {
-                this.getAllPositived();
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-        } else {
-            try {
-                this.getAllNotPositived();
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-        }
+  private void loadClientsByGroupChecked() {
+    if (rdAll.isChecked()) {
+      this.getAllClientsChecked();
+    } else if (rdPositives.isChecked()) {
+      try {
+        this.getAllPositived();
+      } catch (ParseException e) {
+        e.printStackTrace();
+      }
+    } else {
+      try {
+        this.getAllNotPositived();
+      } catch (ParseException e) {
+        e.printStackTrace();
+      }
     }
-
-  private void loadAllClientByRoute(final Route route) {
-    LiveData<List<Client>> listLiveData = this.mViewModel.getlAllClientByRoute(route);
-    listLiveData.observe(
-        this,
-        clients -> {
-          Collections.sort(clients, Comparator.comparing(Client::getRouteOrder));
-          homeAdapter = new HomeAdapter(getActivity(), clients);
-
-          rcvHome.setAdapter(homeAdapter);
-          homeAdapter.setRecyclerViewOnClickListenerHack(this);
-        });
   }
 
   private void setRouteSpinnerPosition(final int position) {

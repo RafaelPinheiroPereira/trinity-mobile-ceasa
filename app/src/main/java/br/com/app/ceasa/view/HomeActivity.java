@@ -1,15 +1,21 @@
 package br.com.app.ceasa.view;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 
 import br.com.app.ceasa.R;
+import br.com.app.ceasa.utils.Constants;
 import br.com.app.ceasa.utils.Singleton;
 import br.com.app.ceasa.view.fragment.EmptyFragment;
 import br.com.app.ceasa.view.fragment.HomeFragment;
@@ -56,6 +62,8 @@ public class HomeActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
+
+        this.checkPermissions();
 
         homeViewModel
                 .getClientsAll()
@@ -132,25 +140,7 @@ public class HomeActivity extends AppCompatActivity {
                     break;
 
                 case R.id.page_5:
-
-                    BottomSheetMaterialDialog mBottomSheetDialog =
-                            new Builder(HomeActivity.this)
-                                    .setTitle("Atenção")
-                                    .setMessage("Você deseja realmente sair da sessão?")
-                                    .setNegativeButton("NÃO", (dialogInterface, which) -> {
-
-                                        dialogInterface.dismiss();
-                                    })
-                                    .setPositiveButton(
-                                            "OK",
-                                            (dialogInterface, which) -> {
-                                                this.homeViewModel.logout();
-                                                dialogInterface.dismiss();
-                                                this.finish();
-                                            })
-                                    .build();
-
-                    mBottomSheetDialog.show();
+                    startActivity(new Intent(HomeActivity.this, ExportActivity.class));
                     break;
             }
             return true;
@@ -173,5 +163,57 @@ public class HomeActivity extends AppCompatActivity {
     private void initViews() {
         toolbar.setTitle("Trinity Mobile - Ceasa");
         setSupportActionBar(toolbar);
+    }
+    private void checkPermissions() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    != PackageManager.PERMISSION_GRANTED
+                    || checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
+                    != PackageManager.PERMISSION_GRANTED) {
+                if (ActivityCompat.shouldShowRequestPermissionRationale(
+                        HomeActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                    Toast.makeText(
+                            HomeActivity.this,
+                            "As permissões são necessárias para as operações de importação e exportação.",
+                            Toast.LENGTH_LONG)
+                            .show();
+                    ActivityCompat.requestPermissions(
+                            HomeActivity.this, Constants.PERMISSIONS_STORAGE, Constants.REQUEST_STORAGE);
+
+                } else {
+                    // Solicita a permissao
+                    ActivityCompat.requestPermissions(
+                            HomeActivity.this, Constants.PERMISSIONS_STORAGE, Constants.REQUEST_STORAGE);
+                }
+            }
+        }
+    }
+    @Override
+    public void onRequestPermissionsResult(
+            int requestCode, String[] permissions, int[] grantResults) {
+
+        if (requestCode == Constants.REQUEST_STORAGE) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                Toast.makeText(this, "Permissões concedidas.", Toast.LENGTH_LONG).show();
+                try {
+                    homeViewModel.setContext(this);
+                    homeViewModel.createAppDirectory();
+                } catch (IOException e) {
+
+                    abstractActivity.showErrorMessage(this, e.getMessage());
+                }
+
+            } else {
+                Toast.makeText(
+                        HomeActivity.this,
+                        "As permissões não foram concedidas.\nO App não funcionará corretamente.",
+                        Toast.LENGTH_LONG)
+                        .show();
+            }
+        } else {
+
+            super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        }
     }
 }

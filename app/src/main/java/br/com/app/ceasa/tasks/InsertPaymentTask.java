@@ -4,17 +4,17 @@ import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.widget.Toast;
 import br.com.app.ceasa.view.PaymentActivity;
-import br.com.app.ceasa.viewmodel.SaleViewModel;
+import br.com.app.ceasa.viewmodel.PaymentViewModel;
 
-public class UpdateSaleItensTask extends AsyncTask<Void, Void, Boolean> {
+public class InsertPaymentTask extends AsyncTask<Void, Void, Boolean> {
 
 
-    SaleViewModel saleViewModel;
+    PaymentViewModel paymentViewModel;
     ProgressDialog progressDialog;
     PaymentActivity paymentActivity;
 
-    public UpdateSaleItensTask(final SaleViewModel saleViewModel,final PaymentActivity paymentActivity) {
-        this.saleViewModel = saleViewModel;
+    public InsertPaymentTask(final PaymentViewModel paymentViewModel, final PaymentActivity paymentActivity) {
+        this.paymentViewModel = paymentViewModel;
         this.paymentActivity = paymentActivity;
     }
 
@@ -24,7 +24,7 @@ public class UpdateSaleItensTask extends AsyncTask<Void, Void, Boolean> {
     protected Boolean doInBackground(final Void... voids) {
 
 
-        this.saleViewModel.updateSale();
+        this.paymentViewModel.insertPayment();
 
         return true;
     }
@@ -32,11 +32,11 @@ public class UpdateSaleItensTask extends AsyncTask<Void, Void, Boolean> {
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
-        progressDialog= new ProgressDialog(this.saleViewModel.getContext());
-        progressDialog.setTitle("Salvar Itens");
+        progressDialog= new ProgressDialog(this.paymentViewModel.getContext());
+        progressDialog.setTitle("Salvar Recebimento");
         progressDialog.setCancelable(false);
         progressDialog
-                .setMessage("Salvando os itens, Por favor aguarde...");
+                .setMessage("Salvando o recebimento, Por favor aguarde...");
         progressDialog.show();
     }
 
@@ -48,8 +48,8 @@ public class UpdateSaleItensTask extends AsyncTask<Void, Void, Boolean> {
         if (salvou) {
 
             Toast.makeText(
-                    this.saleViewModel.getContext(),
-                    "Venda atualizada com sucesso!",
+                    this.paymentViewModel.getContext(),
+                    "Recebimento salvo com sucesso!",
                     Toast.LENGTH_LONG)
                     .show();
             this.paymentActivity.finish();
@@ -57,12 +57,11 @@ public class UpdateSaleItensTask extends AsyncTask<Void, Void, Boolean> {
         } else {
 
             Toast.makeText(
-                    this.saleViewModel.getContext(), "Erro ao atualizar venda!", Toast.LENGTH_LONG)
+                    this.paymentViewModel.getContext(), "Erro ao salvar recebimento!", Toast.LENGTH_LONG)
                     .show();
         }
 
 
     }
-
 
 }

@@ -11,8 +11,8 @@ import java.util.Date;
 
 import br.com.app.ceasa.model.converter.Converters;
 
-@Entity(tableName = "BaseValue")
-public class BaseValue implements Serializable {
+@Entity(tableName = "ConfigurationData")
+public class ConfigurationData implements Serializable {
     @PrimaryKey
     @NonNull
     private Long id;
@@ -54,8 +54,8 @@ public class BaseValue implements Serializable {
         if (this == obj) {
             return true;
         }
-        if (obj instanceof BaseValue) {
-            BaseValue other = (BaseValue) obj;
+        if (obj instanceof ConfigurationData) {
+            ConfigurationData other = (ConfigurationData) obj;
             return id != null && id.equals(other.id);
         }
         return false;

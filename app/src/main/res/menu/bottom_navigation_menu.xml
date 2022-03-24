@@ -33,6 +33,6 @@
     <item
         android:id="@+id/page_5"
         android:enabled="true"
-        android:icon="@mipmap/ic_exit_to_app_white_48dp"
-        android:title="@string/exit" />
+        android:icon="@android:drawable/ic_menu_manage"
+        android:title="@string/configuration" />
 </menu>

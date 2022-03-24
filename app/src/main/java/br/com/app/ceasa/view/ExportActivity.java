@@ -11,6 +11,7 @@ import androidx.core.app.NavUtils;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
 import br.com.app.ceasa.R;
+import br.com.app.ceasa.model.entity.Payment;
 import br.com.app.ceasa.utils.DateUtils;
 import br.com.app.ceasa.viewmodel.ExportViewModel;
 import butterknife.BindView;
@@ -62,7 +63,7 @@ public class ExportActivity extends AppCompatActivity {
         }
 
         this.exportViewModel.setContext(this);
-        this.exportViewModel.setEmployee(this.exportViewModel.findSessionEmployee());
+
 
         cvInitialDate.setOnDateChangeListener(
                 (view, year, month, dayOfMonth)->{
@@ -124,12 +125,11 @@ public class ExportActivity extends AppCompatActivity {
     public void exportData() {
         if (DateUtils.isValidPeriod(
                 this.exportViewModel.getInitialDate(), this.exportViewModel.getFinalDate())) {
-            LiveData<List<Sale>> salesListLiveData = this.exportViewModel.searchDataToExportByDate();
-            salesListLiveData.observe(this, sales->{
-                if (sales.size() > 0) {
+            LiveData<List<Payment>> paymentsListLiveData = this.exportViewModel.searchDataToExportByDate();
+            paymentsListLiveData.observe(this, payments->{
+                if (payments.size() > 0) {
                     //vou procurar os itens de cada vendas e preencher
-                    exportViewModel.setSales(sales);
-                    exportViewModel.loadAllSaleItem();
+                    exportViewModel.setPayments(payments);
                     exportViewModel.exportData();
                 } else {
                     BottomSheetMaterialDialog mBottomSheetDialog =
@@ -141,7 +141,7 @@ public class ExportActivity extends AppCompatActivity {
                                             "OK",
                                             (dialogInterface, which)->{
                                                 Toast.makeText(getApplication().getApplicationContext(),
-                                                        "Por favor, verifique o período de vendas!",
+                                                        "Por favor, verifique o período de recebimentos!",
                                                         Toast.LENGTH_LONG).show();
 
                                                 dialogInterface.dismiss();

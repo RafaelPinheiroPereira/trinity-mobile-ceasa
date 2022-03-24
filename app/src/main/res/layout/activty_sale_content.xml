@@ -59,7 +59,7 @@
                         android:textSize="14sp" />
 
                     <TextView
-                        android:id="@+id/txt_fantasy_name"
+                        android:id="@+id/txt_name"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
@@ -69,40 +69,17 @@
 
                 </LinearLayout>
 
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-
-                    <TextView
-                        android:id="@+id/txt_cnpj"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:text=""
-                        android:textColor="@color/textColorPrimary"
-                        android:textSize="14sp" />
-
-                    <TextView
-                        android:id="@+id/txt_open_note"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:text=""
-                        android:textColor="@color/textColorPrimary"
-                        android:textSize="14sp" />
-
-                </LinearLayout>
+          
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
                     android:orientation="vertical">
 
                     <com.google.android.material.textfield.TextInputLayout
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="Data Base"
                         app:endIconMode="custom"
@@ -112,7 +89,7 @@
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/edt_date_base"
-                            android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:enabled="true"
                             android:focusable="true"
@@ -124,29 +101,17 @@
                     </com.google.android.material.textfield.TextInputLayout>
                 </LinearLayout>
 
-
-                <View
-                    android:id="@+id/divider6"
-                    android:layout_width="match_parent"
-                    android:layout_height="4dp"
-                    android:background="?android:attr/listDivider" />
-
-
-
-
-
-
-
+                                
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginTop="15dp"
                     android:orientation="horizontal">
 
 
                     <com.google.android.material.textfield.TextInputLayout
-                        android:layout_width="100dp"
+                        android:layout_width="match_parent"
                         style="@style/TextInputLayout"
                         app:endIconDrawable="@mipmap/ic_clear_black_48dp"
                         android:layout_height="wrap_content">
@@ -157,13 +122,13 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
                             android:digits="0123456789."
-                            android:hint="Preço"
+                            android:hint="Valor Base"
                             android:enabled="false"
                             android:inputType="number|textMultiLine"
                             android:lines="1"
                             android:maxLength="9"
                             android:padding="10dp"
-                            android:textSize="12sp"
+                            android:textSize="18sp"
                             app:groupDivider="."
                             app:monetaryDivider=","
                             app:locale="en_US"
@@ -174,33 +139,38 @@
 
 
                     </com.google.android.material.textfield.TextInputLayout>
+                    
 
-                    <TextView
-                        android:id="@+id/txt_total_value_product"
-                        android:layout_width="wrap_content"
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:orientation="vertical">
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="left|center_vertical"
-                        android:gravity="center_vertical"
-                        android:layout_marginStart="10dp"
-                        android:text=""
-                        android:textColor="@color/textColorPrimary"
-                        android:textSize="14sp" />
+                        android:hint="Observações"
+                        app:endIconMode="custom"
+                        app:endIconCheckable="true"
+                        app:endIconTint="@color/colorPrimaryDark"
+                        app:endIconDrawable="@mipmap/ic_info_white_48dp">
 
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/btn_add"
-                        style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="10dp"
-                        android:text="ADD"
-                        android:textSize="12sp"
-                        android:padding="10dp"
-                        app:icon="@mipmap/ic_add_shopping_cart_black_48dp"
-                        android:textColor="@color/primary_dark"
-                        app:iconGravity="textStart"
-                        />
-
-
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/edt_description"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:enabled="true"
+                            android:focusable="true"
+                            android:padding="10dp"
+                            android:clickable="true"
+                            android:editable="false"
+                            android:textColor="@android:color/primary_text_light"
+                            android:textSize="18sp" />
+                    </com.google.android.material.textfield.TextInputLayout>
                 </LinearLayout>
 
 
@@ -211,16 +181,10 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:orientation="horizontal">
-
-
-
+                
             </LinearLayout>
-
-
-
+            
         </LinearLayout>
     </ScrollView>
-
-
-
+    
 </LinearLayout>

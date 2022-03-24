@@ -1,35 +1,31 @@
 package br.com.app.ceasa.repository;
 
+import android.content.Context;
+import android.media.MediaScannerConnection;
+
 import br.com.app.ceasa.model.entity.Payment;
 import br.com.app.ceasa.utils.Constants;
 import br.com.app.ceasa.utils.PaymentFile;
 import br.com.app.ceasa.utils.Singleton;
 import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
+import java.io.FileNotFoundException;
 import java.util.List;
 
-public class PaymentFileRepository implements  IFileRepository {
-     List<Payment> payments=new ArrayList<>();
-     PaymentFile paymentFile;
+public class PaymentFileRepository {
+
+    PaymentFile paymentFile;
 
     public PaymentFileRepository() throws IllegalAccessException, InstantiationException {
-        paymentFile= Singleton.getInstance(PaymentFile.class);
-    }
-
-    @Override
-    public void readFile() throws IOException, InstantiationException, IllegalAccessException {
-        File file = paymentFile.createFile(Constants.APP_DIRECTORY, Constants.INPUT_FILES[7]);
-        paymentFile.readFile(file);
-        this.setPayments(paymentFile.getPayments());
+        paymentFile = Singleton.getInstance(PaymentFile.class);
 
     }
 
-    public List<Payment> getPayments() {
-        return payments;
+    public void writeFile(
+            final List<Payment> payments, Context context) throws FileNotFoundException {
+        File file = paymentFile.createFile(Constants.APP_DIRECTORY, Constants.OUTPUT_FILE);
+        paymentFile.writeFile(payments, file);
+        MediaScannerConnection.scanFile(context, new String[]{file.toString()}, null, null);
     }
 
-    private void setPayments(final List<Payment> payments) {
-        this.payments = payments;
-    }
+
 }
