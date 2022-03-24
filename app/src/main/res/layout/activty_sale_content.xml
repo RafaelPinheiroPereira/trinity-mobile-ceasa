@@ -234,7 +234,7 @@
                         style="@style/TextInputLayout"
                         app:endIconDrawable="@mipmap/ic_clear_black_48dp"
                         android:layout_height="wrap_content">
-                        <br.com.app.rmalimentos.utils.CurrencyEditText
+                        <br.com.app.ceasa.utils.CurrencyEditText
 
                             android:id="@+id/cet_price"
                             android:layout_width="match_parent"
@@ -254,7 +254,7 @@
                             android:textColor="@android:color/primary_text_light"
                             app:showSymbol="false">
 
-                        </br.com.app.rmalimentos.utils.CurrencyEditText>
+                        </br.com.app.ceasa.utils.CurrencyEditText>
 
 
                     </com.google.android.material.textfield.TextInputLayout>

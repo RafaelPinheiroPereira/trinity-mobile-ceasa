@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:dist="http://schemas.android.com/apk/distribution"
-    package="br.com.app.rmalimentos">
+    package="br.com.app.ceasa">
 
     <dist:module dist:instant="true" />
 
@@ -16,21 +16,21 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".view.ExportActivity"
-            android:parentActivityName=".view.HomeActivity">
+            android:name="br.com.app.ceasa.view.ExportActivity"
+            android:parentActivityName="br.com.app.ceasa.view.HomeActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="view.ExportActivity" />
+                android:value="br.com.app.ceasa.view.ExportActivity" />
         </activity>
         <activity
-            android:name=".view.SaleActivity"
-            android:parentActivityName=".view.HomeActivity">
+            android:name="br.com.app.ceasa.view.SaleActivity"
+            android:parentActivityName="br.com.app.ceasa.view.HomeActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="view.SaleActivity" />
+                android:value="br.com.app.ceasa.view.SaleActivity" />
         </activity>
         <activity
-            android:name=".view.HomeActivity"
+            android:name="br.com.app.ceasa.view.HomeActivity"
             android:label="@string/title_activity_home"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
@@ -41,7 +41,7 @@
                 <action android:name="android.intent.action.SEARCH" />
             </intent-filter>
         </activity>
-        <activity android:name=".view.SessionManagerActivity">
+        <activity android:name="br.com.app.ceasa.view.SessionManagerActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -49,9 +49,9 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".view.LoginActivity"
+            android:name="br.com.app.ceasa.view.LoginActivity"
             android:windowSoftInputMode="stateAlwaysHidden|adjustResize" />
-        <activity android:name=".view.AbstractActivity" />
+        <activity android:name="br.com.app.ceasa.view.AbstractActivity" />
     </application>
 
 </manifest>
