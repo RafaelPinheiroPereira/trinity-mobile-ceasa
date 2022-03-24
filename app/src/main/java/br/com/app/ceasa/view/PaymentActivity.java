@@ -52,7 +52,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
-public class SaleActivity extends AppCompatActivity {
+public class PaymentActivity extends AppCompatActivity {
 
   @BindView(R.id.toolbar)
   Toolbar toolbar;

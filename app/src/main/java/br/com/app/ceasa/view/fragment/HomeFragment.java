@@ -38,7 +38,7 @@ import br.com.app.ceasa.utils.Constants;
 import br.com.app.ceasa.utils.DateUtils;
 import br.com.app.ceasa.utils.Singleton;
 import br.com.app.ceasa.view.AbstractActivity;
-import br.com.app.ceasa.view.SaleActivity;
+import br.com.app.ceasa.view.PaymentActivity;
 import br.com.app.ceasa.view.adapter.HomeAdapter;
 import br.com.app.ceasa.view.dialog.ClientDataAlertDialog;
 import br.com.app.ceasa.view.dialog.DateSalePickerDialog;
@@ -400,7 +400,7 @@ public class HomeFragment extends Fragment
   }
 
   private void navigateToSaleActivity(final int position) {
-    Intent intent = new Intent(getActivity(), SaleActivity.class);
+    Intent intent = new Intent(getActivity(), PaymentActivity.class);
     Bundle params = new Bundle();
     params.putSerializable("keyClient", homeAdapter.getItem(position));
     params.putString("keyDateSale", edtDateSale.getText().toString());

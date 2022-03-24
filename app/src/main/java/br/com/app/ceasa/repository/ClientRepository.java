@@ -19,13 +19,13 @@ public class ClientRepository {
         this.clientDAO=this.appDataBase.clientDAO();
     }
 
-    public LiveData<List<Client>> findNotPositived(final Date dateSale, final Long routeId) {
+    public LiveData<List<Client>> findNotPositived(final Date dateSale) {
 
-        return this.clientDAO.findNotPositivedClient(dateSale,routeId);
+        return this.clientDAO.findNotPositivedClient(dateSale);
     }
 
-    public LiveData<List<Client>> findPositivedClient(final Date dateSale, final Long routeId) {
-        return this.clientDAO.findPositivedClient(dateSale,routeId);
+    public LiveData<List<Client>> findPositivedClient(final Date dateSale) {
+        return this.clientDAO.findPositivedClient(dateSale);
     }
 
     public LiveData<List<Client>> getAll() {
@@ -39,7 +39,4 @@ public class ClientRepository {
 
     }
 
-    public  LiveData<List<Client>> getAllClientByRoute(Long routeId){
-        return this.clientDAO.getAllClientByRoute(routeId);
-    }
 }

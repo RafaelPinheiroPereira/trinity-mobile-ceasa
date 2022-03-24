@@ -57,28 +57,22 @@ public class HomeActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
-        try {
-            homeViewModel
-                    .getAllRoutes()
-                    .observe(
-                            this,
-                            routes -> {
-                                if (routes.size() > 0) {
-                                    HomeFragment homeFragment = new HomeFragment();
-                                    this.loadFragment(homeFragment);
+        homeViewModel
+                .getClientsAll()
+                .observe(
+                        this,
+                        clients -> {
+                            if (clients.size() > 0) {
+                                HomeFragment homeFragment = new HomeFragment();
+                                this.loadFragment(homeFragment);
 
-                                } else {
+                            } else {
 
-                                    EmptyFragment emptyFragment = new EmptyFragment();
-                                    this.loadFragment(emptyFragment);
+                                EmptyFragment emptyFragment = new EmptyFragment();
+                                this.loadFragment(emptyFragment);
 
-                                }
-                            });
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+                            }
+                        });
         bottomNavigationView.setSelectedItemId(R.id.page_1);
 
         bottomNavigationView.setOnNavigationItemSelectedListener(item -> {
@@ -177,7 +171,7 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     private void initViews() {
-        toolbar.setTitle("Trinity Mobile - R&M Alimentos");
+        toolbar.setTitle("Trinity Mobile - Ceasa");
         setSupportActionBar(toolbar);
     }
 }

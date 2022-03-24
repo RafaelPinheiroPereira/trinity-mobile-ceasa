@@ -23,11 +23,11 @@
                 android:value="br.com.app.ceasa.view.ExportActivity" />
         </activity>
         <activity
-            android:name="br.com.app.ceasa.view.SaleActivity"
+            android:name="br.com.app.ceasa.view.PaymentActivity"
             android:parentActivityName="br.com.app.ceasa.view.HomeActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="br.com.app.ceasa.view.SaleActivity" />
+                android:value="br.com.app.ceasa.view.PaymentActivity" />
         </activity>
         <activity
             android:name="br.com.app.ceasa.view.HomeActivity"
@@ -39,18 +39,11 @@
 
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />
-            </intent-filter>
-        </activity>
-        <activity android:name="br.com.app.ceasa.view.SessionManagerActivity">
-            <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name="br.com.app.ceasa.view.LoginActivity"
-            android:windowSoftInputMode="stateAlwaysHidden|adjustResize" />
+
         <activity android:name="br.com.app.ceasa.view.AbstractActivity" />
     </application>
 

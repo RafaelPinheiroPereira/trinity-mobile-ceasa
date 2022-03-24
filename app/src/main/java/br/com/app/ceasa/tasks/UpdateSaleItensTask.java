@@ -3,7 +3,7 @@ package br.com.app.ceasa.tasks;
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.widget.Toast;
-import br.com.app.ceasa.view.SaleActivity;
+import br.com.app.ceasa.view.PaymentActivity;
 import br.com.app.ceasa.viewmodel.SaleViewModel;
 
 public class UpdateSaleItensTask extends AsyncTask<Void, Void, Boolean> {
@@ -11,11 +11,11 @@ public class UpdateSaleItensTask extends AsyncTask<Void, Void, Boolean> {
 
     SaleViewModel saleViewModel;
     ProgressDialog progressDialog;
-    SaleActivity saleActivity;
+    PaymentActivity paymentActivity;
 
-    public UpdateSaleItensTask(final SaleViewModel saleViewModel,final SaleActivity saleActivity) {
+    public UpdateSaleItensTask(final SaleViewModel saleViewModel,final PaymentActivity paymentActivity) {
         this.saleViewModel = saleViewModel;
-        this.saleActivity=saleActivity;
+        this.paymentActivity = paymentActivity;
     }
 
 
@@ -52,7 +52,7 @@ public class UpdateSaleItensTask extends AsyncTask<Void, Void, Boolean> {
                     "Venda atualizada com sucesso!",
                     Toast.LENGTH_LONG)
                     .show();
-            this.saleActivity.finish();
+            this.paymentActivity.finish();
 
         } else {
 
