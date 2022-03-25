@@ -16,21 +16,28 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name="br.com.app.ceasa.view.ExportActivity"
-            android:parentActivityName="br.com.app.ceasa.view.HomeActivity">
+            android:name=".ui.ConfigurationDataActivity"
+            android:parentActivityName=".ui.HomeActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="br.com.app.ceasa.view.ExportActivity" />
+                android:value="br.com.app.ceasa.ui.ConfigurationDataActivity" />
         </activity>
         <activity
-            android:name="br.com.app.ceasa.view.PaymentActivity"
-            android:parentActivityName="br.com.app.ceasa.view.HomeActivity">
+            android:name=".ui.ExportActivity"
+            android:parentActivityName=".ui.HomeActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="br.com.app.ceasa.view.PaymentActivity" />
+                android:value="br.com.app.ceasa.ui.ExportActivity" />
         </activity>
         <activity
-            android:name="br.com.app.ceasa.view.HomeActivity"
+            android:name=".ui.PaymentActivity"
+            android:parentActivityName=".ui.HomeActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="br.com.app.ceasa.ui.PaymentActivity" />
+        </activity>
+        <activity
+            android:name=".ui.HomeActivity"
             android:label="@string/title_activity_home"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
@@ -40,11 +47,11 @@
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <activity android:name="br.com.app.ceasa.view.AbstractActivity" />
+        <activity android:name=".ui.AbstractActivity" />
     </application>
 
 </manifest>

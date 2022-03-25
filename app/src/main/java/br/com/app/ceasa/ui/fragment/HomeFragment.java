@@ -1,4 +1,4 @@
-package br.com.app.ceasa.view.fragment;
+package br.com.app.ceasa.ui.fragment;
 
 import static br.com.app.ceasa.utils.Constants.EXTRA_DATE_SALE;
 import static br.com.app.ceasa.utils.Constants.TARGET_FRAGMENT_REQUEST_CODE;
@@ -7,7 +7,6 @@ import android.app.Activity;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,7 +16,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -34,17 +32,16 @@ import androidx.recyclerview.widget.RecyclerView;
 import br.com.app.ceasa.R;
 import br.com.app.ceasa.listener.RecyclerViewOnClickListenerHack;
 import br.com.app.ceasa.model.entity.Client;
-import br.com.app.ceasa.utils.Constants;
 import br.com.app.ceasa.utils.DateUtils;
 import br.com.app.ceasa.utils.Singleton;
-import br.com.app.ceasa.view.AbstractActivity;
-import br.com.app.ceasa.view.PaymentActivity;
-import br.com.app.ceasa.view.adapter.HomeAdapter;
-import br.com.app.ceasa.view.dialog.DateSalePickerDialog;
+import br.com.app.ceasa.ui.AbstractActivity;
+import br.com.app.ceasa.ui.PaymentActivity;
+import br.com.app.ceasa.ui.adapter.HomeAdapter;
+import br.com.app.ceasa.ui.dialog.DateSalePickerDialog;
 import br.com.app.ceasa.viewmodel.HomeViewModel;
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnItemSelected;
+
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -61,7 +58,7 @@ public class HomeFragment extends Fragment
   AbstractActivity abstractActivity;
 
   @BindView(R.id.edt_date_sale)
-  EditText edtDateSale;
+  EditText edtDatePayment;
 
   @BindView(R.id.rd_group_status)
   RadioGroup rdGroupStatus;
@@ -125,7 +122,7 @@ public class HomeFragment extends Fragment
   public void onStart() {
     super.onStart();
     this.setAdapter();
-    this.edtDateSale.setOnClickListener(this);
+    this.edtDatePayment.setOnClickListener(this);
     this.setDateSaleToday();
     rdAll.setChecked(true);
     this.configInitialRecycle();
@@ -219,9 +216,8 @@ public class HomeFragment extends Fragment
   }
 
   private void getAllNotPositived() throws ParseException {
-    int position = this.getRouteSpinnerPosition();
     LiveData<List<Client>> clientListLiveData =
-        mViewModel.getNotPositived(edtDateSale.getText().toString());
+        mViewModel.getNotPositived(edtDatePayment.getText().toString());
     clientListLiveData.observe(
         this,
         clients -> {
@@ -247,7 +243,7 @@ public class HomeFragment extends Fragment
   private void getAllPositived() throws ParseException {
 
     LiveData<List<Client>> clientListLiveData =
-        mViewModel.getPositivedClients(edtDateSale.getText().toString());
+        mViewModel.getPositivedClients(edtDatePayment.getText().toString());
     clientListLiveData.observe(
         this,
         clients -> {
@@ -285,9 +281,9 @@ public class HomeFragment extends Fragment
   }
 
   private void setDateSaleToday() {
-    edtDateSale.setText(
+    edtDatePayment.setText(
         DateUtils.convertDateToStringInFormat_dd_mm_yyyy(new Date(System.currentTimeMillis())));
-    this.mViewModel.setDateSale(edtDateSale.getText().toString());
+    this.mViewModel.setDatePayment(edtDatePayment.getText().toString());
   }
 
   @Override
@@ -323,8 +319,8 @@ public class HomeFragment extends Fragment
       return;
     }
     if (requestCode == TARGET_FRAGMENT_REQUEST_CODE) {
-      this.edtDateSale.setText(data.getStringExtra(EXTRA_DATE_SALE));
-      this.mViewModel.setDateSale(edtDateSale.getText().toString());
+      this.edtDatePayment.setText(data.getStringExtra(EXTRA_DATE_SALE));
+      this.mViewModel.setDatePayment(edtDatePayment.getText().toString());
       loadClientsByGroupChecked();
     }
   }
@@ -348,7 +344,7 @@ public class HomeFragment extends Fragment
     Intent intent = new Intent(getActivity(), PaymentActivity.class);
     Bundle params = new Bundle();
     params.putSerializable("keyClient", homeAdapter.getItem(position));
-    params.putString("keyDateSale", edtDateSale.getText().toString());
+    params.putString("keyDateSale", edtDatePayment.getText().toString());
     intent.putExtras(params);
     startActivity(intent);
   }
@@ -376,15 +372,5 @@ public class HomeFragment extends Fragment
     }
   }
 
-  private void setRouteSpinnerPosition(final int position) {
-    SharedPreferences settings = getActivity().getSharedPreferences(Constants.PREFS_NAME, 0);
-    SharedPreferences.Editor editor = settings.edit();
-    editor.putInt(Constants.SPINNER_KEY_POSITION, position);
-    editor.commit();
-  }
 
-  private int getRouteSpinnerPosition() {
-    SharedPreferences settings = getActivity().getSharedPreferences(Constants.PREFS_NAME, 0);
-    return settings.getInt(Constants.SPINNER_KEY_POSITION, 0);
-  }
 }

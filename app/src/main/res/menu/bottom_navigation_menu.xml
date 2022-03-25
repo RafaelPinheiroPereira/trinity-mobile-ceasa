@@ -5,34 +5,24 @@
     <item
         android:id="@+id/page_1"
         android:enabled="true"
-        android:iconTint="@color/bg_swipe_group_item_pinned"
-        android:icon="@mipmap/ic_perm_contact_calendar_white_48dp"
-        android:iconTintMode="add"
-        android:title="@string/clients" />
+        android:icon="@drawable/outline_receipt_black_48"
+        android:title="@string/request" />
 
     <item
         android:id="@+id/page_2"
         android:enabled="true"
-
-        android:icon="@mipmap/ic_cart"
-        android:title="@string/request" />
+        android:icon="@mipmap/ic_cloud_download_white_48dp"
+        android:title="@string/upload"  />
 
     <item
         android:id="@+id/page_3"
         android:enabled="true"
-
-        android:icon="@mipmap/ic_cloud_download_white_48dp"
-
-        android:title="@string/upload" />
-    <item
-        android:id="@+id/page_4"
-        android:enabled="true"
-
         android:icon="@mipmap/ic_cloud_upload_white_48dp"
         android:title="@string/donwload" />
     <item
-        android:id="@+id/page_5"
+        android:id="@+id/page_4"
         android:enabled="true"
-        android:icon="@android:drawable/ic_menu_manage"
+        android:icon="@drawable/outline_build_black_48"
         android:title="@string/configuration" />
+
 </menu>

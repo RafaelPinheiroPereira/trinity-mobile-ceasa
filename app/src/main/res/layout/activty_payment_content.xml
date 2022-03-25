@@ -20,8 +20,6 @@
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimaryDark"
             app:layout_scrollFlags="scroll|enterAlways"
-
-            app:subtitle="Recebimentos"
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -57,7 +55,7 @@
                         android:layout_gravity="center_vertical"
                         android:text="Dados do Cliente:"
                         android:textColor="@color/textColorPrimary"
-                        android:textSize="14sp" />
+                        android:textSize="18sp" />
 
 
                 </LinearLayout>
@@ -67,32 +65,25 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
                     android:padding="10dp"
                     android:orientation="vertical">
 
-                    <com.google.android.material.textfield.TextInputLayout
-                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
-                        android:layout_width="match_parent"
+                    <TextView
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:hint="Data Base"
-                        app:endIconMode="custom"
-                        app:endIconCheckable="true"
-                        app:endIconTint="@color/colorPrimaryDark"
-                        app:endIconDrawable="@mipmap/ic_calendar_48">
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="10dp"
+                        android:text="Data Base"
+                        android:textColor="@color/textColorPrimary"
+                        android:textSize="20sp"></TextView>
 
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/edt_date_base"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:enabled="true"
-                            android:focusable="true"
-                            android:padding="10dp"
-                            android:clickable="true"
-                            android:editable="false"
-                            android:textColor="@android:color/primary_text_light"
-                            android:textSize="18sp" />
-                    </com.google.android.material.textfield.TextInputLayout>
+                    <CalendarView
+                        android:id="@+id/cv_base_date"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="10dp" />
+
                 </LinearLayout>
 
                                 
@@ -151,11 +142,7 @@
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Observações"
-                        app:endIconMode="custom"
-                        app:endIconCheckable="true"
-                        app:endIconTint="@color/colorPrimaryDark"
-                        app:endIconDrawable="@mipmap/ic_info_white_48dp">
+                        android:hint="Observações">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/edt_description"

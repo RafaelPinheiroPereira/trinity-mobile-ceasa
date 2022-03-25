@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/cl_container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimaryDark"
+            app:layout_scrollFlags="scroll|enterAlways"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:orientation="vertical"
+        android:padding="10dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="10dp"
+            android:text="Data Base"
+            android:textColor="@color/textColorPrimary"
+            android:textSize="20sp"></TextView>
+
+        <CalendarView
+            android:id="@+id/cv_base_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="10dp" />
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:orientation="horizontal"
+        android:padding="10dp">
+
+
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/TextInputLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:endIconCheckable="true"
+            app:endIconDrawable="@mipmap/ic_vender_48"
+            app:endIconMode="custom"
+            app:endIconTint="@color/colorPrimaryDark">
+
+            <br.com.app.ceasa.utils.CurrencyEditText
+
+                android:id="@+id/cet_base_value"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:digits="0123456789."
+                android:hint="Valor Base"
+                android:inputType="number|textMultiLine"
+                android:lines="1"
+                android:maxLength="9"
+                android:padding="10dp"
+                android:textColor="@android:color/primary_text_light"
+                android:textSize="18sp"
+                app:groupDivider="."
+                app:locale="en_US"
+                app:monetaryDivider=","
+                app:showSymbol="false">
+
+            </br.com.app.ceasa.utils.CurrencyEditText>
+
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+    </LinearLayout>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_save_configuration_data"
+        style="@style/Widget.MaterialComponents.Button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:text="Salvar Configurações"
+        android:textColor="#fff"
+        app:backgroundTint="@color/primary_dark"
+        app:icon="@mipmap/ic_save_white_48dp"
+        app:iconGravity="textStart"
+        app:iconTint="@color/white" />
+</LinearLayout>

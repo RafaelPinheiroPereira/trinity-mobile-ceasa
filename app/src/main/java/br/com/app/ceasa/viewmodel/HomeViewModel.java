@@ -28,7 +28,7 @@ public class HomeViewModel extends AndroidViewModel {
 
   private PaymentRepository paymentRepository;
 
-  private String dateSale;
+  private String datePayment;
 
   FileManagerRepository fileManagerRepository;
 
@@ -96,12 +96,12 @@ public class HomeViewModel extends AndroidViewModel {
     return progressDialog;
   }
 
-  public String getDateSale() {
-    return dateSale;
+  public String getDatePayment() {
+    return datePayment;
   }
 
-  public void setDateSale(final String dateSale) {
-    this.dateSale = dateSale;
+  public void setDatePayment(final String datePayment) {
+    this.datePayment = datePayment;
   }
 
   public Context getContext() {

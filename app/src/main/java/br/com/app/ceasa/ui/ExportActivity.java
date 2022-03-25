@@ -1,4 +1,4 @@
-package br.com.app.ceasa.view;
+package br.com.app.ceasa.ui;
 
 import android.os.Bundle;
 import android.view.MenuItem;

@@ -3,12 +3,22 @@ package br.com.app.ceasa.model.dao;
 import android.os.AsyncTask;
 
 import androidx.room.Dao;
+import androidx.room.Query;
+
+import java.util.Date;
 
 import br.com.app.ceasa.model.entity.ConfigurationData;
 import br.com.app.ceasa.model.entity.Payment;
 
 @Dao
 public abstract class ConfigurationDataDAO extends GenericDAO<ConfigurationData> {
+
+
+  @Query(value = "SELECT * FROM configurationdata")
+  public abstract ConfigurationData findConfigurationData();
+
+  @Query(value="SELECT MAX(id) FROM configurationdata ")
+  public abstract Long findLastId();
 
   private class OperationsAsyncTask extends AsyncTask<ConfigurationData, Void, Void> {
 

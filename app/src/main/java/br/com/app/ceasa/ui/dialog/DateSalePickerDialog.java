@@ -1,4 +1,4 @@
-package br.com.app.ceasa.view.dialog;
+package br.com.app.ceasa.ui.dialog;
 
 import android.app.Activity;
 import android.app.DatePickerDialog;

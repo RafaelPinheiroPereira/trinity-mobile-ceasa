@@ -6,7 +6,9 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 
 import br.com.app.ceasa.model.entity.Client;
+import br.com.app.ceasa.model.entity.ConfigurationData;
 import br.com.app.ceasa.model.entity.Payment;
+import br.com.app.ceasa.repository.ConfigurationDataRepository;
 import br.com.app.ceasa.repository.PaymentRepository;
 
 import java.text.ParseException;
@@ -26,10 +28,19 @@ public class PaymentViewModel extends AndroidViewModel {
 
   /*Repositorios de acesso ao dados */
   PaymentRepository paymentRepository;
+  ConfigurationDataRepository configurationDataRepository;
 
   public PaymentViewModel(@NonNull final Application application) {
     super(application);
     paymentRepository = new PaymentRepository(application);
+    configurationDataRepository= new ConfigurationDataRepository(application);
+  }
+
+  public boolean existConfigurationData(){
+    Optional<ConfigurationData> configurationDataOptional =
+            Optional.ofNullable(this.configurationDataRepository.findConfigurationData());
+    return configurationDataOptional.isPresent();
+
   }
 
   public Client getClient() {
@@ -93,5 +104,9 @@ public class PaymentViewModel extends AndroidViewModel {
     payment.setBaseValue(this.getPayment().getBaseValue());
     payment.setDateSale(this.getPaymentDate());
     return payment;
+  }
+
+  public ConfigurationData getConfigurationDataSalved() {
+    return this.configurationDataRepository.findConfigurationData();
   }
 }

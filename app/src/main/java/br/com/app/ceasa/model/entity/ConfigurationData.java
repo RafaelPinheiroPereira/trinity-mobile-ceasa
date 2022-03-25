@@ -22,7 +22,7 @@ public class ConfigurationData implements Serializable {
     public Date baseDate;
 
     @ColumnInfo(name = "base_value")
-    private double base_value;
+    private double baseValue;
 
     @NonNull
     public Long getId() {
@@ -41,12 +41,12 @@ public class ConfigurationData implements Serializable {
         this.baseDate = baseDate;
     }
 
-    public double getBase_value() {
-        return base_value;
+    public double getBaseValue() {
+        return baseValue;
     }
 
-    public void setBase_value(double base_value) {
-        this.base_value = base_value;
+    public void setBaseValue(double baseValue) {
+        this.baseValue = baseValue;
     }
 
     @Override

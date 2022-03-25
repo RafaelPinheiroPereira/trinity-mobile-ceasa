@@ -1,10 +1,10 @@
-package br.com.app.ceasa.view;
+package br.com.app.ceasa.ui;
 
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.EditText;
+import android.widget.CalendarView;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -16,6 +16,8 @@ import br.com.app.ceasa.model.entity.Client;
 import br.com.app.ceasa.model.entity.Payment;
 import br.com.app.ceasa.tasks.InsertPaymentTask;
 import br.com.app.ceasa.utils.CurrencyEditText;
+import br.com.app.ceasa.utils.DateUtils;
+import br.com.app.ceasa.utils.MonetaryFormatting;
 import br.com.app.ceasa.utils.Singleton;
 import br.com.app.ceasa.viewmodel.PaymentViewModel;
 import butterknife.BindView;
@@ -26,6 +28,8 @@ import com.shreyaspatil.MaterialDialog.MaterialDialog;
 
 import java.text.DateFormat;
 import java.text.ParseException;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Optional;
 
 public class PaymentActivity extends AppCompatActivity {
@@ -39,8 +43,8 @@ public class PaymentActivity extends AppCompatActivity {
   @BindView(R.id.cet_price)
   CurrencyEditText cetPrice;
 
-  @BindView(R.id.edt_date_base)
-  EditText baseDate;
+  @BindView(R.id.cv_base_date)
+  CalendarView cvDate;
 
   PaymentViewModel paymentViewModel;
 
@@ -63,12 +67,37 @@ public class PaymentActivity extends AppCompatActivity {
       this.paymentViewModel.setContext(this);
       this.getParentActivityData();
 
+      if (this.paymentViewModel.existConfigurationData()) {
+        cetPrice.setText(
+            MonetaryFormatting.convertToDolar(
+                this.paymentViewModel.getConfigurationDataSalved().getBaseValue()));
+      }
+
     } catch (InstantiationException | IllegalAccessException | ParseException e) {
       e.printStackTrace();
     }
 
     this.setClientData();
     this.checkInitialConfigure();
+
+    cvDate.setOnDateChangeListener(
+        (view, year, month, dayOfMonth) -> {
+          // display the selected date by using a toast
+
+          Calendar c = Calendar.getInstance();
+          c.set(Calendar.YEAR, year);
+          c.set(Calendar.MONTH, month);
+          c.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+          DateFormat f = DateFormat.getDateInstance(DateFormat.DATE_FIELD);
+          String formatedPaymentDate = f.format(c.getTime());
+          try {
+
+            Date datePayment = f.parse(formatedPaymentDate);
+            this.paymentViewModel.setPaymentDate(datePayment);
+          } catch (ParseException e) {
+            e.printStackTrace();
+          }
+        });
   }
 
   /*Configura os componentes para a criacao da venda*/
@@ -88,7 +117,11 @@ public class PaymentActivity extends AppCompatActivity {
 
   /*Preeche os text view com os dados do cliente*/
   private void setClientData() {
-    this.dataClient.setText("CLIENTE: "+this.paymentViewModel.getClient().getId()+" - " + this.paymentViewModel.getClient().getName());
+    this.dataClient.setText(
+        "CLIENTE: "
+            + this.paymentViewModel.getClient().getId()
+            + " - "
+            + this.paymentViewModel.getClient().getName());
   }
 
   /*Obtem os dados da HomeActivity*/
@@ -104,7 +137,8 @@ public class PaymentActivity extends AppCompatActivity {
   }
 
   private void initViews() {
-    toolbar.setTitle("Trinity Mobile - Ceasa");
+    toolbar.setTitle("Trinity Mobile - Recebimentos");
+
     setSupportActionBar(toolbar);
     getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     cetPrice.setText("0.00");
@@ -128,35 +162,37 @@ public class PaymentActivity extends AppCompatActivity {
 
     if (isBaseValueValid()) {
 
-      MaterialDialog mDialog =
-          new MaterialDialog.Builder(this)
-              .setTitle("Salvar Recebimento?")
-              .setMessage("Você deseja realmente confirmar o recebimento?")
-              .setCancelable(true)
-              .setNegativeButton(
-                  "Não",
-                  R.mipmap.ic_clear_black_48dp,
-                  (dialogInterface, which) -> dialogInterface.dismiss())
-              .setPositiveButton(
-                  "Salvar",
-                  R.mipmap.ic_save_white_48dp,
-                  (dialogInterface, which) -> {
-                    this.paymentViewModel.setPayment(this.paymentViewModel.getPaymentToInsert());
-                    new InsertPaymentTask(this.paymentViewModel, this).execute();
+      if (DateUtils.isValidPeriod(
+          this.paymentViewModel.getPaymentDate(),
+          this.paymentViewModel.getConfigurationDataSalved().getBaseDate())) {
+        MaterialDialog mDialog =
+            new MaterialDialog.Builder(this)
+                .setTitle("Salvar Recebimento?")
+                .setMessage("Você deseja realmente confirmar o recebimento?")
+                .setCancelable(true)
+                .setNegativeButton(
+                    "Não",
+                    R.mipmap.ic_clear_black_48dp,
+                    (dialogInterface, which) -> dialogInterface.dismiss())
+                .setPositiveButton(
+                    "Salvar",
+                    R.mipmap.ic_save_white_48dp,
+                    (dialogInterface, which) -> {
+                      this.paymentViewModel.setPayment(this.paymentViewModel.getPaymentToInsert());
+                      new InsertPaymentTask(this.paymentViewModel, this).execute();
 
-                    dialogInterface.dismiss();
-                  })
-              .build();
+                      dialogInterface.dismiss();
+                    })
+                .build();
 
-      mDialog.show();
+        mDialog.show();
 
+      } else {
+        abstractActivity.showMessage(this, "Data Base inferior a Data de Recebimento!");
+      }
     } else {
       abstractActivity.showMessage(this, "Por favor,digite um valor base válido!");
     }
-  }
-
-  private boolean isPaymentValid() {
-    return false;
   }
 
   /** Realiza a validacao dos itens antes da insercao */
@@ -164,11 +200,6 @@ public class PaymentActivity extends AppCompatActivity {
     if (TextUtils.isEmpty(cetPrice.getText().toString())) {
       cetPrice.setError("Valor Base Obrigatório!");
       cetPrice.requestFocus();
-      return false;
-    }
-    if (TextUtils.isEmpty(baseDate.getText().toString())) {
-      baseDate.setError("Data Base Obrigatória!");
-      baseDate.requestFocus();
       return false;
     }
 

@@ -1,4 +1,4 @@
-package br.com.app.ceasa.view.fragment;
+package br.com.app.ceasa.ui.fragment;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;

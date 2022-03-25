@@ -1,4 +1,4 @@
-package br.com.app.ceasa.view.adapter;
+package br.com.app.ceasa.ui.adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import br.com.app.ceasa.R;
 import br.com.app.ceasa.listener.RecyclerViewOnClickListenerHack;
 import br.com.app.ceasa.model.entity.Client;
-import br.com.app.ceasa.view.adapter.HomeAdapter.MyViewHolder;
+import br.com.app.ceasa.ui.adapter.HomeAdapter.MyViewHolder;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import java.util.List;
