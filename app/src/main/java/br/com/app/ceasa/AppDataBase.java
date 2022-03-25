@@ -8,6 +8,7 @@ import androidx.room.TypeConverters;
 import br.com.app.ceasa.model.converter.Converters;
 import br.com.app.ceasa.model.dao.ClientDAO;
 import br.com.app.ceasa.model.dao.ConfigurationDataDAO;
+import br.com.app.ceasa.model.dao.HistoricDAO;
 import br.com.app.ceasa.model.dao.PaymentDAO;
 import br.com.app.ceasa.model.entity.Client;
 import br.com.app.ceasa.model.entity.ConfigurationData;
@@ -26,6 +27,8 @@ public abstract class AppDataBase extends RoomDatabase {
   public abstract PaymentDAO paymentDAO();
 
   public abstract ConfigurationDataDAO configurationDataDAO();
+
+  public  abstract HistoricDAO historicDAO();
 
   public static AppDataBase getDatabase(final Context context) {
     if (mAppDataBaseInstance == null) {

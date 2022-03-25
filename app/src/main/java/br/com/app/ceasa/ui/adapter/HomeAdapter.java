@@ -24,15 +24,15 @@ public class HomeAdapter extends RecyclerView.Adapter<MyViewHolder> implements F
 
   private LayoutInflater mLayoutInflater;
 
-    private List<Client> clientOriginalList;
+  private List<Client> clientOriginalList;
 
-    private List<Client> clientsFiltereds;
+  private List<Client> clientsFiltereds;
   private RecyclerViewOnClickListenerHack recyclerViewOnClickListenerHack;
 
   public HomeAdapter(Context ctx, List<Client> clients) {
     this.mLayoutInflater = (LayoutInflater) ctx.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-      this.clientOriginalList = clients;
-      this.clientsFiltereds = clients;
+    this.clientOriginalList = clients;
+    this.clientsFiltereds = clients;
   }
 
   @NonNull
@@ -46,58 +46,54 @@ public class HomeAdapter extends RecyclerView.Adapter<MyViewHolder> implements F
   @Override
   public void onBindViewHolder(@NonNull final MyViewHolder holder, final int position) {
 
-      holder.txtClientId.setText(String.format("%05d", clientsFiltereds.get(position).getId()));
-      holder.txtName.setText(clientsFiltereds.get(position).getName());
-
-
+    holder.txtClientId.setText(String.format("%05d", clientsFiltereds.get(position).getId()));
+    holder.txtName.setText(clientsFiltereds.get(position).getName());
   }
 
   public Client getItem(int position) {
-      return this.clientsFiltereds.get(position);
+    return this.clientsFiltereds.get(position);
   }
 
   @Override
   public int getItemCount() {
-      return this.clientsFiltereds.size();
+    return this.clientsFiltereds.size();
   }
 
   @Override
   public Filter getFilter() {
-      return new Filter() {
-          @Override
-          protected FilterResults performFiltering(final CharSequence constraint) {
-              FilterResults filterResults = new FilterResults();
-              if (constraint.toString().isEmpty()) {
-                  filterResults.values = clientOriginalList;
-              } else {
-                  filterResults.values = clientOriginalList.stream()
-                          .filter(
-                                  client->
-                                          client
-                                                  .getName()
-                                                  .toLowerCase()
-                                                  .contains(constraint.toString().toLowerCase())
-                                                  || String.valueOf(client.getId())
-                                                  .contains(constraint.toString())).collect(Collectors.toList());
-              }
+    return new Filter() {
+      @Override
+      protected FilterResults performFiltering(final CharSequence constraint) {
+        FilterResults filterResults = new FilterResults();
+        if (constraint.toString().isEmpty()) {
+          filterResults.values = clientOriginalList;
+        } else {
+          filterResults.values =
+              clientOriginalList.stream()
+                  .filter(
+                      client ->
+                          client
+                                  .getName()
+                                  .toLowerCase()
+                                  .contains(constraint.toString().toLowerCase())
+                              || String.valueOf(client.getId()).contains(constraint.toString()))
+                  .collect(Collectors.toList());
+        }
 
-              return filterResults;
+        return filterResults;
+      }
 
-          }
+      @Override
+      protected void publishResults(final CharSequence constraint, final FilterResults results) {
 
-          @Override
-          protected void publishResults(final CharSequence constraint, final FilterResults results) {
+        clientsFiltereds = (List<Client>) results.values;
 
-              clientsFiltereds = (List<Client>) results.values;
-
-              notifyDataSetChanged();
-          }
-      };
+        notifyDataSetChanged();
+      }
+    };
   }
 
   public class MyViewHolder extends RecyclerView.ViewHolder implements OnClickListener {
-
-
 
     @BindView(R.id.txt_fantasy_name)
     public TextView txtName;

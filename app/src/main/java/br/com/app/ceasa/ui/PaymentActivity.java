@@ -5,6 +5,7 @@ import android.text.TextUtils;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.CalendarView;
+import android.widget.EditText;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -42,6 +43,9 @@ public class PaymentActivity extends AppCompatActivity {
 
   @BindView(R.id.cet_price)
   CurrencyEditText cetPrice;
+
+  @BindView(R.id.edt_description)
+  EditText edtDescription;
 
   @BindView(R.id.cv_base_date)
   CalendarView cvDate;
@@ -101,7 +105,15 @@ public class PaymentActivity extends AppCompatActivity {
   }
 
   /*Configura os componentes para a criacao da venda*/
-  private void configureCreate() {}
+  private void configureCreate() {
+    DateFormat format = DateFormat.getDateInstance(DateFormat.DATE_FIELD);
+    try {
+      this.paymentViewModel.setPaymentDate( format.parse(format.format(cvDate.getDate())));
+    } catch (ParseException e) {
+      abstractActivity.showErrorMessage(this, e.getMessage());
+    }
+
+  }
 
   /*Configura os componentes para a atualizacao da venda*/
 
@@ -162,6 +174,7 @@ public class PaymentActivity extends AppCompatActivity {
 
     if (isBaseValueValid()) {
 
+
       if (DateUtils.isValidPeriod(
           this.paymentViewModel.getPaymentDate(),
           this.paymentViewModel.getConfigurationDataSalved().getBaseDate())) {
@@ -178,6 +191,8 @@ public class PaymentActivity extends AppCompatActivity {
                     "Salvar",
                     R.mipmap.ic_save_white_48dp,
                     (dialogInterface, which) -> {
+                      this.paymentViewModel.setDescription(edtDescription.getText().toString());
+                      this.paymentViewModel.setPaymentValue(cetPrice.getCurrencyDouble());
                       this.paymentViewModel.setPayment(this.paymentViewModel.getPaymentToInsert());
                       new InsertPaymentTask(this.paymentViewModel, this).execute();
 

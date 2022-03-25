@@ -21,8 +21,6 @@ public class Client implements Serializable {
   @ColumnInfo(name = "order")
   private int  order;
 
-  @ColumnInfo(name = "is_paid")
-  private Boolean isPaid=false;
 
   @NonNull
   public Long getId() {
@@ -49,13 +47,6 @@ public class Client implements Serializable {
     this.order = order;
   }
 
-  public Boolean getPaid() {
-    return isPaid;
-  }
-
-  public void setPaid(Boolean paid) {
-    isPaid = paid;
-  }
 
   @Override
   public boolean equals(final Object obj) {

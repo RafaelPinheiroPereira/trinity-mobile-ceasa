@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".ui.fragment.HomeFragment">
 
     <LinearLayout
@@ -14,7 +14,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="17dp"
+            android:layout_marginStart="20dp"
             android:layout_marginTop="5dp"
             android:layout_marginEnd="15dp"
             android:orientation="horizontal">
@@ -25,20 +25,20 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Data do Recebimento"
-                app:endIconCheckable="true"
-                app:endIconDrawable="@mipmap/ic_calendar_48"
                 app:endIconMode="custom"
-                app:endIconTint="@color/colorPrimaryDark">
+                app:endIconCheckable="true"
+                app:endIconTint="@color/colorPrimaryDark"
+                app:endIconDrawable="@mipmap/ic_calendar_48">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/edt_date_sale"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:clickable="true"
-                    android:editable="false"
                     android:enabled="true"
                     android:focusable="true"
                     android:padding="10dp"
+                    android:clickable="true"
+                    android:editable="false"
                     android:textColor="@android:color/primary_text_light"
                     android:textSize="14sp" />
             </com.google.android.material.textfield.TextInputLayout>
@@ -46,49 +46,18 @@
         </LinearLayout>
 
 
-        <RadioGroup
-            android:id="@+id/rd_group_status"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="15dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginEnd="5dp"
-            android:orientation="horizontal">
 
-            <RadioButton
-                android:id="@+id/rd_not_positives"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="5dp"
-                android:text="Pendentes"
-                android:textSize="14sp" />
-
-            <RadioButton
-                android:id="@+id/rd_positives"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:text="Recebidos"
-                android:textSize="14sp" />
-
-            <RadioButton
-                android:id="@+id/rd_all"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:text="Todos"
-                android:textSize="14sp" />
-        </RadioGroup>
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rcv_home"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginStart="15dp"
             android:layout_marginTop="20dp"
-            android:layout_marginEnd="10dp" />
+            android:layout_marginEnd="10dp"
+            android:id="@+id/rcv_historic"/>
 
     </LinearLayout>
+
 
 
 </FrameLayout>

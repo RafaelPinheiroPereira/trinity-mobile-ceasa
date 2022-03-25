@@ -45,7 +45,7 @@ public class PaymentFile extends FileManager {
 
     String formatedClientId = String.format("%09d", payment.getIdClient());
 
-    String formatedValueBase = String.format("%06.2f", payment.getBaseValue());
+    String formatedValueBase = String.format("%06.2f", payment.getValue());
 
     String formatedPaymentId = String.format("%09d", payment.getId());
 

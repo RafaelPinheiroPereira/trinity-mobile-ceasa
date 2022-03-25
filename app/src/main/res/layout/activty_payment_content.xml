@@ -148,11 +148,9 @@
                             android:id="@+id/edt_description"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:enabled="true"
                             android:focusable="true"
                             android:padding="10dp"
                             android:clickable="true"
-                            android:editable="false"
                             android:textColor="@android:color/primary_text_light"
                             android:textSize="18sp" />
                     </com.google.android.material.textfield.TextInputLayout>

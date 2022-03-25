@@ -87,8 +87,6 @@ public class HomeActivity extends AppCompatActivity {
             case R.id.page_1:
               // Todo Historico de Recebimentos
 
-              break;
-            case R.id.page_2:
               if (homeViewModel.containsAllFiles()) {
 
                 try {
@@ -128,13 +126,16 @@ public class HomeActivity extends AppCompatActivity {
               }
 
               break;
+            case R.id.page_2:
+              startActivity(new Intent(HomeActivity.this, ConfigurationDataActivity.class));
+              break;
             case R.id.page_3:
-              startActivity(new Intent(HomeActivity.this, ExportActivity.class));
+              startActivity(new Intent(HomeActivity.this, HistoricActivity.class));
               break;
 
             case R.id.page_4:
-              // Todo Tela de configuracao
-              startActivity(new Intent(HomeActivity.this, ConfigurationDataActivity.class));
+              startActivity(new Intent(HomeActivity.this, ExportActivity.class));
+
               break;
           }
           return true;

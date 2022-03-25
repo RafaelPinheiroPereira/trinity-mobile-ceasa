@@ -7,6 +7,7 @@
         <entry key="..\:/Users/rafae/StudioProjects/trinity-mobile-ceasa/app/src/main/res/layout-sw600dp/activty_sale_content.xml" value="0.126953125" />
         <entry key="..\:/Users/rafae/StudioProjects/trinity-mobile-ceasa/app/src/main/res/layout/activity_configuration_data.xml" value="0.23822463768115942" />
         <entry key="..\:/Users/rafae/StudioProjects/trinity-mobile-ceasa/app/src/main/res/layout/activity_export.xml" value="0.2" />
+        <entry key="..\:/Users/rafae/StudioProjects/trinity-mobile-ceasa/app/src/main/res/layout/activity_historic.xml" value="0.23822463768115942" />
         <entry key="..\:/Users/rafae/StudioProjects/trinity-mobile-ceasa/app/src/main/res/layout/activity_home.xml" value="0.10989583333333333" />
         <entry key="..\:/Users/rafae/StudioProjects/trinity-mobile-ceasa/app/src/main/res/layout/activity_login.xml" value="0.10989583333333333" />
         <entry key="..\:/Users/rafae/StudioProjects/trinity-mobile-ceasa/app/src/main/res/layout/activity_main.xml" value="0.23822463768115942" />
@@ -15,7 +16,9 @@
         <entry key="..\:/Users/rafae/StudioProjects/trinity-mobile-ceasa/app/src/main/res/layout/activty_sale_content.xml" value="0.29760225669957685" />
         <entry key="..\:/Users/rafae/StudioProjects/trinity-mobile-ceasa/app/src/main/res/layout/empty_sate.xml" value="0.10989583333333333" />
         <entry key="..\:/Users/rafae/StudioProjects/trinity-mobile-ceasa/app/src/main/res/layout/fragment_empty.xml" value="0.10989583333333333" />
+        <entry key="..\:/Users/rafae/StudioProjects/trinity-mobile-ceasa/app/src/main/res/layout/historic_fragment.xml" value="0.23822463768115942" />
         <entry key="..\:/Users/rafae/StudioProjects/trinity-mobile-ceasa/app/src/main/res/layout/home_fragment.xml" value="0.16927083333333334" />
+        <entry key="..\:/Users/rafae/StudioProjects/trinity-mobile-ceasa/app/src/main/res/layout/item_recycle_historic.xml" value="0.23822463768115942" />
         <entry key="..\:/Users/rafae/StudioProjects/trinity-mobile-ceasa/app/src/main/res/layout/item_recycle_home.xml" value="0.23822463768115942" />
         <entry key="..\:/Users/rafae/StudioProjects/trinity-mobile-ceasa/app/src/main/res/menu/bottom_navigation_menu.xml" value="0.25" />
         <entry key="..\:/Users/rafae/StudioProjects/trinity-mobile-ceasa/app/src/main/res/menu/home_menu.xml" value="0.25" />

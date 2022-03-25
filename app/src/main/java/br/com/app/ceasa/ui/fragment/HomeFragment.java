@@ -19,6 +19,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -123,15 +124,13 @@ public class HomeFragment extends Fragment
     super.onStart();
     this.setAdapter();
     this.edtDatePayment.setOnClickListener(this);
-    this.setDateSaleToday();
-    rdAll.setChecked(true);
+    this.setDatePaymentToday();
+    rdNotPositives.setChecked(true);
     this.configInitialRecycle();
     try {
-      loadClientsAll();
-    } catch (ExecutionException e) {
-      abstractActivity.showErrorMessage(getActivity(), e.getMessage());
-    } catch (InterruptedException e) {
-      abstractActivity.showErrorMessage(getActivity(), e.getMessage());
+      getAllNotPositived();
+    } catch (ParseException e) {
+      e.printStackTrace();
     }
 
     rdAll.setOnCheckedChangeListener(
@@ -280,7 +279,7 @@ public class HomeFragment extends Fragment
     rcvHome.setLayoutManager(layoutManager);
   }
 
-  private void setDateSaleToday() {
+  private void setDatePaymentToday() {
     edtDatePayment.setText(
         DateUtils.convertDateToStringInFormat_dd_mm_yyyy(new Date(System.currentTimeMillis())));
     this.mViewModel.setDatePayment(edtDatePayment.getText().toString());
@@ -330,7 +329,7 @@ public class HomeFragment extends Fragment
 
     switch (view.getId()) {
       case R.id.img_info:
-        //abrir tela de pedidos
+        // abrir tela de pedidos
         break;
       case R.id.btn_sale:
         navigateToSaleActivity(position);
@@ -350,9 +349,9 @@ public class HomeFragment extends Fragment
   }
 
   @Override
-  public void onLongPressClickListener(final View view, final int position) {}
+  public void onLongPressClickListener(final View view, final int position) {
 
-
+  }
 
   private void loadClientsByGroupChecked() {
     if (rdAll.isChecked()) {
@@ -371,6 +370,4 @@ public class HomeFragment extends Fragment
       }
     }
   }
-
-
 }

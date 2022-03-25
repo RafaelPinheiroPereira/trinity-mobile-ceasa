@@ -28,8 +28,8 @@ public class Payment implements Serializable {
     @TypeConverters(Converters.class)
     public Date dateSale;
 
-    @ColumnInfo(name = "base_value")
-    private double baseValue;
+    @ColumnInfo(name = "value")
+    private double value;
 
     @NonNull
     public Long getId() {
@@ -64,12 +64,12 @@ public class Payment implements Serializable {
         this.dateSale = dateSale;
     }
 
-    public double getBaseValue() {
-        return baseValue;
+    public double getValue() {
+        return value;
     }
 
-    public void setBaseValue(double baseValue) {
-        this.baseValue = baseValue;
+    public void setValue(double value) {
+        this.value = value;
     }
 
     @Override

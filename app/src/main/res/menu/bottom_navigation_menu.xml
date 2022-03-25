@@ -5,24 +5,26 @@
     <item
         android:id="@+id/page_1"
         android:enabled="true"
-        android:icon="@drawable/outline_receipt_black_48"
-        android:title="@string/request" />
+        android:icon="@mipmap/ic_cloud_download_white_48dp"
+        android:title="@string/upload"
+        />
 
     <item
         android:id="@+id/page_2"
         android:enabled="true"
-        android:icon="@mipmap/ic_cloud_download_white_48dp"
-        android:title="@string/upload"  />
+        android:icon="@drawable/outline_build_black_48"
+        android:title="@string/configuration"  />
 
     <item
         android:id="@+id/page_3"
         android:enabled="true"
-        android:icon="@mipmap/ic_cloud_upload_white_48dp"
-        android:title="@string/donwload" />
+        android:icon="@drawable/outline_receipt_black_48"
+        android:title="@string/request"
+        />
     <item
         android:id="@+id/page_4"
         android:enabled="true"
-        android:icon="@drawable/outline_build_black_48"
-        android:title="@string/configuration" />
+        android:icon="@mipmap/ic_cloud_upload_white_48dp"
+        android:title="@string/donwload"/>
 
 </menu>

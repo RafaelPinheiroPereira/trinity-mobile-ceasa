@@ -11,7 +11,6 @@ import br.com.app.ceasa.model.entity.Payment;
 import br.com.app.ceasa.repository.ConfigurationDataRepository;
 import br.com.app.ceasa.repository.PaymentRepository;
 
-import java.text.ParseException;
 import java.util.Date;
 import java.util.Optional;
 
@@ -24,7 +23,11 @@ public class PaymentViewModel extends AndroidViewModel {
 
   Payment payment;
 
+  String description;
+
   Context context;
+
+  Double paymentValue;
 
   /*Repositorios de acesso ao dados */
   PaymentRepository paymentRepository;
@@ -33,14 +36,13 @@ public class PaymentViewModel extends AndroidViewModel {
   public PaymentViewModel(@NonNull final Application application) {
     super(application);
     paymentRepository = new PaymentRepository(application);
-    configurationDataRepository= new ConfigurationDataRepository(application);
+    configurationDataRepository = new ConfigurationDataRepository(application);
   }
 
-  public boolean existConfigurationData(){
+  public boolean existConfigurationData() {
     Optional<ConfigurationData> configurationDataOptional =
-            Optional.ofNullable(this.configurationDataRepository.findConfigurationData());
+        Optional.ofNullable(this.configurationDataRepository.findConfigurationData());
     return configurationDataOptional.isPresent();
-
   }
 
   public Client getClient() {
@@ -51,8 +53,9 @@ public class PaymentViewModel extends AndroidViewModel {
     return this.paymentRepository.findLastId();
   }
 
-  public Payment getPaymentByDateAndClient(){
-    return  this.paymentRepository.findPaymentByDateAndClient(this.getPaymentDate(),this.getClient().getId());
+  public Payment getPaymentByDateAndClient() {
+    return this.paymentRepository.findPaymentByDateAndClient(
+        this.getPaymentDate(), this.getClient().getId());
   }
 
   public void insertPayment() {
@@ -99,14 +102,29 @@ public class PaymentViewModel extends AndroidViewModel {
 
     Payment payment = new Payment();
     payment.setIdClient(this.getClient().getId());
-    payment.setId(this.getPayment().getId());
-    payment.setDescription(this.getPayment().getDescription());
-    payment.setBaseValue(this.getPayment().getBaseValue());
+    payment.setDescription(this.getDescription());
+    payment.setValue(this.getPaymentValue());
     payment.setDateSale(this.getPaymentDate());
     return payment;
   }
 
   public ConfigurationData getConfigurationDataSalved() {
     return this.configurationDataRepository.findConfigurationData();
+  }
+
+  public String getDescription() {
+    return description;
+  }
+
+  public void setDescription(String description) {
+    this.description = description;
+  }
+
+  public Double getPaymentValue() {
+    return paymentValue;
+  }
+
+  public void setPaymentValue(Double paymentValue) {
+    this.paymentValue = paymentValue;
   }
 }
