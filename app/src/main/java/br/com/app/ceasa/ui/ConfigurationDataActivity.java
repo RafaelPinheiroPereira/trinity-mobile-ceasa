@@ -125,7 +125,6 @@ public class ConfigurationDataActivity extends AppCompatActivity {
                 this.configurationDataViewModel.getConfigurationDataToInsert());
         new InsertConfigurationDataTask(this.configurationDataViewModel, this).execute();
       }else{
-
           this.configurationDataViewModel.setConfigurationData(this.configurationDataViewModel.getConfigurationDataSalved());
           this.configurationDataViewModel.getConfigurationData().setBaseValue(this.configurationDataViewModel.getValueBase());
           this.configurationDataViewModel.getConfigurationData().setBaseDate(this.configurationDataViewModel.getInitialDateBase());

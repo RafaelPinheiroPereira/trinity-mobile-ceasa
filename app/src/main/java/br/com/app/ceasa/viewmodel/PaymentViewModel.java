@@ -104,7 +104,7 @@ public class PaymentViewModel extends AndroidViewModel {
     payment.setIdClient(this.getClient().getId());
     payment.setDescription(this.getDescription());
     payment.setValue(this.getPaymentValue());
-    payment.setDateSale(this.getPaymentDate());
+    payment.setDate(this.getPaymentDate());
     return payment;
   }
 

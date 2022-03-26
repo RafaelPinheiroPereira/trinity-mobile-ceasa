@@ -20,10 +20,10 @@ public abstract  class PaymentDAO  extends GenericDAO<Payment> {
     @Query(value="SELECT MAX(id) FROM payment ")
     public abstract Long findLastId();
 
-    @Query(value = "SELECT * FROM payment WHERE date_sale= :datePayment and id_client = :clientId ")
+    @Query(value = "SELECT * FROM payment WHERE date= :datePayment and id_client = :clientId ")
     public abstract Payment findPaymentByDateAndClient(Date datePayment, Long clientId);
 
-    @Query(value = "SELECT * FROM payment WHERE date_sale>= :initialDate and date_sale<= :finalDate ")
+    @Query(value = "SELECT * FROM payment WHERE date>= :initialDate and date<= :finalDate ")
     public abstract LiveData<List<Payment>> findDataToExportByDate(Date initialDate, Date finalDate);
 
     private class OperationsAsyncTask extends AsyncTask<Payment, Void, Void> {

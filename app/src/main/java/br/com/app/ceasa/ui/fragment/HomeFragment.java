@@ -1,7 +1,8 @@
 package br.com.app.ceasa.ui.fragment;
 
-import static br.com.app.ceasa.utils.Constants.EXTRA_DATE_SALE;
-import static br.com.app.ceasa.utils.Constants.TARGET_FRAGMENT_REQUEST_CODE;
+import static br.com.app.ceasa.utils.Constants.EXTRA_DATE_PAYMENT;
+
+import static br.com.app.ceasa.utils.Constants.TARGET_HOME_FRAGMENT_REQUEST_CODE;
 
 import android.app.Activity;
 import android.app.SearchManager;
@@ -19,7 +20,6 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -83,10 +83,6 @@ public class HomeFragment extends Fragment
   private SearchView searchView = null;
 
   private SearchView.OnQueryTextListener queryTextListener;
-
-  public static HomeFragment newInstance() {
-    return new HomeFragment();
-  }
 
   @Override
   public View onCreateView(
@@ -301,7 +297,8 @@ public class HomeFragment extends Fragment
   private void showDatePickerDialog() {
     /*Se ainda nao foi instanciado*/
     if (!dialogDateSaleFragment.isAdded()) {
-      dialogDateSaleFragment.setTargetFragment(HomeFragment.this, TARGET_FRAGMENT_REQUEST_CODE);
+      dialogDateSaleFragment.setTargetFragment(
+          HomeFragment.this, TARGET_HOME_FRAGMENT_REQUEST_CODE);
       dialogDateSaleFragment.show(getParentFragmentManager(), "datePicker");
     }
     /*Caso ele já tenha sido instanciado eu removo, isto ocorre devida a baixa performace
@@ -317,8 +314,8 @@ public class HomeFragment extends Fragment
     if (resultCode != Activity.RESULT_OK) {
       return;
     }
-    if (requestCode == TARGET_FRAGMENT_REQUEST_CODE) {
-      this.edtDatePayment.setText(data.getStringExtra(EXTRA_DATE_SALE));
+    if (requestCode == TARGET_HOME_FRAGMENT_REQUEST_CODE) {
+      this.edtDatePayment.setText(data.getStringExtra(EXTRA_DATE_PAYMENT));
       this.mViewModel.setDatePayment(edtDatePayment.getText().toString());
       loadClientsByGroupChecked();
     }
@@ -349,9 +346,7 @@ public class HomeFragment extends Fragment
   }
 
   @Override
-  public void onLongPressClickListener(final View view, final int position) {
-
-  }
+  public void onLongPressClickListener(final View view, final int position) {}
 
   private void loadClientsByGroupChecked() {
     if (rdAll.isChecked()) {

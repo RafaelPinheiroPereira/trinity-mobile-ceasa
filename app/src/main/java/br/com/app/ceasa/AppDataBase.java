@@ -10,12 +10,14 @@ import br.com.app.ceasa.model.dao.ClientDAO;
 import br.com.app.ceasa.model.dao.ConfigurationDataDAO;
 import br.com.app.ceasa.model.dao.HistoricDAO;
 import br.com.app.ceasa.model.dao.PaymentDAO;
+import br.com.app.ceasa.model.dao.PrinterDPDAO;
 import br.com.app.ceasa.model.entity.Client;
 import br.com.app.ceasa.model.entity.ConfigurationData;
 import br.com.app.ceasa.model.entity.Payment;
+import br.com.app.ceasa.model.entity.PrinterDP;
 
 @Database(
-    entities = {Client.class, Payment.class, ConfigurationData.class},
+    entities = {Client.class, Payment.class, ConfigurationData.class, PrinterDP.class},
     version = 1)
 @TypeConverters({Converters.class})
 public abstract class AppDataBase extends RoomDatabase {
@@ -28,7 +30,9 @@ public abstract class AppDataBase extends RoomDatabase {
 
   public abstract ConfigurationDataDAO configurationDataDAO();
 
-  public  abstract HistoricDAO historicDAO();
+  public abstract HistoricDAO historicDAO();
+
+  public abstract PrinterDPDAO printerDPDAO();
 
   public static AppDataBase getDatabase(final Context context) {
     if (mAppDataBaseInstance == null) {

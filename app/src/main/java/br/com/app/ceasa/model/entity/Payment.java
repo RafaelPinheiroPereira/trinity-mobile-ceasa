@@ -24,9 +24,9 @@ public class Payment implements Serializable {
     @ColumnInfo(name = "id_client")
     private long idClient;
 
-    @ColumnInfo(name = "date_sale")
+    @ColumnInfo(name = "date")
     @TypeConverters(Converters.class)
-    public Date dateSale;
+    public Date date;
 
     @ColumnInfo(name = "value")
     private double value;
@@ -56,12 +56,12 @@ public class Payment implements Serializable {
         this.idClient = idClient;
     }
 
-    public Date getDateSale() {
-        return dateSale;
+    public Date getDate() {
+        return date;
     }
 
-    public void setDateSale(Date dateSale) {
-        this.dateSale = dateSale;
+    public void setDate(Date date) {
+        this.date = date;
     }
 
     public double getValue() {

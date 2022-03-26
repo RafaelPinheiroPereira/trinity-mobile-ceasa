@@ -19,6 +19,8 @@ import br.com.app.ceasa.repository.HistoricRepository;
 
 public class HistoricViewModel   extends AndroidViewModel {
 
+    private String datePayment;
+
     HistoricRepository historicRepository;
     ConfigurationDataRepository configurationDataRepository;
 
@@ -34,5 +36,13 @@ public class HistoricViewModel   extends AndroidViewModel {
 
     public ConfigurationData getConfigurationDataSalved() {
         return this.configurationDataRepository.findConfigurationData();
+    }
+
+    public String getDatePayment() {
+        return datePayment;
+    }
+
+    public void setDatePayment(String datePayment) {
+        this.datePayment = datePayment;
     }
 }

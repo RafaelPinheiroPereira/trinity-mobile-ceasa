@@ -41,7 +41,7 @@ public class PaymentFile extends FileManager {
       throws IOException {
 
     DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.SHORT);
-    String formatedDatePayment = dateFormat.format(payment.getDateSale());
+    String formatedDatePayment = dateFormat.format(payment.getDate());
 
     String formatedClientId = String.format("%09d", payment.getIdClient());
 

@@ -27,17 +27,17 @@ public class DateSalePickerDialog extends DialogFragment
 
   public void onDateSet(DatePicker view, int year, int month, int day) {
     // Do something with the date chosen by the user
-    sendDateSaleForHomeFragment(year, month, day);
+    sendDatePaymentForFragment(year, month, day);
   }
 
-  private void sendDateSaleForHomeFragment(final int year, final int month, final int day) {
+  private void sendDatePaymentForFragment(final int year, final int month, final int day) {
 
     /*Existe um bug no calendar relacionado ao mes por isso ha necessidade de acrescentar +1 */
     String strMonth = (month + 1) < 10 ? "0" + (month + 1) : String.valueOf(month + 1);
     String strDay = (day) < 10 ? "0" + (day) : String.valueOf(day);
 
     Intent intent = new Intent();
-    intent.putExtra(Constants.EXTRA_DATE_SALE, strDay + "/" + strMonth + "/" + year);
+    intent.putExtra(Constants.EXTRA_DATE_PAYMENT, strDay + "/" + strMonth + "/" + year);
     getTargetFragment().onActivityResult(getTargetRequestCode(), Activity.RESULT_OK, intent);
   }
 }

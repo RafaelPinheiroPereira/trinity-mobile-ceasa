@@ -79,14 +79,11 @@ public class HomeActivity extends AppCompatActivity {
                 this.loadFragment(emptyFragment);
               }
             });
-    bottomNavigationView.setSelectedItemId(R.id.page_1);
 
     bottomNavigationView.setOnNavigationItemSelectedListener(
         item -> {
           switch (item.getItemId()) {
             case R.id.page_1:
-              // Todo Historico de Recebimentos
-
               if (homeViewModel.containsAllFiles()) {
 
                 try {
@@ -124,7 +121,6 @@ public class HomeActivity extends AppCompatActivity {
 
                 mBottomSheetDialog.show();
               }
-
               break;
             case R.id.page_2:
               startActivity(new Intent(HomeActivity.this, ConfigurationDataActivity.class));
@@ -142,8 +138,6 @@ public class HomeActivity extends AppCompatActivity {
         });
   }
 
-  @Override
-  public void onBackPressed() {}
 
   private void loadFragment(Fragment fragment) {
     // load fragment
@@ -184,6 +178,11 @@ public class HomeActivity extends AppCompatActivity {
   }
 
   @Override
+  public void onBackPressed() {
+    this.finish();
+  }
+
+  @Override
   public void onRequestPermissionsResult(
       int requestCode, String[] permissions, int[] grantResults) {
 
@@ -211,4 +210,6 @@ public class HomeActivity extends AppCompatActivity {
       super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
   }
+
+
 }
