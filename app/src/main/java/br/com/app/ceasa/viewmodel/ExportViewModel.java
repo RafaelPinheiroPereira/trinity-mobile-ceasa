@@ -10,7 +10,7 @@ import br.com.app.ceasa.model.entity.Payment;
 import br.com.app.ceasa.repository.FileManagerRepository;
 import br.com.app.ceasa.repository.PaymentRepository;
 import br.com.app.ceasa.tasks.ExportDataTask;
-import br.com.app.ceasa.utils.Singleton;
+import br.com.app.ceasa.util.Singleton;
 import io.reactivex.annotations.NonNull;
 import java.util.Date;
 import java.util.List;

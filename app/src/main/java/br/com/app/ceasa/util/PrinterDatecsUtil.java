@@ -1,4 +1,4 @@
-package br.com.app.ceasa.utils;
+package br.com.app.ceasa.util;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -18,17 +18,14 @@ import java.util.List;
 import java.util.UUID;
 
 import br.com.app.ceasa.R;
+import br.com.app.ceasa.listener.IPrinterRunnableListener;
 import br.com.app.ceasa.model.entity.Historic;
 import br.com.app.ceasa.model.entity.Payment;
 import br.com.app.ceasa.model.entity.PrinterDP;
 import br.com.app.ceasa.ui.AbstractActivity;
 
-public class PrinterDatecs {
+public class PrinterDatecsUtil {
 
-  private interface IPrinterRunnable {
-
-    void run(ProgressDialog dialog, Printer printer) throws IOException;
-  }
 
   AbstractActivity abstractActivity = new AbstractActivity();
 
@@ -42,7 +39,7 @@ public class PrinterDatecs {
 
   private BluetoothSocket mBluetoothSocket;
 
-  public PrinterDatecs(final Activity activity) {
+  public PrinterDatecsUtil(final Activity activity) {
     this.activity = activity;
   }
 
@@ -80,7 +77,6 @@ public class PrinterDatecs {
 
             StringBuffer textBuffer = configuratePrinterLayoutPayment(payment);
 
-
             printer.reset();
             printer.printTaggedText(textBuffer.toString());
             printer.feedPaper(110);
@@ -106,8 +102,7 @@ public class PrinterDatecs {
         R.string.app_name);
   }
 
-  public void initPrint(
-      InputStream inputStream, OutputStream outputStream, PrinterDP printerDP)
+  public void initPrint(InputStream inputStream, OutputStream outputStream, PrinterDP printerDP)
       throws IOException {
 
     // Here you can enable various debug information
@@ -317,7 +312,7 @@ public class PrinterDatecs {
     }
   }
 
-  private void runTask(final IPrinterRunnable r, final int msgResId) {
+  private void runTask(final IPrinterRunnableListener r, final int msgResId) {
     final ProgressDialog dialog = new ProgressDialog(this.activity);
     dialog.setTitle("Impressão");
     dialog.setMessage("Por favor aguarde,imprimindo...");

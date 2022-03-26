@@ -1,9 +1,9 @@
 package br.com.app.ceasa.repository;
 
 import br.com.app.ceasa.model.entity.Client;
-import br.com.app.ceasa.utils.Constants;
-import br.com.app.ceasa.utils.ClientFile;
-import br.com.app.ceasa.utils.Singleton;
+import br.com.app.ceasa.util.Constants;
+import br.com.app.ceasa.util.ClientFile;
+import br.com.app.ceasa.util.Singleton;
 
 import java.io.File;
 import java.io.IOException;

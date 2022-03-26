@@ -65,7 +65,7 @@
             app:endIconMode="custom"
             app:endIconTint="@color/colorPrimaryDark">
 
-            <br.com.app.ceasa.utils.CurrencyEditText
+            <br.com.app.ceasa.util.CurrencyEditText
 
                 android:id="@+id/cet_base_value"
                 android:layout_width="match_parent"
@@ -84,13 +84,28 @@
                 app:monetaryDivider=","
                 app:showSymbol="false">
 
-            </br.com.app.ceasa.utils.CurrencyEditText>
+            </br.com.app.ceasa.util.CurrencyEditText>
 
 
         </com.google.android.material.textfield.TextInputLayout>
 
 
     </LinearLayout>
+
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_save_printer"
+        style="@style/Widget.MaterialComponents.Button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:text="Configurar Impressora"
+        android:textColor="#fff"
+        app:backgroundTint="@color/primary_dark"
+        app:icon="@android:drawable/stat_sys_data_bluetooth"
+        app:iconGravity="textStart"
+        app:iconTint="@color/white" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btn_save_configuration_data"

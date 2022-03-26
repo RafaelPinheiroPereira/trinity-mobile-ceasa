@@ -29,4 +29,5 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="ok">Ok</string>
     <string name="action_search">Pesquisar nome ou código...</string>
+    <string name="title_select_device">Selecione um dispositivo  para conectar</string>
 </resources>

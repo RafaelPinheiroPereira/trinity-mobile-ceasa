@@ -5,6 +5,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.NavUtils;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.MenuItem;
@@ -15,14 +16,12 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Optional;
 
 import br.com.app.ceasa.R;
-import br.com.app.ceasa.model.entity.ConfigurationData;
 import br.com.app.ceasa.tasks.InsertConfigurationDataTask;
 import br.com.app.ceasa.tasks.UpdateConfigurationDataTask;
-import br.com.app.ceasa.utils.CurrencyEditText;
-import br.com.app.ceasa.utils.MonetaryFormatting;
+import br.com.app.ceasa.util.CurrencyEditText;
+import br.com.app.ceasa.util.MonetaryFormatting;
 import br.com.app.ceasa.viewmodel.ConfigurationDataViewModel;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -37,6 +36,9 @@ public class ConfigurationDataActivity extends AppCompatActivity {
 
   @BindView(R.id.btn_save_configuration_data)
   Button btnSaveConfigurationData;
+
+  @BindView(R.id.btn_save_printer)
+  Button btnSavePrinter;
 
   @BindView(R.id.cv_base_date)
   CalendarView cvBaseDate;
@@ -61,7 +63,8 @@ public class ConfigurationDataActivity extends AppCompatActivity {
     if (this.configurationDataViewModel.existConfigurationData()) {
       // Todo setar os campos de data e valor com os dados do banco
       cetPrice.setText(
-          MonetaryFormatting.convertToDolar(this.configurationDataViewModel.getConfigurationDataSalved().getBaseValue()));
+          MonetaryFormatting.convertToDolar(
+              this.configurationDataViewModel.getConfigurationDataSalved().getBaseValue()));
     } else {
       cetPrice.setText("0.00");
     }
@@ -120,17 +123,26 @@ public class ConfigurationDataActivity extends AppCompatActivity {
 
     if (isConfigurationDataValid()) {
       this.configurationDataViewModel.setValueBase(cetPrice.getCurrencyDouble());
-      if(!this.configurationDataViewModel.existConfigurationData()){
+      if (!this.configurationDataViewModel.existConfigurationData()) {
         this.configurationDataViewModel.setConfigurationData(
-                this.configurationDataViewModel.getConfigurationDataToInsert());
+            this.configurationDataViewModel.getConfigurationDataToInsert());
         new InsertConfigurationDataTask(this.configurationDataViewModel, this).execute();
-      }else{
-          this.configurationDataViewModel.setConfigurationData(this.configurationDataViewModel.getConfigurationDataSalved());
-          this.configurationDataViewModel.getConfigurationData().setBaseValue(this.configurationDataViewModel.getValueBase());
-          this.configurationDataViewModel.getConfigurationData().setBaseDate(this.configurationDataViewModel.getInitialDateBase());
+      } else {
+        this.configurationDataViewModel.setConfigurationData(
+            this.configurationDataViewModel.getConfigurationDataSalved());
+        this.configurationDataViewModel
+            .getConfigurationData()
+            .setBaseValue(this.configurationDataViewModel.getValueBase());
+        this.configurationDataViewModel
+            .getConfigurationData()
+            .setBaseDate(this.configurationDataViewModel.getInitialDateBase());
         new UpdateConfigurationDataTask(this.configurationDataViewModel, this).execute();
       }
-
     }
+  }
+
+  @OnClick(R.id.btn_save_printer)
+  public void savePrinter() {
+         startActivity(new Intent(this,PrinterActivity.class));
   }
 }

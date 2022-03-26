@@ -12,7 +12,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
 import br.com.app.ceasa.R;
 import br.com.app.ceasa.model.entity.Payment;
-import br.com.app.ceasa.utils.DateUtils;
+import br.com.app.ceasa.util.DateUtils;
 import br.com.app.ceasa.viewmodel.ExportViewModel;
 import butterknife.BindView;
 import butterknife.ButterKnife;

@@ -1,8 +1,8 @@
 package br.com.app.ceasa.ui.fragment;
 
-import static br.com.app.ceasa.utils.Constants.EXTRA_DATE_PAYMENT;
+import static br.com.app.ceasa.util.Constants.EXTRA_DATE_PAYMENT;
 
-import static br.com.app.ceasa.utils.Constants.TARGET_HOME_FRAGMENT_REQUEST_CODE;
+import static br.com.app.ceasa.util.Constants.TARGET_HOME_FRAGMENT_REQUEST_CODE;
 
 import android.app.Activity;
 import android.app.SearchManager;
@@ -33,8 +33,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import br.com.app.ceasa.R;
 import br.com.app.ceasa.listener.RecyclerViewOnClickListenerHack;
 import br.com.app.ceasa.model.entity.Client;
-import br.com.app.ceasa.utils.DateUtils;
-import br.com.app.ceasa.utils.Singleton;
+import br.com.app.ceasa.util.DateUtils;
+import br.com.app.ceasa.util.Singleton;
 import br.com.app.ceasa.ui.AbstractActivity;
 import br.com.app.ceasa.ui.PaymentActivity;
 import br.com.app.ceasa.ui.adapter.HomeAdapter;

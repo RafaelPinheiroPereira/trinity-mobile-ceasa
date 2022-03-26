@@ -1,4 +1,4 @@
-package br.com.app.ceasa.utils;
+package br.com.app.ceasa.util;
 
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;

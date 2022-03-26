@@ -19,12 +19,18 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
+            android:name=".ui.PrinterActivity"
+            android:parentActivityName=".ui.ConfigurationDataActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="br.com.app.ceasa.ui.PrinterActivity" />
+        </activity>
+        <activity
             android:name=".ui.HistoricActivity"
             android:parentActivityName=".ui.HomeActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="br.com.app.ceasa.ui.HistoricActivity" />
-
         </activity>
         <activity
             android:name=".ui.ConfigurationDataActivity"

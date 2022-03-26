@@ -104,7 +104,7 @@
                         app:endIconCheckable="true"
                         app:endIconTint="@color/colorPrimaryDark"
                         android:layout_height="wrap_content">
-                        <br.com.app.ceasa.utils.CurrencyEditText
+                        <br.com.app.ceasa.util.CurrencyEditText
 
                             android:id="@+id/cet_price"
                             android:layout_width="match_parent"
@@ -123,7 +123,7 @@
                             android:textColor="@android:color/primary_text_light"
                             app:showSymbol="false">
 
-                        </br.com.app.ceasa.utils.CurrencyEditText>
+                        </br.com.app.ceasa.util.CurrencyEditText>
 
 
                     </com.google.android.material.textfield.TextInputLayout>

@@ -4,8 +4,8 @@ import android.content.Context;
 
 import br.com.app.ceasa.model.entity.Client;
 import br.com.app.ceasa.model.entity.Payment;
-import br.com.app.ceasa.utils.FileManager;
-import br.com.app.ceasa.utils.Singleton;
+import br.com.app.ceasa.util.FileManager;
+import br.com.app.ceasa.util.Singleton;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;

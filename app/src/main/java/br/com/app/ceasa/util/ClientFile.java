@@ -1,4 +1,4 @@
-package br.com.app.ceasa.utils;
+package br.com.app.ceasa.util;
 
 import java.io.BufferedReader;
 import java.io.File;

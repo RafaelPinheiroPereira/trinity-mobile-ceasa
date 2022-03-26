@@ -4,9 +4,9 @@ import android.content.Context;
 import android.media.MediaScannerConnection;
 
 import br.com.app.ceasa.model.entity.Payment;
-import br.com.app.ceasa.utils.Constants;
-import br.com.app.ceasa.utils.PaymentFile;
-import br.com.app.ceasa.utils.Singleton;
+import br.com.app.ceasa.util.Constants;
+import br.com.app.ceasa.util.PaymentFile;
+import br.com.app.ceasa.util.Singleton;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.List;

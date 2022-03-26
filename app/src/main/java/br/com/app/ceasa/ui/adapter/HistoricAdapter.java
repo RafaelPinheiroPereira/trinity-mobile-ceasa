@@ -4,7 +4,6 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -15,9 +14,8 @@ import java.util.List;
 
 import br.com.app.ceasa.R;
 import br.com.app.ceasa.listener.RecyclerViewOnClickListenerHack;
-import br.com.app.ceasa.model.entity.Client;
 import br.com.app.ceasa.model.entity.Historic;
-import br.com.app.ceasa.utils.MonetaryFormatting;
+import br.com.app.ceasa.util.MonetaryFormatting;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 

@@ -7,7 +7,7 @@ import androidx.room.PrimaryKey;
 
 import java.io.Serializable;
 
-@Entity(tableName = "PrinterDP250")
+@Entity(tableName = "PrinterDP")
 public class PrinterDP implements Serializable {
   @PrimaryKey @NonNull private Long id;
 
@@ -19,6 +19,11 @@ public class PrinterDP implements Serializable {
 
   @ColumnInfo(name = "atived")
   private boolean atived = false;
+
+  public PrinterDP(String name, String mac) {
+    this.name = name;
+    this.mac = mac;
+  }
 
   @NonNull
   public Long getId() {

@@ -13,7 +13,7 @@ import br.com.app.ceasa.repository.ClientRepository;
 import br.com.app.ceasa.repository.FileManagerRepository;
 import br.com.app.ceasa.repository.PaymentRepository;
 import br.com.app.ceasa.tasks.ImportDataTask;
-import br.com.app.ceasa.utils.Singleton;
+import br.com.app.ceasa.util.Singleton;
 
 import java.io.IOException;
 import java.text.DateFormat;

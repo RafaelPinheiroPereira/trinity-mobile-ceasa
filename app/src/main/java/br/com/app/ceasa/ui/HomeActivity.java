@@ -15,8 +15,8 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 
 import br.com.app.ceasa.R;
-import br.com.app.ceasa.utils.Constants;
-import br.com.app.ceasa.utils.Singleton;
+import br.com.app.ceasa.util.Constants;
+import br.com.app.ceasa.util.Singleton;
 import br.com.app.ceasa.ui.fragment.EmptyFragment;
 import br.com.app.ceasa.ui.fragment.HomeFragment;
 import br.com.app.ceasa.viewmodel.HomeViewModel;

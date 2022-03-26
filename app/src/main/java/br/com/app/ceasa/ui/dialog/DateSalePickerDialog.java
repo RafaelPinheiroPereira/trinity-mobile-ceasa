@@ -8,7 +8,7 @@ import android.icu.util.Calendar;
 import android.os.Bundle;
 import android.widget.DatePicker;
 import androidx.fragment.app.DialogFragment;
-import br.com.app.ceasa.utils.Constants;
+import br.com.app.ceasa.util.Constants;
 
 public class DateSalePickerDialog extends DialogFragment
     implements DatePickerDialog.OnDateSetListener {
