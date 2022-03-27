@@ -20,6 +20,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -42,6 +43,9 @@ import br.com.app.ceasa.ui.dialog.DateSalePickerDialog;
 import br.com.app.ceasa.viewmodel.HomeViewModel;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
+import butterknife.OnItemClick;
+import butterknife.OnTouch;
 
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -325,10 +329,11 @@ public class HomeFragment extends Fragment
   public void onClickListener(final View view, final int position) {
 
     switch (view.getId()) {
-      case R.id.img_info:
-        // abrir tela de pedidos
+
+      case R.id.btn_historic:
+        //
         break;
-      case R.id.btn_sale:
+      case R.id.contentContainerRl:
         navigateToSaleActivity(position);
         break;
       default:
@@ -365,4 +370,5 @@ public class HomeFragment extends Fragment
       }
     }
   }
+
 }

@@ -5,11 +5,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.Filter;
 import android.widget.Filterable;
+import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 import br.com.app.ceasa.R;
 import br.com.app.ceasa.listener.RecyclerViewOnClickListenerHack;
@@ -101,18 +103,19 @@ public class HomeAdapter extends RecyclerView.Adapter<MyViewHolder> implements F
     @BindView(R.id.txt_client_id)
     public TextView txtClientId;
 
-    @BindView(R.id.img_info)
-    Button imgInfo;
 
-    @BindView(R.id.btn_sale)
-    Button btnSale;
+    @BindView(R.id.contentContainerRl)
+    LinearLayout linearLayout;
+    @BindView(R.id.btn_historic)
+    ImageButton btnHistoric;
 
     public MyViewHolder(View itemView) {
       super(itemView);
       ButterKnife.bind(this, itemView);
 
-      imgInfo.setOnClickListener(this);
-      btnSale.setOnClickListener(this);
+
+      btnHistoric.setOnClickListener(this);
+      linearLayout.setOnClickListener(this);
     }
 
     @Override
