@@ -25,6 +25,8 @@ public class PrinterDP implements Serializable {
     this.mac = mac;
   }
 
+  public PrinterDP() {}
+
   @NonNull
   public Long getId() {
     return id;

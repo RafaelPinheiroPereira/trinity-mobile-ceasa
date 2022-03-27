@@ -10,6 +10,8 @@ import br.com.app.ceasa.model.entity.ConfigurationData;
 import br.com.app.ceasa.model.entity.Payment;
 import br.com.app.ceasa.repository.ConfigurationDataRepository;
 import br.com.app.ceasa.repository.PaymentRepository;
+import br.com.app.ceasa.repository.PrinterDPRepository;
+import br.com.app.ceasa.util.PrinterDatecsUtil;
 
 import java.util.Date;
 import java.util.Optional;
@@ -29,14 +31,18 @@ public class PaymentViewModel extends AndroidViewModel {
 
   Double paymentValue;
 
+  PrinterDatecsUtil printerDatecsUtil;
+
   /*Repositorios de acesso ao dados */
   PaymentRepository paymentRepository;
   ConfigurationDataRepository configurationDataRepository;
+  PrinterDPRepository printerDPRepository;
 
   public PaymentViewModel(@NonNull final Application application) {
     super(application);
     paymentRepository = new PaymentRepository(application);
     configurationDataRepository = new ConfigurationDataRepository(application);
+    printerDPRepository= new PrinterDPRepository(application);
   }
 
   public boolean existConfigurationData() {
@@ -126,5 +132,29 @@ public class PaymentViewModel extends AndroidViewModel {
 
   public void setPaymentValue(Double paymentValue) {
     this.paymentValue = paymentValue;
+  }
+
+  public PrinterDatecsUtil getPrinterDatecsUtil() {
+    return printerDatecsUtil;
+  }
+
+  public void setPrinterDatecsUtil(PrinterDatecsUtil printerDatecsUtil) {
+    this.printerDatecsUtil = printerDatecsUtil;
+  }
+
+  public void waitForConnection() throws Throwable {
+        this.printerDatecsUtil.waitForConection(this.printerDPRepository.findActivedPrinter());
+  }
+
+  public boolean isAtivedPrinter() {
+    return this.printerDPRepository.isActivedPrinter();
+  }
+
+  public void printPayment() {
+    this.getPrinterDatecsUtil().printPayment(this.getPayment());
+  }
+
+  public void closeConnection() {
+    this.getPrinterDatecsUtil().closeConnection();
   }
 }

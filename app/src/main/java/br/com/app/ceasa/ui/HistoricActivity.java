@@ -7,25 +7,25 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.os.Bundle;
+import android.view.View;
 
 import java.text.ParseException;
 
 import br.com.app.ceasa.R;
-import br.com.app.ceasa.model.entity.Historic;
 import br.com.app.ceasa.ui.fragment.EmptyFragment;
 import br.com.app.ceasa.ui.fragment.HistoricFragment;
-import br.com.app.ceasa.ui.fragment.HomeFragment;
+import br.com.app.ceasa.util.PrinterDatecsUtil;
 import br.com.app.ceasa.viewmodel.HistoricViewModel;
-import br.com.app.ceasa.viewmodel.PaymentViewModel;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
-public class HistoricActivity extends AppCompatActivity {
+public class HistoricActivity extends AbstractActivity {
 
   @BindView(R.id.toolbar)
   Toolbar toolbar;
 
-  HistoricViewModel historicViewModel;
+  HistoricViewModel viewModel;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -33,7 +33,8 @@ public class HistoricActivity extends AppCompatActivity {
     setContentView(R.layout.activity_historic);
     ButterKnife.bind(this);
     initViews();
-    historicViewModel = new ViewModelProvider(this).get(HistoricViewModel.class);
+    viewModel = new ViewModelProvider(this).get(HistoricViewModel.class);
+    this.viewModel.setPrinterDatecsUtil(new PrinterDatecsUtil(this));
   }
 
   @Override
@@ -41,8 +42,8 @@ public class HistoricActivity extends AppCompatActivity {
     super.onStart();
 
     try {
-      historicViewModel
-          .getHistoricByDatePayment(this.historicViewModel.getConfigurationDataSalved().getBaseDate())
+      viewModel
+          .getHistoricByDatePayment(this.viewModel.getConfigurationDataSalved().getBaseDate())
           .observe(
               this,
               historic -> {
@@ -59,6 +60,15 @@ public class HistoricActivity extends AppCompatActivity {
     } catch (ParseException e) {
       e.printStackTrace();
     }
+    if (this.viewModel.isAtivedPrinter()) {
+      try {
+        this.viewModel.waitForConnection();
+      } catch (Throwable throwable) {
+        showErrorMessage(this, "Erro ao encontrar impressora ativa!");
+      }
+    } else {
+      showMessage(this, "Não há impressora ativa, por favor configure!");
+    }
   }
 
   private void initViews() {
@@ -66,11 +76,24 @@ public class HistoricActivity extends AppCompatActivity {
     setSupportActionBar(toolbar);
     getSupportActionBar().setDisplayHomeAsUpEnabled(true);
   }
+
   private void loadFragment(Fragment fragment) {
     // load fragment
     FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
     transaction.replace(R.id.frame_container, fragment);
     transaction.addToBackStack(null);
     transaction.commit();
+  }
+
+  @OnClick(R.id.fb_print_historic)
+  public void printHistoric(View view) {
+    if (!this.viewModel.getHistorics().isEmpty()) this.viewModel.printHistoric();
+    else showMessage(this,"Não existem recebimentos a serem impressos!");
+  }
+
+  @Override
+  protected void onDestroy() {
+    super.onDestroy();
+    this.viewModel.closeConnection();
   }
 }

@@ -29,7 +29,7 @@ import com.shreyaspatil.MaterialDialog.BottomSheetMaterialDialog.Builder;
 
 import java.io.IOException;
 
-public class HomeActivity extends AppCompatActivity {
+public class HomeActivity extends AbstractActivity {
 
   @BindView(R.id.toolbar)
   Toolbar toolbar;
@@ -39,7 +39,7 @@ public class HomeActivity extends AppCompatActivity {
 
   HomeViewModel homeViewModel;
 
-  AbstractActivity abstractActivity;
+
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -49,13 +49,7 @@ public class HomeActivity extends AppCompatActivity {
     initViews();
     homeViewModel = new ViewModelProvider(this).get(HomeViewModel.class);
     homeViewModel.setContext(this);
-    try {
-      abstractActivity = Singleton.getInstance(AbstractActivity.class);
-    } catch (InstantiationException e) {
-      e.printStackTrace();
-    } catch (IllegalAccessException e) {
-      e.printStackTrace();
-    }
+
   }
 
   @Override
@@ -89,14 +83,14 @@ public class HomeActivity extends AppCompatActivity {
                 try {
                   homeViewModel.importData();
                 } catch (IllegalAccessException e) {
-                  abstractActivity.showErrorMessage(getApplicationContext(), e.getMessage());
+                  showErrorMessage(getApplicationContext(), e.getMessage());
                   e.printStackTrace();
                 } catch (IOException e) {
                   e.printStackTrace();
-                  abstractActivity.showErrorMessage(getApplicationContext(), e.getMessage());
+                  showErrorMessage(getApplicationContext(), e.getMessage());
                 } catch (InstantiationException e) {
                   e.printStackTrace();
-                  abstractActivity.showErrorMessage(getApplicationContext(), e.getMessage());
+                  showErrorMessage(getApplicationContext(), e.getMessage());
                 }
 
               } else {
@@ -111,7 +105,7 @@ public class HomeActivity extends AppCompatActivity {
                         .setPositiveButton(
                             "OK",
                             (dialogInterface, which) -> {
-                              abstractActivity.showMessage(
+                              showMessage(
                                   getApplicationContext(),
                                   "Por favor, realize a inclusão dos arquivos");
 
@@ -195,7 +189,7 @@ public class HomeActivity extends AppCompatActivity {
           homeViewModel.createAppDirectory();
         } catch (IOException e) {
 
-          abstractActivity.showErrorMessage(this, e.getMessage());
+          showErrorMessage(this, e.getMessage());
         }
 
       } else {

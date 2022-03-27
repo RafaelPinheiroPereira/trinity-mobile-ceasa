@@ -18,6 +18,8 @@ public abstract class PrinterDPDAO extends GenericDAO<PrinterDP> {
 
   @Query("select * from printerdp where printerdp.mac=:mac order by id")
   public abstract PrinterDP searchPrinterByMac(String mac);
+  @Query(value="SELECT MAX(id) FROM printerdp ")
+  public abstract Long findLastId();
 
   private class OperationsAsyncTask extends AsyncTask<PrinterDP, Void, Void> {
 

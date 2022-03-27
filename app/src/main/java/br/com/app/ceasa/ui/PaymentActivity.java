@@ -19,6 +19,7 @@ import br.com.app.ceasa.tasks.InsertPaymentTask;
 import br.com.app.ceasa.util.CurrencyEditText;
 import br.com.app.ceasa.util.DateUtils;
 import br.com.app.ceasa.util.MonetaryFormatting;
+import br.com.app.ceasa.util.PrinterDatecsUtil;
 import br.com.app.ceasa.util.Singleton;
 import br.com.app.ceasa.viewmodel.PaymentViewModel;
 import butterknife.BindView;
@@ -33,7 +34,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Optional;
 
-public class PaymentActivity extends AppCompatActivity {
+public class PaymentActivity extends AbstractActivity {
 
   @BindView(R.id.toolbar)
   Toolbar toolbar;
@@ -50,9 +51,9 @@ public class PaymentActivity extends AppCompatActivity {
   @BindView(R.id.cv_base_date)
   CalendarView cvDate;
 
-  PaymentViewModel paymentViewModel;
+  PaymentViewModel viewModel;
 
-  AbstractActivity abstractActivity;
+
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -60,24 +61,25 @@ public class PaymentActivity extends AppCompatActivity {
     setContentView(R.layout.activity_sale);
     ButterKnife.bind(this);
     initViews();
-    paymentViewModel = new ViewModelProvider(this).get(PaymentViewModel.class);
+    viewModel = new ViewModelProvider(this).get(PaymentViewModel.class);
+    this.viewModel.setPrinterDatecsUtil(new PrinterDatecsUtil(this));
+
   }
 
   @Override
   protected void onStart() {
     super.onStart();
     try {
-      abstractActivity = Singleton.getInstance(AbstractActivity.class);
-      this.paymentViewModel.setContext(this);
+      this.viewModel.setContext(this);
       this.getParentActivityData();
 
-      if (this.paymentViewModel.existConfigurationData()) {
+      if (this.viewModel.existConfigurationData()) {
         cetPrice.setText(
             MonetaryFormatting.convertToDolar(
-                this.paymentViewModel.getConfigurationDataSalved().getBaseValue()));
+                this.viewModel.getConfigurationDataSalved().getBaseValue()));
       }
 
-    } catch (InstantiationException | IllegalAccessException | ParseException e) {
+    } catch (ParseException e) {
       e.printStackTrace();
     }
 
@@ -97,20 +99,31 @@ public class PaymentActivity extends AppCompatActivity {
           try {
 
             Date datePayment = f.parse(formatedPaymentDate);
-            this.paymentViewModel.setPaymentDate(datePayment);
+            this.viewModel.setPaymentDate(datePayment);
           } catch (ParseException e) {
             e.printStackTrace();
           }
         });
+
+    if(this.viewModel.isAtivedPrinter()){
+      try {
+        this.viewModel.waitForConnection();
+      } catch (Throwable throwable) {
+        showErrorMessage(this,"Erro ao encontrar impressora ativa!");
+      }
+    }else{
+      showMessage(this,"Não há impressora ativa, por favor configure!");
+    }
+
   }
 
   /*Configura os componentes para a criacao da venda*/
   private void configureCreate() {
     DateFormat format = DateFormat.getDateInstance(DateFormat.DATE_FIELD);
     try {
-      this.paymentViewModel.setPaymentDate( format.parse(format.format(cvDate.getDate())));
+      this.viewModel.setPaymentDate( format.parse(format.format(cvDate.getDate())));
     } catch (ParseException e) {
-      abstractActivity.showErrorMessage(this, e.getMessage());
+      showErrorMessage(this, e.getMessage());
     }
 
   }
@@ -119,7 +132,7 @@ public class PaymentActivity extends AppCompatActivity {
 
   private void checkInitialConfigure() {
     Optional<Payment> optionalPayment =
-        Optional.ofNullable(this.paymentViewModel.getPaymentByDateAndClient());
+        Optional.ofNullable(this.viewModel.getPaymentByDateAndClient());
     if (optionalPayment.isPresent()) {
       // deixa tudo desabilitado
     } else {
@@ -131,9 +144,9 @@ public class PaymentActivity extends AppCompatActivity {
   private void setClientData() {
     this.dataClient.setText(
         "CLIENTE: "
-            + this.paymentViewModel.getClient().getId()
+            + this.viewModel.getClient().getId()
             + " - "
-            + this.paymentViewModel.getClient().getName());
+            + this.viewModel.getClient().getName());
   }
 
   /*Obtem os dados da HomeActivity*/
@@ -142,8 +155,8 @@ public class PaymentActivity extends AppCompatActivity {
     Bundle args = getIntent().getExtras();
 
     if (args != null) {
-      this.paymentViewModel.setClient((Client) args.getSerializable("keyClient"));
-      this.paymentViewModel.setPaymentDate(
+      this.viewModel.setClient((Client) args.getSerializable("keyClient"));
+      this.viewModel.setPaymentDate(
           DateFormat.getDateInstance(DateFormat.SHORT).parse(args.getString("keyDateSale")));
     }
   }
@@ -176,8 +189,8 @@ public class PaymentActivity extends AppCompatActivity {
 
 
       if (DateUtils.isValidPeriod(
-          this.paymentViewModel.getPaymentDate(),
-          this.paymentViewModel.getConfigurationDataSalved().getBaseDate())) {
+          this.viewModel.getPaymentDate(),
+          this.viewModel.getConfigurationDataSalved().getBaseDate())) {
         MaterialDialog mDialog =
             new MaterialDialog.Builder(this)
                 .setTitle("Salvar Recebimento?")
@@ -191,10 +204,13 @@ public class PaymentActivity extends AppCompatActivity {
                     "Salvar",
                     R.mipmap.ic_save_white_48dp,
                     (dialogInterface, which) -> {
-                      this.paymentViewModel.setDescription(edtDescription.getText().toString());
-                      this.paymentViewModel.setPaymentValue(cetPrice.getCurrencyDouble());
-                      this.paymentViewModel.setPayment(this.paymentViewModel.getPaymentToInsert());
-                      new InsertPaymentTask(this.paymentViewModel, this).execute();
+
+                      this.viewModel.setDescription(edtDescription.getText().toString());
+                      this.viewModel.setPaymentValue(cetPrice.getCurrencyDouble());
+                      this.viewModel.setPayment(this.viewModel.getPaymentToInsert());
+                      new InsertPaymentTask(this.viewModel, this).execute();
+
+                      this.viewModel.printPayment();
 
                       dialogInterface.dismiss();
                     })
@@ -203,10 +219,10 @@ public class PaymentActivity extends AppCompatActivity {
         mDialog.show();
 
       } else {
-        abstractActivity.showMessage(this, "Data Base inferior a Data de Recebimento!");
+        showMessage(this, "Data Base inferior a Data de Recebimento!");
       }
     } else {
-      abstractActivity.showMessage(this, "Por favor,digite um valor base válido!");
+      showMessage(this, "Por favor,digite um valor base válido!");
     }
   }
 
@@ -224,5 +240,9 @@ public class PaymentActivity extends AppCompatActivity {
   @Override
   public void onBackPressed() {}
 
-
+  @Override
+  protected void onDestroy() {
+    super.onDestroy();
+    this.viewModel.closeConnection();
+  }
 }

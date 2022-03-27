@@ -9,6 +9,7 @@ public class Constants {
     public static final String SPINNER_KEY_POSITION = "spinnerKeyPostion";
     public static final int TARGET_HOME_FRAGMENT_REQUEST_CODE = 1;
     public static final int TARGET_HISTORIC_FRAGMENT_REQUEST_CODE = 2;
+    public static String PREF_DEVICE_ADDRESS = "device_address";
 
     public static final String PREFS_NAME = "Preferences";
 

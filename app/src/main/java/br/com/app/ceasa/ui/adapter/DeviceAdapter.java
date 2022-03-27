@@ -14,11 +14,11 @@ import br.com.app.ceasa.R;
 import br.com.app.ceasa.model.entity.PrinterDP;
 import br.com.app.ceasa.viewmodel.PrinterDPViewModel;
 
-public class DeviceAdpater extends BaseAdapter {
+public class DeviceAdapter extends BaseAdapter {
   private List<PrinterDP> printerDPS = new ArrayList<>();
   private PrinterDPViewModel printerDPViewModel;
 
-  public DeviceAdpater(final PrinterDPViewModel printerDPViewModel) {
+  public DeviceAdapter(final PrinterDPViewModel printerDPViewModel) {
 
     this.printerDPViewModel = printerDPViewModel;
   }

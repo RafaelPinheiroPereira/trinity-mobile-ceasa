@@ -53,7 +53,7 @@ public class HistoricFragment extends Fragment implements View.OnClickListener {
   RecyclerView rcvHistoric;
 
   AbstractActivity abstractActivity;
-  private HistoricViewModel historicViewModel;
+  private HistoricViewModel viewModel;
   HistoricAdapter historicAdapter;
   DialogFragment dialogDatePaymentFragment = new DateSalePickerDialog();
 
@@ -84,7 +84,7 @@ public class HistoricFragment extends Fragment implements View.OnClickListener {
   @Override
   public void onActivityCreated(@Nullable Bundle savedInstanceState) {
     super.onActivityCreated(savedInstanceState);
-    historicViewModel = new ViewModelProvider(requireActivity()).get(HistoricViewModel.class);
+    viewModel = new ViewModelProvider(requireActivity()).get(HistoricViewModel.class);
   }
 
   @Override
@@ -121,13 +121,14 @@ public class HistoricFragment extends Fragment implements View.OnClickListener {
 
   private void loadHistoricByDate()
       throws ExecutionException, InterruptedException, ParseException {
-    this.historicViewModel
-        .getHistoricByDatePayment(this.historicViewModel.getConfigurationDataSalved().getBaseDate())
+    this.viewModel
+        .getHistoricByDatePayment(this.viewModel.getConfigurationDataSalved().getBaseDate())
         .observe(
             this,
             historics -> {
               Collections.sort(historics, Comparator.comparing(Historic::getIdClient));
               historicAdapter = new HistoricAdapter(getActivity(), historics);
+              this.viewModel.setHistorics(historics);
               rcvHistoric.setAdapter(historicAdapter);
               this.updateTxtTotalValue(historics);
             });
@@ -172,18 +173,21 @@ public class HistoricFragment extends Fragment implements View.OnClickListener {
     }
     if (requestCode == TARGET_HISTORIC_FRAGMENT_REQUEST_CODE) {
       this.edtDatePayment.setText(data.getStringExtra(EXTRA_DATE_PAYMENT));
-      this.historicViewModel.setDatePayment(edtDatePayment.getText().toString());
+      this.viewModel.setDatePayment(edtDatePayment.getText().toString());
       try {
-        this.historicViewModel
+        this.viewModel
             .getHistoricByDatePayment(
-                DateFormat.getDateInstance(DateFormat.SHORT)
-                    .parse(this.historicViewModel.getDatePayment()))
+                DateFormat.getDateInstance(DateFormat.SHORT).parse(this.viewModel.getDatePayment()))
             .observe(
                 this,
                 historics -> {
-                  Collections.sort(historics, Comparator.comparing(Historic::getIdClient));
-                  historicAdapter = new HistoricAdapter(getActivity(), historics);
-                  rcvHistoric.setAdapter(historicAdapter);
+
+                    Collections.sort(historics, Comparator.comparing(Historic::getIdClient));
+                    historicAdapter = new HistoricAdapter(getActivity(), historics);
+                    rcvHistoric.setAdapter(historicAdapter);
+                    this.viewModel.setHistorics(historics);
+
+                  updateTxtTotalValue(historics);
                 });
 
       } catch (ParseException e) {
@@ -195,6 +199,6 @@ public class HistoricFragment extends Fragment implements View.OnClickListener {
   private void setDatePaymentToday() {
     edtDatePayment.setText(
         DateUtils.convertDateToStringInFormat_dd_mm_yyyy(new Date(System.currentTimeMillis())));
-    this.historicViewModel.setDatePayment(edtDatePayment.getText().toString());
+    this.viewModel.setDatePayment(edtDatePayment.getText().toString());
   }
 }

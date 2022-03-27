@@ -29,4 +29,15 @@ public class PrinterDPRepository {
     return Optional.ofNullable(printerDPDAO.searchPrinterByMac(mac)).orElseThrow(Exception::new);
   }
 
+  public void updatePrinter(PrinterDP printerDP) {
+    this.printerDPDAO.update(printerDP);
+  }
+
+  public Long findLastId() {
+    return this.printerDPDAO.findLastId();
+  }
+
+  public void insertPrintDP(PrinterDP printerDP) {
+    this.printerDPDAO.insert(printerDP);
+  }
 }

@@ -26,7 +26,6 @@ import br.com.app.ceasa.ui.AbstractActivity;
 
 public class PrinterDatecsUtil {
 
-
   AbstractActivity abstractActivity = new AbstractActivity();
 
   Activity activity;
@@ -50,7 +49,7 @@ public class PrinterDatecsUtil {
     if (bluetoothAdapter.isEnabled()) {
       // Checa conexao
       if (BluetoothAdapter.checkBluetoothAddress(printerDP.getMac())) {
-        estabelecerConexaoBluetooth(printerDP);
+        establishConnectionBluetooth(printerDP);
         return true;
       } else {
         abstractActivity.showMessage(
@@ -65,7 +64,7 @@ public class PrinterDatecsUtil {
     }
   }
 
-  public void fecharConexaoAtiva() {
+  public void closeConnection() {
     closeConection();
   }
 
@@ -102,7 +101,7 @@ public class PrinterDatecsUtil {
         R.string.app_name);
   }
 
-  public void initPrint(InputStream inputStream, OutputStream outputStream, PrinterDP printerDP)
+  private void initPrint(InputStream inputStream, OutputStream outputStream, PrinterDP printerDP)
       throws IOException {
 
     // Here you can enable various debug information
@@ -207,12 +206,12 @@ public class PrinterDatecsUtil {
     textBuffer.append("{br}");
     textBuffer.append("{br}");
     textBuffer.append("{b}Data:");
-    textBuffer.append("{b}" + payment.getDate().toString() + "{br}");
+    textBuffer.append(
+        "{b}" + DateUtils.convertDateToStringInFormat_dd_mm_yyyy(payment.getDate()) + "{br}");
     textBuffer.append("{b}Cliente:");
     textBuffer.append("{b}" + payment.getIdClient() + "{br}");
     textBuffer.append("{br}");
-    textBuffer.append(
-        "{reset}{right}{h}TOTAL: {/w}" + MonetaryFormatting.convertToReal(payment.getValue()));
+    textBuffer.append("{reset}{right}{h}TOTAL: {/w}" + String.format("%.2f", payment.getValue()));
     textBuffer.append("{br}");
     textBuffer.append("{s}------------------------------------------");
     textBuffer.append("{br}");
@@ -231,27 +230,30 @@ public class PrinterDatecsUtil {
     textBuffer.append("{br}");
     textBuffer.append("{s}------------------------------------------");
     textBuffer.append("{br}");
-    textBuffer.append("{center}{h}RESUMO DE PAGAMENTO  " + historicList.get(0).getDatePayment());
+    textBuffer.append(
+        "{center}{h}RESUMO DE PAGAMENTO  "
+            + DateUtils.convertDateToStringInFormat_dd_mm_yyyy(
+                historicList.get(0).getDatePayment()));
     textBuffer.append("{br}");
     textBuffer.append("{center}{h} (BANCA VAREJAO) {br}{br}");
+    historicList.forEach(
+        historic -> {
+          textBuffer.append(
+              "{b}" + historic.getName().concat("  ") + String.format("%.2f", historic.getValue()) + "{br}");
+        });
     // Aqui vem um foreach
-    textBuffer.append(
-        "{b}"
-            + historicList.get(0).getName()
-            + MonetaryFormatting.convertToReal(historicList.get(0).getValue())
-            + "{br}");
+
     textBuffer.append("------------------------------------------{br}");
     textBuffer.append(
         "{reset}{right}{h}TOTAL: {/w}"
-            + MonetaryFormatting.convertToReal(
-                historicList.stream().mapToDouble(Historic::getValue).sum()));
+            + String.format("%.2f", historicList.stream().mapToDouble(Historic::getValue).sum()));
     textBuffer.append("{br}");
     textBuffer.append("{br}");
 
     return textBuffer;
   }
 
-  private void estabelecerConexaoBluetooth(final PrinterDP printerDP) {
+  private void establishConnectionBluetooth(final PrinterDP printerDP) {
     final ProgressDialog dialog = new ProgressDialog(this.activity);
     dialog.setTitle("Por favor , aguarde a conexão...");
     dialog.setMessage("Conectando o dispositivo");

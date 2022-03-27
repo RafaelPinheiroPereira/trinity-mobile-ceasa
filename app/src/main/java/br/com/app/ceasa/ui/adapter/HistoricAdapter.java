@@ -34,8 +34,11 @@ public class HistoricAdapter extends RecyclerView.Adapter<HistoricAdapter.MyView
   public HistoricAdapter.MyViewHolder onCreateViewHolder(
       @NonNull final ViewGroup parent, final int viewType) {
     View v = null;
-    if (this.historics.isEmpty()) v = mLayoutInflater.inflate(R.layout.empty_sate, parent, false);
-    else v = mLayoutInflater.inflate(R.layout.item_recycle_historic, parent, false);
+    if (this.historics.size() == 0) {
+      v = mLayoutInflater.inflate(R.layout.empty_sate, parent, false);
+    } else {
+      v = mLayoutInflater.inflate(R.layout.item_recycle_historic, parent, false);
+    }
     HistoricAdapter.MyViewHolder mvh = new HistoricAdapter.MyViewHolder(v);
     return mvh;
   }
