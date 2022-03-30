@@ -49,6 +49,9 @@ public class HistoricFragment extends Fragment implements View.OnClickListener {
   @BindView(R.id.txt_total_value_historic)
   TextView txtValueTotal;
 
+  @BindView(R.id.txt_msg_empty)
+  TextView txtMsgEmpty;
+
   @BindView(R.id.rcv_historic)
   RecyclerView rcvHistoric;
 
@@ -126,17 +129,30 @@ public class HistoricFragment extends Fragment implements View.OnClickListener {
         .observe(
             this,
             historics -> {
-              Collections.sort(historics, Comparator.comparing(Historic::getIdClient));
-              historicAdapter = new HistoricAdapter(getActivity(), historics);
-              this.viewModel.setHistorics(historics);
-              rcvHistoric.setAdapter(historicAdapter);
-              this.updateTxtTotalValue(historics);
+              cofigureRecycleView(historics);
             });
   }
 
-  private void updateTxtTotalValue(List<Historic> historics) {
-    txtValueTotal.setText("Total: "+MonetaryFormatting.convertToReal(historics.stream().mapToDouble(Historic::getValue).sum()));
+  private void cofigureRecycleView(List<Historic> historics) {
+    Collections.sort(historics, Comparator.comparing(Historic::getIdClient));
+    historicAdapter = new HistoricAdapter(getActivity(), historics);
+    this.viewModel.setHistorics(historics);
+    rcvHistoric.setAdapter(historicAdapter);
+    if (historics.size() > 0) {
+      txtMsgEmpty.setVisibility(View.INVISIBLE);
 
+    } else {
+
+      txtMsgEmpty.setVisibility(View.VISIBLE);
+    }
+    this.updateTxtTotalValue(historics);
+  }
+
+  private void updateTxtTotalValue(List<Historic> historics) {
+    txtValueTotal.setText(
+        "Total: "
+            + MonetaryFormatting.convertToReal(
+                historics.stream().mapToDouble(Historic::getValue).sum()));
   }
 
   @Override
@@ -181,13 +197,7 @@ public class HistoricFragment extends Fragment implements View.OnClickListener {
             .observe(
                 this,
                 historics -> {
-
-                    Collections.sort(historics, Comparator.comparing(Historic::getIdClient));
-                    historicAdapter = new HistoricAdapter(getActivity(), historics);
-                    rcvHistoric.setAdapter(historicAdapter);
-                    this.viewModel.setHistorics(historics);
-
-                  updateTxtTotalValue(historics);
+                  cofigureRecycleView(historics);
                 });
 
       } catch (ParseException e) {

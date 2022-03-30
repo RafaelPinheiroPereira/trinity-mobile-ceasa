@@ -185,7 +185,7 @@ public class PaymentActivity extends AbstractActivity {
       ConfigurationData configurationData=  this.viewModel.getConfigurationDataSalved();
       if (DateUtils.isValidPeriod(
           this.viewModel.getPaymentDate(),
-              configurationData !=null?configurationData.getBaseDate():this.viewModel.getPaymentDate())) {
+              configurationData.getBaseDate())) {
         MaterialDialog mDialog =
             new MaterialDialog.Builder(this)
                 .setTitle("Salvar Recebimento?")

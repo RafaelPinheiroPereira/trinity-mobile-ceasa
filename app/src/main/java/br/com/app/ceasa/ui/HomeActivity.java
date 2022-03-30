@@ -233,6 +233,7 @@ public class HomeActivity extends AbstractActivity {
           dateToday, configurationData.getBaseDate())) {
         this.configurationDataViewModel.setInitialDateBase(dateToday);
         this.configurationDataViewModel.setValueBase(configurationData.getBaseValue());
+        this.configurationDataViewModel.setConfigurationData(configurationData);
         new UpdateConfigurationDataTask(this.configurationDataViewModel).execute();
       }
 

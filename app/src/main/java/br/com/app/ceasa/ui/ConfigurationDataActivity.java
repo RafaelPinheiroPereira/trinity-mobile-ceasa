@@ -21,13 +21,14 @@ import br.com.app.ceasa.R;
 import br.com.app.ceasa.tasks.InsertConfigurationDataTask;
 import br.com.app.ceasa.tasks.UpdateConfigurationDataTask;
 import br.com.app.ceasa.util.CurrencyEditText;
+import br.com.app.ceasa.util.DateUtils;
 import br.com.app.ceasa.util.MonetaryFormatting;
 import br.com.app.ceasa.viewmodel.ConfigurationDataViewModel;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class ConfigurationDataActivity extends AppCompatActivity {
+public class ConfigurationDataActivity extends AbstractActivity {
   @BindView(R.id.toolbar)
   Toolbar toolbar;
 
@@ -123,6 +124,7 @@ public class ConfigurationDataActivity extends AppCompatActivity {
 
     if (isConfigurationDataValid()) {
       this.configurationDataViewModel.setValueBase(cetPrice.getCurrencyDouble());
+
       if (!this.configurationDataViewModel.existConfigurationData()) {
         this.configurationDataViewModel.setConfigurationData(
             this.configurationDataViewModel.getConfigurationDataToInsert());
@@ -133,16 +135,24 @@ public class ConfigurationDataActivity extends AppCompatActivity {
         this.configurationDataViewModel
             .getConfigurationData()
             .setBaseValue(this.configurationDataViewModel.getValueBase());
-        this.configurationDataViewModel
-            .getConfigurationData()
-            .setBaseDate(this.configurationDataViewModel.getInitialDateBase());
-        new UpdateConfigurationDataTask(this.configurationDataViewModel).execute();
+
+        if (DateUtils.isUpdateDataBase(
+            this.configurationDataViewModel.getInitialDateBase(),
+            this.configurationDataViewModel.getConfigurationDataSalved().getBaseDate())) {
+          this.configurationDataViewModel
+              .getConfigurationData()
+              .setBaseDate(this.configurationDataViewModel.getInitialDateBase());
+          new UpdateConfigurationDataTask(this.configurationDataViewModel).execute();
+        }else{
+          showMessage(this,"A nova data base não pode ser menor do que a cadastrada!");
+
+        }
       }
     }
   }
 
   @OnClick(R.id.btn_save_printer)
   public void savePrinter() {
-         startActivity(new Intent(this,PrinterActivity.class));
+    startActivity(new Intent(this, PrinterActivity.class));
   }
 }

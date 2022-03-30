@@ -1,6 +1,5 @@
 package br.com.app.ceasa.ui;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
@@ -12,7 +11,6 @@ import android.view.View;
 import java.text.ParseException;
 
 import br.com.app.ceasa.R;
-import br.com.app.ceasa.ui.fragment.EmptyFragment;
 import br.com.app.ceasa.ui.fragment.HistoricFragment;
 import br.com.app.ceasa.util.PrinterDatecsUtil;
 import br.com.app.ceasa.viewmodel.HistoricViewModel;
@@ -47,15 +45,10 @@ public class HistoricActivity extends AbstractActivity {
           .observe(
               this,
               historic -> {
-                if (historic.size() > 0) {
+
                   HistoricFragment historicFragment = new HistoricFragment();
                   this.loadFragment(historicFragment);
 
-                } else {
-
-                  EmptyFragment emptyFragment = new EmptyFragment();
-                  this.loadFragment(emptyFragment);
-                }
               });
     } catch (ParseException e) {
       e.printStackTrace();
