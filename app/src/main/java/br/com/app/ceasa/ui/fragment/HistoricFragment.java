@@ -97,7 +97,6 @@ public class HistoricFragment extends Fragment implements View.OnClickListener {
     this.txtValueTotal.setText("Total :R$ 00,00");
     this.edtDatePayment.setOnClickListener(this);
     this.setDatePaymentToday();
-
     this.configInitialRecycle();
     try {
       loadHistoricByDate();
@@ -124,8 +123,13 @@ public class HistoricFragment extends Fragment implements View.OnClickListener {
 
   private void loadHistoricByDate()
       throws ExecutionException, InterruptedException, ParseException {
+    Date dateToday =
+            DateFormat.getDateInstance(DateFormat.SHORT)
+                    .parse(
+                            DateUtils.convertDateToStringInFormat_dd_mm_yyyy(
+                                    new Date(System.currentTimeMillis())));
     this.viewModel
-        .getHistoricByDatePayment(this.viewModel.getConfigurationDataSalved().getBaseDate())
+        .getHistoricByDatePayment(dateToday)
         .observe(
             this,
             historics -> {

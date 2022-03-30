@@ -8,10 +8,13 @@ import androidx.lifecycle.ViewModelProvider;
 import android.os.Bundle;
 import android.view.View;
 
+import java.text.DateFormat;
 import java.text.ParseException;
+import java.util.Date;
 
 import br.com.app.ceasa.R;
 import br.com.app.ceasa.ui.fragment.HistoricFragment;
+import br.com.app.ceasa.util.DateUtils;
 import br.com.app.ceasa.util.PrinterDatecsUtil;
 import br.com.app.ceasa.viewmodel.HistoricViewModel;
 import butterknife.BindView;
@@ -40,8 +43,13 @@ public class HistoricActivity extends AbstractActivity {
     super.onStart();
 
     try {
+      Date dateToday =
+              DateFormat.getDateInstance(DateFormat.SHORT)
+                      .parse(
+                              DateUtils.convertDateToStringInFormat_dd_mm_yyyy(
+                                      new Date(System.currentTimeMillis())));
       viewModel
-          .getHistoricByDatePayment(this.viewModel.getConfigurationDataSalved().getBaseDate())
+          .getHistoricByDatePayment(dateToday)
           .observe(
               this,
               historic -> {
@@ -89,4 +97,7 @@ public class HistoricActivity extends AbstractActivity {
     super.onDestroy();
     this.viewModel.closeConnection();
   }
+
+  @Override
+  public void onBackPressed() {}
 }

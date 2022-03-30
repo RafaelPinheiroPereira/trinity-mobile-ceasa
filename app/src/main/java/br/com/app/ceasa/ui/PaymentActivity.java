@@ -75,6 +75,8 @@ public class PaymentActivity extends AbstractActivity {
         cetPrice.setText(
             MonetaryFormatting.convertToDolar(
                 this.viewModel.getConfigurationDataSalved().getBaseValue()));
+        this.viewModel.setPaymentDate(this.viewModel.getConfigurationDataSalved().getBaseDate());
+        cvDate.setDate( this.viewModel.getConfigurationDataSalved().getBaseDate().getTime());
       }
 
     } catch (ParseException e) {
