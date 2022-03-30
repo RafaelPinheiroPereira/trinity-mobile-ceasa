@@ -30,9 +30,15 @@ public class PaymentRepository {
     return this.paymentDAO.findPaymentByDateAndClient(datePayment, clientId);
   }
 
+  public List<Payment> findPaymentClient( final Long clientId) {
+    return this.paymentDAO.findPaymentClient( clientId);
+  }
+
   public LiveData<List<Payment>> findDataToExportByDate(Date initialDate, Date finalDate) {
     return this.paymentDAO.findDataToExportByDate(initialDate, finalDate);
   }
+
+
 
   public void saveAll(final List<Payment> payments) {
 

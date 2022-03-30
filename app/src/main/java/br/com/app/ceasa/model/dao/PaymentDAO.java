@@ -11,50 +11,53 @@ import java.util.Date;
 import java.util.List;
 
 @Dao
-public abstract  class PaymentDAO  extends GenericDAO<Payment> {
+public abstract class PaymentDAO extends GenericDAO<Payment> {
 
+  @Query("select * from payment order by id")
+  public abstract List<Payment> getAll();
 
-    @Query("select * from payment order by id")
-    public abstract List<Payment> getAll();
+  @Query(value = "SELECT MAX(id) FROM payment ")
+  public abstract Long findLastId();
 
-    @Query(value="SELECT MAX(id) FROM payment ")
-    public abstract Long findLastId();
+  @Query(value = "SELECT * FROM payment WHERE date= :datePayment and id_client = :clientId ")
+  public abstract Payment findPaymentByDateAndClient(Date datePayment, Long clientId);
 
-    @Query(value = "SELECT * FROM payment WHERE date= :datePayment and id_client = :clientId ")
-    public abstract Payment findPaymentByDateAndClient(Date datePayment, Long clientId);
+  @Query(value = "SELECT * FROM payment WHERE date>= :initialDate and date<= :finalDate ")
+  public abstract LiveData<List<Payment>> findDataToExportByDate(Date initialDate, Date finalDate);
 
-    @Query(value = "SELECT * FROM payment WHERE date>= :initialDate and date<= :finalDate ")
-    public abstract LiveData<List<Payment>> findDataToExportByDate(Date initialDate, Date finalDate);
+  @Query(value = "SELECT * FROM payment WHERE  id_client = :clientId ")
+  public abstract List<Payment> findPaymentClient(Long clientId);
 
-    private class OperationsAsyncTask extends AsyncTask<Payment, Void, Void> {
+  private class OperationsAsyncTask extends AsyncTask<Payment, Void, Void> {
 
-        PaymentDAO mAsyncTaskDao;
+    PaymentDAO mAsyncTaskDao;
 
-        OperationsAsyncTask(PaymentDAO dao) {
-            this.mAsyncTaskDao = dao;
-        }
-
-        @Override
-        protected Void doInBackground(Payment... payments) {
-            return null;
-        }
+    OperationsAsyncTask(PaymentDAO dao) {
+      this.mAsyncTaskDao = dao;
     }
-    private class InsertAsyncTask extends OperationsAsyncTask {
 
-        InsertAsyncTask(PaymentDAO paymentDAO) {
-            super(paymentDAO);
-        }
-
-        @Override
-        protected Void doInBackground(Payment... payments) {
-            mAsyncTaskDao.insert(payments[0]);
-            return null;
-        }
-    }
     @Override
-    public void save(final Payment obj) {
-
-        new PaymentDAO.InsertAsyncTask(this).execute(obj);
-
+    protected Void doInBackground(Payment... payments) {
+      return null;
     }
+  }
+
+  private class InsertAsyncTask extends OperationsAsyncTask {
+
+    InsertAsyncTask(PaymentDAO paymentDAO) {
+      super(paymentDAO);
+    }
+
+    @Override
+    protected Void doInBackground(Payment... payments) {
+      mAsyncTaskDao.insert(payments[0]);
+      return null;
+    }
+  }
+
+  @Override
+  public void save(final Payment obj) {
+
+    new PaymentDAO.InsertAsyncTask(this).execute(obj);
+  }
 }

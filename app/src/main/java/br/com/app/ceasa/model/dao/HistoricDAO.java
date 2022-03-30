@@ -12,9 +12,11 @@ import br.com.app.ceasa.model.entity.Historic;
 @Dao
 public interface HistoricDAO {
 
-    @Query("SELECT payment.id_client AS idClient,client.name AS name,payment.value AS value, payment.date as datePayment " +
-            "FROM client , payment  " +
-            "WHERE client.id = payment.id_client and  payment.date= :datePayment")
-    public LiveData<List<Historic>> findHistoricByDatePayment(Date datePayment);
-}
+  @Query(
+      "SELECT payment.id_client AS idClient,client.name AS name,payment.value AS value, payment.date as datePayment, payment.description as description  "
+          + "FROM client , payment  "
+          + "WHERE client.id = payment.id_client and  payment.date= :datePayment")
+  public LiveData<List<Historic>> findHistoricByDatePayment(Date datePayment);
 
+
+}

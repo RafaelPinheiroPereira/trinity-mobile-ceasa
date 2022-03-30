@@ -63,4 +63,7 @@ public class DateUtils {
     public static boolean isValidPeriod(Date dataInicial, Date dataFinal) {
         return dataInicial.before(dataFinal) || dataInicial.equals(dataFinal);
     }
+    public static boolean isUpdateDataBase(Date today, Date baseDate) {
+        return today.after(baseDate);
+    }
 }

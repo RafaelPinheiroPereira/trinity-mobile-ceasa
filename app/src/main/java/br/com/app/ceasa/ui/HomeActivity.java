@@ -7,7 +7,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
@@ -15,10 +14,14 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 
 import br.com.app.ceasa.R;
+import br.com.app.ceasa.model.entity.ConfigurationData;
+import br.com.app.ceasa.tasks.InsertConfigurationDataTask;
+import br.com.app.ceasa.tasks.UpdateConfigurationDataTask;
 import br.com.app.ceasa.util.Constants;
-import br.com.app.ceasa.util.Singleton;
 import br.com.app.ceasa.ui.fragment.EmptyFragment;
 import br.com.app.ceasa.ui.fragment.HomeFragment;
+import br.com.app.ceasa.util.DateUtils;
+import br.com.app.ceasa.viewmodel.ConfigurationDataViewModel;
 import br.com.app.ceasa.viewmodel.HomeViewModel;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -28,6 +31,9 @@ import com.shreyaspatil.MaterialDialog.BottomSheetMaterialDialog;
 import com.shreyaspatil.MaterialDialog.BottomSheetMaterialDialog.Builder;
 
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.util.Date;
 
 public class HomeActivity extends AbstractActivity {
 
@@ -37,9 +43,8 @@ public class HomeActivity extends AbstractActivity {
   @BindView(R.id.bottom_nav)
   BottomNavigationView bottomNavigationView;
 
-  HomeViewModel homeViewModel;
-
-
+  HomeViewModel viewModel;
+  private ConfigurationDataViewModel configurationDataViewModel;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -47,9 +52,9 @@ public class HomeActivity extends AbstractActivity {
     setContentView(R.layout.activity_home);
     ButterKnife.bind(this);
     initViews();
-    homeViewModel = new ViewModelProvider(this).get(HomeViewModel.class);
-    homeViewModel.setContext(this);
-
+    viewModel = new ViewModelProvider(this).get(HomeViewModel.class);
+    configurationDataViewModel = new ViewModelProvider(this).get(ConfigurationDataViewModel.class);
+    viewModel.setContext(this);
   }
 
   @Override
@@ -58,12 +63,19 @@ public class HomeActivity extends AbstractActivity {
 
     this.checkPermissions();
 
-    homeViewModel
+    try {
+      this.configurationData();
+    } catch (ParseException e) {
+      showErrorMessage(this, e.getMessage());
+    }
+
+    this.viewModel
         .getClientsAll()
         .observe(
             this,
             clients -> {
               if (clients.size() > 0) {
+                this.viewModel.setPayments(clients);
                 HomeFragment homeFragment = new HomeFragment();
                 this.loadFragment(homeFragment);
 
@@ -78,10 +90,10 @@ public class HomeActivity extends AbstractActivity {
         item -> {
           switch (item.getItemId()) {
             case R.id.page_1:
-              if (homeViewModel.containsAllFiles()) {
+              if (viewModel.containsAllFiles()) {
 
                 try {
-                  homeViewModel.importData();
+                  viewModel.importData();
                 } catch (IllegalAccessException e) {
                   showErrorMessage(getApplicationContext(), e.getMessage());
                   e.printStackTrace();
@@ -95,7 +107,7 @@ public class HomeActivity extends AbstractActivity {
 
               } else {
 
-                StringBuilder message = homeViewModel.searchInexistsFilesNames();
+                StringBuilder message = viewModel.searchInexistsFilesNames();
 
                 BottomSheetMaterialDialog mBottomSheetDialog =
                     new Builder(HomeActivity.this)
@@ -131,7 +143,6 @@ public class HomeActivity extends AbstractActivity {
           return true;
         });
   }
-
 
   private void loadFragment(Fragment fragment) {
     // load fragment
@@ -185,8 +196,8 @@ public class HomeActivity extends AbstractActivity {
 
         Toast.makeText(this, "Permissões concedidas.", Toast.LENGTH_LONG).show();
         try {
-          homeViewModel.setContext(this);
-          homeViewModel.createAppDirectory();
+          viewModel.setContext(this);
+          viewModel.createAppDirectory();
         } catch (IOException e) {
 
           showErrorMessage(this, e.getMessage());
@@ -205,5 +216,37 @@ public class HomeActivity extends AbstractActivity {
     }
   }
 
+  private void configurationData() throws ParseException {
 
+    this.configurationDataViewModel.setContext(this.viewModel.getContext());
+    ConfigurationData configurationData = this.viewModel.getConfigurationData();
+
+    if (configurationData != null) {
+
+      Date dateToday =
+          DateFormat.getDateInstance(DateFormat.SHORT)
+              .parse(
+                  DateUtils.convertDateToStringInFormat_dd_mm_yyyy(
+                      new Date(System.currentTimeMillis())));
+
+      if (DateUtils.isUpdateDataBase(
+          dateToday, configurationData.getBaseDate())) {
+        this.configurationDataViewModel.setInitialDateBase(dateToday);
+        this.configurationDataViewModel.setValueBase(configurationData.getBaseValue());
+        new UpdateConfigurationDataTask(this.configurationDataViewModel).execute();
+      }
+
+    } else {
+
+      this.configurationDataViewModel.setInitialDateBase(
+          DateFormat.getDateInstance(DateFormat.SHORT)
+              .parse(
+                  DateUtils.convertDateToStringInFormat_dd_mm_yyyy(
+                      new Date(System.currentTimeMillis()))));
+      this.configurationDataViewModel.setValueBase(0.0);
+      this.configurationDataViewModel.setConfigurationData(
+          this.configurationDataViewModel.getConfigurationDataToInsert());
+      new InsertConfigurationDataTask(this.configurationDataViewModel).execute();
+    }
+  }
 }

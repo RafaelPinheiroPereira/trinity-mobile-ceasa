@@ -10,13 +10,12 @@ import br.com.app.ceasa.viewmodel.ConfigurationDataViewModel;
 public class UpdateConfigurationDataTask extends AsyncTask<Void, Void, Boolean> {
   ConfigurationDataViewModel configurationDataViewModel;
   ProgressDialog progressDialog;
-  ConfigurationDataActivity configurationDataActivity;
+  //ConfigurationDataActivity configurationDataActivity;
 
   public UpdateConfigurationDataTask(
-      final ConfigurationDataViewModel configurationDataViewModel,
-      final ConfigurationDataActivity configurationDataActivity) {
+      final ConfigurationDataViewModel configurationDataViewModel) {
     this.configurationDataViewModel = configurationDataViewModel;
-    this.configurationDataActivity = configurationDataActivity;
+   // this.configurationDataActivity = configurationDataActivity;
   }
 
   @Override
@@ -48,7 +47,7 @@ public class UpdateConfigurationDataTask extends AsyncTask<Void, Void, Boolean> 
               "Configuração alterada com sucesso!",
               Toast.LENGTH_LONG)
           .show();
-      this.configurationDataActivity.finish();
+     // this.configurationDataActivity.finish();
 
     } else {
 

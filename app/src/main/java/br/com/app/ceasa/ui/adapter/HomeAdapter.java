@@ -71,15 +71,15 @@ public class HomeAdapter extends RecyclerView.Adapter<MyViewHolder> implements F
           filterResults.values = clientOriginalList;
         } else {
           filterResults.values =
-              clientOriginalList.stream()
-                  .filter(
-                      client ->
-                          client
-                                  .getName()
-                                  .toLowerCase()
-                                  .contains(constraint.toString().toLowerCase())
-                              || String.valueOf(client.getId()).contains(constraint.toString()))
-                  .collect(Collectors.toList());
+                  clientOriginalList.stream()
+                          .filter(
+                                  client ->
+                                          client
+                                                  .getName()
+                                                  .toLowerCase()
+                                                  .contains(constraint.toString().toLowerCase())
+                                                  || String.valueOf(client.getId()).contains(constraint.toString()))
+                          .collect(Collectors.toList());
         }
 
         return filterResults;

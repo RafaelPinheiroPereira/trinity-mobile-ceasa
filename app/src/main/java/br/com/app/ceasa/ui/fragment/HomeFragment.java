@@ -20,7 +20,6 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -34,19 +33,20 @@ import androidx.recyclerview.widget.RecyclerView;
 import br.com.app.ceasa.R;
 import br.com.app.ceasa.listener.RecyclerViewOnClickListenerHack;
 import br.com.app.ceasa.model.entity.Client;
+import br.com.app.ceasa.model.entity.ConfigurationData;
+import br.com.app.ceasa.tasks.InsertConfigurationDataTask;
 import br.com.app.ceasa.util.DateUtils;
 import br.com.app.ceasa.util.Singleton;
 import br.com.app.ceasa.ui.AbstractActivity;
 import br.com.app.ceasa.ui.PaymentActivity;
 import br.com.app.ceasa.ui.adapter.HomeAdapter;
 import br.com.app.ceasa.ui.dialog.DateSalePickerDialog;
+import br.com.app.ceasa.viewmodel.ConfigurationDataViewModel;
 import br.com.app.ceasa.viewmodel.HomeViewModel;
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
-import butterknife.OnItemClick;
-import butterknife.OnTouch;
 
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -58,7 +58,7 @@ import java.util.concurrent.ExecutionException;
 public class HomeFragment extends Fragment
     implements OnClickListener, RecyclerViewOnClickListenerHack {
 
-  private HomeViewModel mViewModel;
+  private HomeViewModel viewModel;
 
   AbstractActivity abstractActivity;
 
@@ -88,6 +88,8 @@ public class HomeFragment extends Fragment
 
   private SearchView.OnQueryTextListener queryTextListener;
 
+
+
   @Override
   public View onCreateView(
       @NonNull LayoutInflater inflater,
@@ -116,7 +118,8 @@ public class HomeFragment extends Fragment
   public void onActivityCreated(@Nullable Bundle savedInstanceState) {
     super.onActivityCreated(savedInstanceState);
 
-    mViewModel = new ViewModelProvider(requireActivity()).get(HomeViewModel.class);
+    viewModel = new ViewModelProvider(requireActivity()).get(HomeViewModel.class);
+
   }
 
   @Override
@@ -125,6 +128,7 @@ public class HomeFragment extends Fragment
     this.setAdapter();
     this.edtDatePayment.setOnClickListener(this);
     this.setDatePaymentToday();
+
     rdNotPositives.setChecked(true);
     this.configInitialRecycle();
     try {
@@ -165,6 +169,8 @@ public class HomeFragment extends Fragment
           }
         });
   }
+
+
 
   @Override
   public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
@@ -216,7 +222,7 @@ public class HomeFragment extends Fragment
 
   private void getAllNotPositived() throws ParseException {
     LiveData<List<Client>> clientListLiveData =
-        mViewModel.getNotPositived(edtDatePayment.getText().toString());
+        viewModel.getNotPositived(edtDatePayment.getText().toString());
     clientListLiveData.observe(
         this,
         clients -> {
@@ -242,7 +248,7 @@ public class HomeFragment extends Fragment
   private void getAllPositived() throws ParseException {
 
     LiveData<List<Client>> clientListLiveData =
-        mViewModel.getPositivedClients(edtDatePayment.getText().toString());
+        viewModel.getPositivedClients(edtDatePayment.getText().toString());
     clientListLiveData.observe(
         this,
         clients -> {
@@ -262,7 +268,7 @@ public class HomeFragment extends Fragment
   }
 
   private void loadClientsAll() throws ExecutionException, InterruptedException {
-    this.mViewModel
+    this.viewModel
         .getClientsAll()
         .observe(
             this,
@@ -282,7 +288,7 @@ public class HomeFragment extends Fragment
   private void setDatePaymentToday() {
     edtDatePayment.setText(
         DateUtils.convertDateToStringInFormat_dd_mm_yyyy(new Date(System.currentTimeMillis())));
-    this.mViewModel.setDatePayment(edtDatePayment.getText().toString());
+    this.viewModel.setDatePayment(edtDatePayment.getText().toString());
   }
 
   @Override
@@ -320,7 +326,7 @@ public class HomeFragment extends Fragment
     }
     if (requestCode == TARGET_HOME_FRAGMENT_REQUEST_CODE) {
       this.edtDatePayment.setText(data.getStringExtra(EXTRA_DATE_PAYMENT));
-      this.mViewModel.setDatePayment(edtDatePayment.getText().toString());
+      this.viewModel.setDatePayment(edtDatePayment.getText().toString());
       loadClientsByGroupChecked();
     }
   }
@@ -329,7 +335,6 @@ public class HomeFragment extends Fragment
   public void onClickListener(final View view, final int position) {
 
     switch (view.getId()) {
-
       case R.id.btn_historic:
         //
         break;
@@ -370,5 +375,4 @@ public class HomeFragment extends Fragment
       }
     }
   }
-
 }

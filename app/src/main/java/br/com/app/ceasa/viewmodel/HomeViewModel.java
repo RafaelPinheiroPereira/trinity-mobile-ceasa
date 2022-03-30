@@ -9,7 +9,11 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
 import br.com.app.ceasa.model.entity.Client;
+import br.com.app.ceasa.model.entity.ConfigurationData;
+import br.com.app.ceasa.model.entity.Home;
+import br.com.app.ceasa.model.entity.Payment;
 import br.com.app.ceasa.repository.ClientRepository;
+import br.com.app.ceasa.repository.ConfigurationDataRepository;
 import br.com.app.ceasa.repository.FileManagerRepository;
 import br.com.app.ceasa.repository.PaymentRepository;
 import br.com.app.ceasa.tasks.ImportDataTask;
@@ -18,6 +22,7 @@ import br.com.app.ceasa.util.Singleton;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class HomeViewModel extends AndroidViewModel {
@@ -28,6 +33,8 @@ public class HomeViewModel extends AndroidViewModel {
 
   private PaymentRepository paymentRepository;
 
+  private ConfigurationDataRepository configurationDataRepository;
+
   private String datePayment;
 
   FileManagerRepository fileManagerRepository;
@@ -36,6 +43,8 @@ public class HomeViewModel extends AndroidViewModel {
 
   ProgressDialog progressDialog;
 
+  List<Home> homes= new ArrayList<>();
+
   public HomeViewModel(@NonNull final Application application)
       throws IllegalAccessException, InstantiationException {
     super(application);
@@ -43,16 +52,35 @@ public class HomeViewModel extends AndroidViewModel {
     clientRepository = new ClientRepository(application);
     paymentRepository = new PaymentRepository(application);
     fileManagerRepository = Singleton.getInstance(FileManagerRepository.class);
+    configurationDataRepository= new ConfigurationDataRepository(application);
   }
 
-  public LiveData<List<Client>> getNotPositived(final String dateSale) throws ParseException {
-    return this.clientRepository.findNotPositived(
-        DateFormat.getDateInstance(DateFormat.SHORT).parse(dateSale));
+  public LiveData<List<Client>> getNotPositived(final String datePayment) throws ParseException {
+
+    LiveData<List<Client>> clients =
+        this.clientRepository.findNotPositived(
+            DateFormat.getDateInstance(DateFormat.SHORT).parse(datePayment));
+
+    return clients;
   }
 
-  public LiveData<List<Client>> getPositivedClients(final String dateSale) throws ParseException {
-    return this.clientRepository.findPositivedClient(
-        DateFormat.getDateInstance(DateFormat.SHORT).parse(dateSale));
+  public void setPayments(List<Client> clients) {
+
+    clients.stream()
+        .forEach(
+            client -> {
+              List<Payment> payments = new ArrayList<>();
+              this.paymentRepository.findPaymentClient(client.getId());
+              client.setPayments(payments);
+            });
+  }
+
+  public LiveData<List<Client>> getPositivedClients(final String datePayment) throws ParseException {
+
+    LiveData<List<Client>> clients =
+        this.clientRepository.findPositivedClient(
+            DateFormat.getDateInstance(DateFormat.SHORT).parse(datePayment));
+    return clients;
   }
 
   public void importData() throws IllegalAccessException, IOException, InstantiationException {
@@ -77,7 +105,8 @@ public class HomeViewModel extends AndroidViewModel {
   }
 
   public LiveData<List<Client>> getClientsAll() {
-    return clientRepository.getAll();
+
+    return this.clientRepository.getAll();
   }
 
   public boolean containsAllFiles() {
@@ -110,5 +139,21 @@ public class HomeViewModel extends AndroidViewModel {
 
   public void setContext(final Context context) {
     this.context = context;
+  }
+
+  public List<Home> getHomes() {
+    return homes;
+  }
+
+  public void setHomes(List<Home> homes) {
+    this.homes = homes;
+  }
+
+  public ConfigurationData getConfigurationData() {
+    return this.configurationDataRepository.findConfigurationData();
+  }
+
+  public void insertConfigurationData(ConfigurationData configurationData) {
+
   }
 }

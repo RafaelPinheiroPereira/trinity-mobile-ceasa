@@ -6,8 +6,8 @@ public class Historic {
   private String name;
   private long idClient;
   private double value;
-  public Date datePayment;
-
+  private Date datePayment;
+  private String description;
 
   public String getName() {
     return name;
@@ -33,11 +33,19 @@ public class Historic {
     this.value = value;
   }
 
-    public Date getDatePayment() {
-        return datePayment;
-    }
+  public Date getDatePayment() {
+    return datePayment;
+  }
 
-    public void setDatePayment(Date datePayment) {
-        this.datePayment = datePayment;
-    }
+  public void setDatePayment(Date datePayment) {
+    this.datePayment = datePayment;
+  }
+
+  public String getDescription() {
+    return description;
+  }
+
+  public void setDescription(String description) {
+    this.description = description;
+  }
 }

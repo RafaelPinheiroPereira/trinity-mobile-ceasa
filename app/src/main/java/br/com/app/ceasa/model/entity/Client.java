@@ -3,10 +3,12 @@ package br.com.app.ceasa.model.entity;
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 
 import java.io.Serializable;
+import java.util.List;
 
 @Entity(tableName = "Client")
 public class Client implements Serializable {
@@ -20,6 +22,9 @@ public class Client implements Serializable {
 
   @ColumnInfo(name = "order")
   private int  order;
+
+  @Ignore
+  private List<Payment> payments;
 
 
   @NonNull
@@ -47,6 +52,13 @@ public class Client implements Serializable {
     this.order = order;
   }
 
+  public List<Payment> getPayments() {
+    return payments;
+  }
+
+  public void setPayments(List<Payment> payments) {
+    this.payments = payments;
+  }
 
   @Override
   public boolean equals(final Object obj) {
@@ -59,4 +71,6 @@ public class Client implements Serializable {
     }
     return false;
   }
+
+
 }

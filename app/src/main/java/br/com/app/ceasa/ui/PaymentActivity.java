@@ -14,6 +14,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import br.com.app.ceasa.R;
 import br.com.app.ceasa.model.entity.Client;
+import br.com.app.ceasa.model.entity.ConfigurationData;
 import br.com.app.ceasa.model.entity.Payment;
 import br.com.app.ceasa.tasks.InsertPaymentTask;
 import br.com.app.ceasa.util.CurrencyEditText;
@@ -53,8 +54,6 @@ public class PaymentActivity extends AbstractActivity {
 
   PaymentViewModel viewModel;
 
-
-
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -63,7 +62,6 @@ public class PaymentActivity extends AbstractActivity {
     initViews();
     viewModel = new ViewModelProvider(this).get(PaymentViewModel.class);
     this.viewModel.setPrinterDatecsUtil(new PrinterDatecsUtil(this));
-
   }
 
   @Override
@@ -105,27 +103,25 @@ public class PaymentActivity extends AbstractActivity {
           }
         });
 
-    if(this.viewModel.isAtivedPrinter()){
+    if (this.viewModel.isAtivedPrinter()) {
       try {
         this.viewModel.waitForConnection();
       } catch (Throwable throwable) {
-        showErrorMessage(this,"Erro ao encontrar impressora ativa!");
+        showErrorMessage(this, "Erro ao encontrar impressora ativa!");
       }
-    }else{
-      showMessage(this,"Não há impressora ativa, por favor configure!");
+    } else {
+      showMessage(this, "Não há impressora ativa, por favor configure!");
     }
-
   }
 
   /*Configura os componentes para a criacao da venda*/
   private void configureCreate() {
     DateFormat format = DateFormat.getDateInstance(DateFormat.DATE_FIELD);
     try {
-      this.viewModel.setPaymentDate( format.parse(format.format(cvDate.getDate())));
+      this.viewModel.setPaymentDate(format.parse(format.format(cvDate.getDate())));
     } catch (ParseException e) {
       showErrorMessage(this, e.getMessage());
     }
-
   }
 
   /*Configura os componentes para a atualizacao da venda*/
@@ -186,11 +182,10 @@ public class PaymentActivity extends AbstractActivity {
   public void savePayment(View view) {
 
     if (isBaseValueValid()) {
-
-
+      ConfigurationData configurationData=  this.viewModel.getConfigurationDataSalved();
       if (DateUtils.isValidPeriod(
           this.viewModel.getPaymentDate(),
-          this.viewModel.getConfigurationDataSalved().getBaseDate())) {
+              configurationData !=null?configurationData.getBaseDate():this.viewModel.getPaymentDate())) {
         MaterialDialog mDialog =
             new MaterialDialog.Builder(this)
                 .setTitle("Salvar Recebimento?")
@@ -204,7 +199,6 @@ public class PaymentActivity extends AbstractActivity {
                     "Salvar",
                     R.mipmap.ic_save_white_48dp,
                     (dialogInterface, which) -> {
-
                       this.viewModel.setDescription(edtDescription.getText().toString());
                       this.viewModel.setPaymentValue(cetPrice.getCurrencyDouble());
                       this.viewModel.setPayment(this.viewModel.getPaymentToInsert());

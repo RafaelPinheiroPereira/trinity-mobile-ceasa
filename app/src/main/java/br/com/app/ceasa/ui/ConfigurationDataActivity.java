@@ -126,7 +126,7 @@ public class ConfigurationDataActivity extends AppCompatActivity {
       if (!this.configurationDataViewModel.existConfigurationData()) {
         this.configurationDataViewModel.setConfigurationData(
             this.configurationDataViewModel.getConfigurationDataToInsert());
-        new InsertConfigurationDataTask(this.configurationDataViewModel, this).execute();
+        new InsertConfigurationDataTask(this.configurationDataViewModel).execute();
       } else {
         this.configurationDataViewModel.setConfigurationData(
             this.configurationDataViewModel.getConfigurationDataSalved());
@@ -136,7 +136,7 @@ public class ConfigurationDataActivity extends AppCompatActivity {
         this.configurationDataViewModel
             .getConfigurationData()
             .setBaseDate(this.configurationDataViewModel.getInitialDateBase());
-        new UpdateConfigurationDataTask(this.configurationDataViewModel, this).execute();
+        new UpdateConfigurationDataTask(this.configurationDataViewModel).execute();
       }
     }
   }
