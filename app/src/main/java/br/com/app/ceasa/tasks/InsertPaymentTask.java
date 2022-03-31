@@ -10,12 +10,12 @@ public class InsertPaymentTask extends AsyncTask<Void, Void, Boolean> {
 
   PaymentViewModel paymentViewModel;
   ProgressDialog progressDialog;
-  PaymentActivity paymentActivity;
+
 
   public InsertPaymentTask(
-      final PaymentViewModel paymentViewModel, final PaymentActivity paymentActivity) {
+      final PaymentViewModel paymentViewModel) {
     this.paymentViewModel = paymentViewModel;
-    this.paymentActivity = paymentActivity;
+
   }
 
   @Override
@@ -48,7 +48,7 @@ public class InsertPaymentTask extends AsyncTask<Void, Void, Boolean> {
               "Recebimento salvo com sucesso!",
               Toast.LENGTH_LONG)
           .show();
-      this.paymentActivity.finish();
+
 
     } else {
 

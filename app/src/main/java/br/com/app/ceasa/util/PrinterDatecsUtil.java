@@ -215,7 +215,7 @@ public class PrinterDatecsUtil {
     textBuffer.append("{br}");
     textBuffer.append("{s}------------------------------------------");
     textBuffer.append("{br}");
-    textBuffer.append("{s}" + "Ceasa");
+    textBuffer.append("{s}" + "Trinity Mobile Ceasa");
     textBuffer.append("{br}");
     textBuffer.append("{br}");
     return textBuffer;
@@ -238,8 +238,9 @@ public class PrinterDatecsUtil {
     textBuffer.append("{center}{h} (BANCA VAREJAO) {br}{br}");
     historicList.forEach(
         historic -> {
+
           textBuffer.append(
-              "{b}" + historic.getName().concat("  ") + String.format("%.2f", historic.getValue()) + "{br}");
+              "{b}" + getNameConfigured(historic.getName()) + String.format("%.2f", historic.getValue()) + "{br}");
         });
     // Aqui vem um foreach
 
@@ -248,12 +249,24 @@ public class PrinterDatecsUtil {
         "{reset}{right}{h}TOTAL: {/w}"
             + String.format("%.2f", historicList.stream().mapToDouble(Historic::getValue).sum()));
     textBuffer.append("{br}");
+    textBuffer.append("{s}" + "Trinity Mobile Ceasa");
     textBuffer.append("{br}");
 
     return textBuffer;
   }
 
-  private void establishConnectionBluetooth(final PrinterDP printerDP) {
+    private String getNameConfigured(String name) {
+      if(name.length()<30){
+          for(int i=name.length();i<30;i++){
+             name=name.concat(" ");
+          }
+      }else{
+          name=name.substring(0,30);
+      }
+      return name;
+    }
+
+    private void establishConnectionBluetooth(final PrinterDP printerDP) {
     final ProgressDialog dialog = new ProgressDialog(this.activity);
     dialog.setTitle("Por favor , aguarde a conexão...");
     dialog.setMessage("Conectando o dispositivo");

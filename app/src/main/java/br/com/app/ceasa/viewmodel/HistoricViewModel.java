@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -17,6 +18,7 @@ import br.com.app.ceasa.model.entity.Historic;
 import br.com.app.ceasa.repository.ConfigurationDataRepository;
 import br.com.app.ceasa.repository.HistoricRepository;
 import br.com.app.ceasa.repository.PrinterDPRepository;
+import br.com.app.ceasa.util.DateUtils;
 import br.com.app.ceasa.util.PrinterDatecsUtil;
 
 public class HistoricViewModel extends AndroidViewModel {
@@ -83,5 +85,14 @@ public class HistoricViewModel extends AndroidViewModel {
 
   public void closeConnection() {
     this.getPrinterDatecsUtil().closeConnection();
+  }
+
+  public Date getToday() throws ParseException {
+      Date dateToday =
+            DateFormat.getDateInstance(DateFormat.SHORT)
+                    .parse(
+                            DateUtils.convertDateToStringInFormat_dd_mm_yyyy(
+                                    new Date(System.currentTimeMillis())));
+    return dateToday;
   }
 }

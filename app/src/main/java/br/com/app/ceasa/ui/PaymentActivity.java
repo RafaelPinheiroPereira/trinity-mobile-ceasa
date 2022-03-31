@@ -27,6 +27,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.shreyaspatil.MaterialDialog.MaterialDialog;
 
 import java.text.DateFormat;
@@ -52,6 +53,9 @@ public class PaymentActivity extends AbstractActivity {
   @BindView(R.id.cv_base_date)
   CalendarView cvDate;
 
+  @BindView(R.id.fb_save_sale)
+  FloatingActionButton floatingActionButton;
+
   PaymentViewModel viewModel;
 
   @Override
@@ -75,8 +79,8 @@ public class PaymentActivity extends AbstractActivity {
         cetPrice.setText(
             MonetaryFormatting.convertToDolar(
                 this.viewModel.getConfigurationDataSalved().getBaseValue()));
-        this.viewModel.setPaymentDate(this.viewModel.getConfigurationDataSalved().getBaseDate());
-        cvDate.setDate( this.viewModel.getConfigurationDataSalved().getBaseDate().getTime());
+        // this.viewModel.setPaymentDate(this.viewModel.getConfigurationDataSalved().getBaseDate());
+        cvDate.setDate(this.viewModel.getConfigurationDataSalved().getBaseDate().getTime());
       }
 
     } catch (ParseException e) {
@@ -131,11 +135,28 @@ public class PaymentActivity extends AbstractActivity {
   private void checkInitialConfigure() {
     Optional<Payment> optionalPayment =
         Optional.ofNullable(this.viewModel.getPaymentByDateAndClient());
+
     if (optionalPayment.isPresent()) {
-      // deixa tudo desabilitado
+      this.viewModel.setPayment(optionalPayment.get());
+      disableForm();
+      setDataPaymet();
+      floatingActionButton.setImageDrawable(getDrawable(R.mipmap.ic_print));
+
     } else {
       this.configureCreate();
     }
+  }
+
+  private void setDataPaymet() {
+    edtDescription.setText(this.viewModel.getPayment().getDescription());
+    cetPrice.setText(MonetaryFormatting.convertToDolar(this.viewModel.getPayment().getValue()));
+    cvDate.setDate(this.viewModel.getPayment().getDate().getTime());
+  }
+
+  private void disableForm() {
+    cvDate.setEnabled(false);
+    edtDescription.setEnabled(false);
+    cetPrice.setEnabled(false);
   }
 
   /*Preeche os text view com os dados do cliente*/
@@ -183,42 +204,48 @@ public class PaymentActivity extends AbstractActivity {
   @OnClick(R.id.fb_save_sale)
   public void savePayment(View view) {
 
-    if (isBaseValueValid()) {
-      ConfigurationData configurationData=  this.viewModel.getConfigurationDataSalved();
-      if (DateUtils.isValidPeriod(
-          this.viewModel.getPaymentDate(),
-              configurationData.getBaseDate())) {
-        MaterialDialog mDialog =
-            new MaterialDialog.Builder(this)
-                .setTitle("Salvar Recebimento?")
-                .setMessage("Você deseja realmente confirmar o recebimento?")
-                .setCancelable(true)
-                .setNegativeButton(
-                    "Não",
-                    R.mipmap.ic_clear_black_48dp,
-                    (dialogInterface, which) -> dialogInterface.dismiss())
-                .setPositiveButton(
-                    "Salvar",
-                    R.mipmap.ic_save_white_48dp,
-                    (dialogInterface, which) -> {
-                      this.viewModel.setDescription(edtDescription.getText().toString());
-                      this.viewModel.setPaymentValue(cetPrice.getCurrencyDouble());
-                      this.viewModel.setPayment(this.viewModel.getPaymentToInsert());
-                      new InsertPaymentTask(this.viewModel, this).execute();
+    Optional<Payment> optionalPayment = Optional.ofNullable(this.viewModel.getPayment());
+    if (!optionalPayment.isPresent()) {
 
-                      this.viewModel.printPayment();
+      if (isBaseValueValid()) {
+        ConfigurationData configurationData = this.viewModel.getConfigurationDataSalved();
+        if (DateUtils.isValidPeriod(
+            this.viewModel.getPaymentDate(), configurationData.getBaseDate())) {
+          MaterialDialog mDialog =
+              new MaterialDialog.Builder(this)
+                  .setTitle("Salvar Recebimento?")
+                  .setMessage("Você deseja realmente confirmar o recebimento?")
+                  .setCancelable(true)
+                  .setNegativeButton(
+                      "Não",
+                      R.mipmap.ic_clear_black_48dp,
+                      (dialogInterface, which) -> dialogInterface.dismiss())
+                  .setPositiveButton(
+                      "Salvar",
+                      R.mipmap.ic_save_white_48dp,
+                      (dialogInterface, which) -> {
+                        this.viewModel.setDescription(edtDescription.getText().toString());
+                        this.viewModel.setPaymentValue(cetPrice.getCurrencyDouble());
+                        this.viewModel.setPayment(this.viewModel.getPaymentToInsert());
+                        new InsertPaymentTask(this.viewModel).execute();
 
-                      dialogInterface.dismiss();
-                    })
-                .build();
+                        this.viewModel.printPayment();
 
-        mDialog.show();
+                        dialogInterface.dismiss();
+                      })
+                  .build();
 
+          mDialog.show();
+
+        } else {
+          showMessage(this, "Data Base inferior a Data de Recebimento!");
+        }
       } else {
-        showMessage(this, "Data Base inferior a Data de Recebimento!");
+        showMessage(this, "Por favor,digite um valor base válido!");
       }
     } else {
-      showMessage(this, "Por favor,digite um valor base válido!");
+
+      this.viewModel.printPayment();
     }
   }
 

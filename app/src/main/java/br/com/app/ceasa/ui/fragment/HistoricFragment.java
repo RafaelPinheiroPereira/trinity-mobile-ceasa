@@ -123,13 +123,9 @@ public class HistoricFragment extends Fragment implements View.OnClickListener {
 
   private void loadHistoricByDate()
       throws ExecutionException, InterruptedException, ParseException {
-    Date dateToday =
-            DateFormat.getDateInstance(DateFormat.SHORT)
-                    .parse(
-                            DateUtils.convertDateToStringInFormat_dd_mm_yyyy(
-                                    new Date(System.currentTimeMillis())));
+
     this.viewModel
-        .getHistoricByDatePayment(dateToday)
+        .getHistoricByDatePayment(this.viewModel.getToday())
         .observe(
             this,
             historics -> {

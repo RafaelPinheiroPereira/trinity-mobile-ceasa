@@ -43,13 +43,9 @@ public class HistoricActivity extends AbstractActivity {
     super.onStart();
 
     try {
-      Date dateToday =
-              DateFormat.getDateInstance(DateFormat.SHORT)
-                      .parse(
-                              DateUtils.convertDateToStringInFormat_dd_mm_yyyy(
-                                      new Date(System.currentTimeMillis())));
+
       viewModel
-          .getHistoricByDatePayment(dateToday)
+          .getHistoricByDatePayment(this.viewModel.getToday())
           .observe(
               this,
               historic -> {
