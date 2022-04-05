@@ -38,8 +38,7 @@ public class ConfigurationDataActivity extends AbstractActivity {
   @BindView(R.id.btn_save_configuration_data)
   Button btnSaveConfigurationData;
 
-  @BindView(R.id.btn_save_printer)
-  Button btnSavePrinter;
+
 
   @BindView(R.id.cv_base_date)
   CalendarView cvBaseDate;
@@ -151,8 +150,5 @@ public class ConfigurationDataActivity extends AbstractActivity {
     }
   }
 
-  @OnClick(R.id.btn_save_printer)
-  public void savePrinter() {
-    startActivity(new Intent(this, PrinterActivity.class));
-  }
+
 }

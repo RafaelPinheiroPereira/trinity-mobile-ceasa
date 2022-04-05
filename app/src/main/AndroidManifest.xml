@@ -19,8 +19,22 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
+            android:name=".ui.ClearPaymentActivity"
+            android:parentActivityName=".ui.ConfigurationActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="br.com.app.ceasa.ui.ClearPaymentActivity" />
+        </activity>
+        <activity
+            android:name=".ui.ConfigurationActivity"
+            android:parentActivityName=".ui.HomeActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="br.com.app.ceasa.ui.ConfigurationActivity" />
+        </activity>
+        <activity
             android:name=".ui.PrinterActivity"
-            android:parentActivityName=".ui.ConfigurationDataActivity">
+            android:parentActivityName=".ui.ConfigurationActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="br.com.app.ceasa.ui.PrinterActivity" />
@@ -34,7 +48,7 @@
         </activity>
         <activity
             android:name=".ui.ConfigurationDataActivity"
-            android:parentActivityName=".ui.HomeActivity">
+            android:parentActivityName=".ui.ConfigurationActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="br.com.app.ceasa.ui.ConfigurationDataActivity" />
