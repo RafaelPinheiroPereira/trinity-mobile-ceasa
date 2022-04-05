@@ -129,7 +129,7 @@ public class HomeActivity extends AbstractActivity {
               }
               break;
             case R.id.page_2:
-              startActivity(new Intent(HomeActivity.this, ConfigurationDataActivity.class));
+              startActivity(new Intent(HomeActivity.this, ConfigurationActivity.class));
               break;
             case R.id.page_3:
               startActivity(new Intent(HomeActivity.this, HistoricActivity.class));
