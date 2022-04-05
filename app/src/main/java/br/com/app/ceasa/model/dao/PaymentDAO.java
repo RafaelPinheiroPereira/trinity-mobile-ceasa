@@ -19,6 +19,9 @@ public abstract class PaymentDAO extends GenericDAO<Payment> {
   @Query(value = "SELECT MAX(id) FROM payment ")
   public abstract Long findLastId();
 
+  @Query("DELETE FROM payment WHERE date>= :initialDate and date<= :finalDate")
+  public abstract void deletePaymentByDates(Date initialDate, Date finalDate);
+
   @Query(value = "SELECT * FROM payment WHERE date= :datePayment and id_client = :clientId ")
   public abstract Payment findPaymentByDateAndClient(Date datePayment, Long clientId);
 

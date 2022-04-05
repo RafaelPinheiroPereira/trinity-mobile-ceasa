@@ -52,4 +52,8 @@ public class PaymentRepository {
   public Long findLastId() {
     return this.paymentDAO.findLastId();
   }
+
+  public void clearDatabaseByDates(Date initialDate, Date finalDate) {
+    this.paymentDAO.deletePaymentByDates(initialDate,finalDate);
+  }
 }

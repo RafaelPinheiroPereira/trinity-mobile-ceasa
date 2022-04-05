@@ -23,6 +23,10 @@ public class PaymentViewModel extends AndroidViewModel {
 
   Date paymentDate;
 
+  Date dateInitial;
+
+  Date dateFinal;
+
   Payment payment;
 
   String description;
