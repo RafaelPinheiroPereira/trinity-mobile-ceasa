@@ -1,11 +1,9 @@
 package br.com.app.ceasa.ui;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.NavUtils;
 import androidx.lifecycle.ViewModelProvider;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.MenuItem;
@@ -43,7 +41,7 @@ public class ConfigurationDataActivity extends AbstractActivity {
   @BindView(R.id.cv_base_date)
   CalendarView cvBaseDate;
 
-  ConfigurationDataViewModel configurationDataViewModel;
+  ConfigurationDataViewModel viewModel;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -51,22 +49,35 @@ public class ConfigurationDataActivity extends AbstractActivity {
     setContentView(R.layout.activity_configuration_data);
     ButterKnife.bind(this);
     initViews();
-    configurationDataViewModel = new ViewModelProvider(this).get(ConfigurationDataViewModel.class);
+    viewModel = new ViewModelProvider(this).get(ConfigurationDataViewModel.class);
   }
 
   @Override
   protected void onStart() {
     super.onStart();
 
-    this.configurationDataViewModel.setContext(this);
+    this.viewModel.setContext(this);
 
-    if (this.configurationDataViewModel.existConfigurationData()) {
-      // Todo setar os campos de data e valor com os dados do banco
+    if (this.viewModel.existConfigurationData()) {
+      this.viewModel.setConfigurationData(this.viewModel.getConfigurationDataSalved());
       cetPrice.setText(
           MonetaryFormatting.convertToDolar(
-              this.configurationDataViewModel.getConfigurationDataSalved().getBaseValue()));
+              this.viewModel.getConfigurationData().getBaseValue()));
+      cvBaseDate.setDate(this.viewModel.getConfigurationData().getBaseDate().getTime());
+      this.viewModel.setInitialDateBase(this.viewModel.getConfigurationData().getBaseDate());
     } else {
       cetPrice.setText("0.00");
+      Date dateToday =
+              null;
+      try {
+        dateToday = DateFormat.getDateInstance(DateFormat.SHORT)
+                .parse(
+                        DateUtils.convertDateToStringInFormat_dd_mm_yyyy(
+                                new Date(System.currentTimeMillis())));
+      } catch (ParseException e) {
+        showMessage(this,e.getMessage());
+      }
+      this.viewModel.setInitialDateBase(dateToday);
     }
 
     cvBaseDate.setOnDateChangeListener(
@@ -82,7 +93,7 @@ public class ConfigurationDataActivity extends AbstractActivity {
           try {
 
             Date initialDate = f.parse(formatedInitialDate);
-            this.configurationDataViewModel.setInitialDateBase(initialDate);
+            this.viewModel.setInitialDateBase(initialDate);
           } catch (ParseException e) {
             e.printStackTrace();
           }
@@ -122,26 +133,26 @@ public class ConfigurationDataActivity extends AbstractActivity {
   public void saveConfigurationData() {
 
     if (isConfigurationDataValid()) {
-      this.configurationDataViewModel.setValueBase(cetPrice.getCurrencyDouble());
+      this.viewModel.setValueBase(cetPrice.getCurrencyDouble());
 
-      if (!this.configurationDataViewModel.existConfigurationData()) {
-        this.configurationDataViewModel.setConfigurationData(
-            this.configurationDataViewModel.getConfigurationDataToInsert());
-        new InsertConfigurationDataTask(this.configurationDataViewModel).execute();
+      if (!this.viewModel.existConfigurationData()) {
+        this.viewModel.setConfigurationData(
+            this.viewModel.getConfigurationDataToInsert());
+        new InsertConfigurationDataTask(this.viewModel).execute();
       } else {
-        this.configurationDataViewModel.setConfigurationData(
-            this.configurationDataViewModel.getConfigurationDataSalved());
-        this.configurationDataViewModel
+        this.viewModel.setConfigurationData(
+            this.viewModel.getConfigurationDataSalved());
+        this.viewModel
             .getConfigurationData()
-            .setBaseValue(this.configurationDataViewModel.getValueBase());
+            .setBaseValue(this.viewModel.getValueBase());
 
         if (DateUtils.isUpdateDataBase(
-            this.configurationDataViewModel.getInitialDateBase(),
-            this.configurationDataViewModel.getConfigurationDataSalved().getBaseDate())) {
-          this.configurationDataViewModel
+            this.viewModel.getInitialDateBase(),
+            this.viewModel.getConfigurationDataSalved().getBaseDate())) {
+          this.viewModel
               .getConfigurationData()
-              .setBaseDate(this.configurationDataViewModel.getInitialDateBase());
-          new UpdateConfigurationDataTask(this.configurationDataViewModel).execute();
+              .setBaseDate(this.viewModel.getInitialDateBase());
+          new UpdateConfigurationDataTask(this.viewModel).execute();
         }else{
           showMessage(this,"A nova data base não pode ser menor do que a cadastrada!");
 

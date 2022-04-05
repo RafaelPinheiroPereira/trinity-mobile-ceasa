@@ -28,14 +28,6 @@ public class DateUtils {
         return FORMATADOR_dd_MM_YYYY_hh_mm.parse(strDate);
     }
 
-    public static Date formatarDateParaYYYYMMDDHHMMSS(Date dateToFormat)
-            throws ParseException {
-
-        String strDate = FORMATADOR_YYYY_MM_DD_HH_MM_SS.format(dateToFormat);
-
-        return FORMATADOR_YYYY_MM_DD_HH_MM_SS.parse(strDate);
-    }
-
     public static String formatarParaYYYYMMDDHHMMSS(Date dateToFormat)
             {
 
@@ -44,26 +36,10 @@ public class DateUtils {
         return FORMATADOR_YYYY_MM_DD_HH_MM_SS.format(dateToFormat);
     }
 
-    public static String formatarDateddMMyyyyhhmmParaString(Date dateToFormat) {
-
-        return FORMATADOR_dd_MM_YYYY_hh_mm.format(dateToFormat);
-    }
-
-    public static String retirarBarrasDaDataNoPadraoddMMyyyyParaString(
-            Date dateToFormat) {
-
-        return FORMATADOR_dd_MM_YYYY.format(dateToFormat).replace("/", "");
-    }
-    public static Date converterStringParaDate(
-            String dataSTR) throws ParseException {
-
-        return FORMATADOR_dd_MM_YYYY.parse(dataSTR);
-    }
-
     public static boolean isValidPeriod(Date dataInicial, Date dataFinal) {
         return dataInicial.before(dataFinal) || dataInicial.equals(dataFinal);
     }
     public static boolean isUpdateDataBase(Date today, Date baseDate) {
-        return today.after(baseDate);
+        return today.after(baseDate) || today.equals(baseDate);
     }
 }
