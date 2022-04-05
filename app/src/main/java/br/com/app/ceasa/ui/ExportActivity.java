@@ -25,7 +25,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-public class ExportActivity extends AppCompatActivity {
+public class ExportActivity extends AbstractActivity {
 
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
@@ -155,9 +155,7 @@ public class ExportActivity extends AppCompatActivity {
 
 
         } else {
-            Toast.makeText(
-                    this, "Data Inicial dever ser menor ou igual a Data Final!", Toast.LENGTH_SHORT)
-                    .show();
+            showMessage(this,"Data Inicial dever ser menor ou igual a Data Final!");
         }
     }
 

@@ -64,7 +64,7 @@
                 android:layout_height="wrap_content" />
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/btn_export"
+                android:id="@+id/btn_clear"
                 style="@style/Widget.MaterialComponents.Button"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"

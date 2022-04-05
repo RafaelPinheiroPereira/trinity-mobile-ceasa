@@ -1,9 +1,7 @@
 package br.com.app.ceasa.ui;
 
-import android.app.ListActivity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
@@ -48,7 +46,7 @@ public class ConfigurationActivity extends AppCompatActivity {
         startActivity(new Intent(this, PrinterActivity.class));
         break;
       case 2:
-        startActivity(new Intent(this, ClearPaymentActivity.class));
+        startActivity(new Intent(this, ClearDatabaseActivity.class));
         break;
       default:
         finish();
