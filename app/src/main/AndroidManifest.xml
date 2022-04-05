@@ -19,11 +19,11 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".ui.ClearPaymentActivity"
+            android:name=".ui.ClearDatabaseActivity"
             android:parentActivityName=".ui.ConfigurationActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="br.com.app.ceasa.ui.ClearPaymentActivity" />
+                android:value="br.com.app.ceasa.ui.ClearDatabaseActivity" />
         </activity>
         <activity
             android:name=".ui.ConfigurationActivity"
