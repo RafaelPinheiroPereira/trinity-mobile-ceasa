@@ -9,6 +9,8 @@ import androidx.lifecycle.LiveData;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -80,6 +82,7 @@ public class HistoricViewModel extends AndroidViewModel {
   }
 
   public void printHistoric() {
+    Collections.sort(this.getHistorics(), Comparator.comparing(Historic::getValue));
     this.getPrinterDatecsUtil().printHistoric(this.getHistorics());
   }
 

@@ -240,14 +240,14 @@ public class PrinterDatecsUtil {
         historic -> {
 
           textBuffer.append(
-              "{b}" + getNameConfigured(historic.getName()) + String.format("%.2f", historic.getValue()) + "{br}");
+              "{b}" + getNameConfigured(historic.getName()) + "R$ "+String.format("% 9.2f",historic.getValue()) + "{br}");
         });
     // Aqui vem um foreach
 
     textBuffer.append("------------------------------------------{br}");
     textBuffer.append(
         "{reset}{right}{h}TOTAL: {/w}"
-            + String.format("%.2f", historicList.stream().mapToDouble(Historic::getValue).sum()));
+            +"R$ "+ String.format("%.2f", historicList.stream().mapToDouble(Historic::getValue).sum()));
     textBuffer.append("{br}");
     textBuffer.append("{s}" + "Trinity Mobile Ceasa");
     textBuffer.append("{br}");
@@ -256,14 +256,14 @@ public class PrinterDatecsUtil {
   }
 
     private String getNameConfigured(String name) {
-      if(name.length()<30){
-          for(int i=name.length();i<30;i++){
+      if(name.length()<25){
+          for(int i=name.length();i<25;i++){
              name=name.concat(" ");
           }
       }else{
-          name=name.substring(0,30);
+          name=name.substring(0,25);
       }
-      return name;
+      return name.concat(" ");
     }
 
     private void establishConnectionBluetooth(final PrinterDP printerDP) {
