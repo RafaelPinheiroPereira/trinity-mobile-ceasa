@@ -40,7 +40,7 @@ public abstract class AppDataBase extends RoomDatabase {
         if (mAppDataBaseInstance == null) {
           mAppDataBaseInstance =
               Room.databaseBuilder(
-                      context.getApplicationContext(), AppDataBase.class, "ceasa_database")
+                      context.getApplicationContext(), AppDataBase.class, "ceasa")
                   .fallbackToDestructiveMigration()
                   .allowMainThreadQueries()
                   .build();

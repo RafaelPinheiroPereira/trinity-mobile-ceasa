@@ -96,12 +96,9 @@ public class HomeActivity extends AbstractActivity {
                   viewModel.importData();
                 } catch (IllegalAccessException e) {
                   showErrorMessage(getApplicationContext(), e.getMessage());
-                  e.printStackTrace();
                 } catch (IOException e) {
-                  e.printStackTrace();
                   showErrorMessage(getApplicationContext(), e.getMessage());
                 } catch (InstantiationException e) {
-                  e.printStackTrace();
                   showErrorMessage(getApplicationContext(), e.getMessage());
                 }
 
