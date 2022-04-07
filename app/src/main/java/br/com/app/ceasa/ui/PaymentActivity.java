@@ -84,7 +84,7 @@ public class PaymentActivity extends AbstractActivity {
       }
 
     } catch (ParseException e) {
-      e.printStackTrace();
+     showErrorMessage(this,e.getMessage());
     }
 
     this.setClientData();
@@ -105,7 +105,7 @@ public class PaymentActivity extends AbstractActivity {
             Date datePayment = f.parse(formatedPaymentDate);
             this.viewModel.setPaymentDate(datePayment);
           } catch (ParseException e) {
-            e.printStackTrace();
+           showErrorMessage(this, e.getMessage());
           }
         });
 
