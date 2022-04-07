@@ -150,7 +150,7 @@ public class PrinterDatecsUtil {
 
       // Get printer instance
       mPrinterChannel = mProtocolAdapter.getChannel(ProtocolAdapter.CHANNEL_PRINTER);
-      Printer printer =
+      mPrinter =
           new Printer(mPrinterChannel.getInputStream(), mPrinterChannel.getOutputStream());
 
     } else {
