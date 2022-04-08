@@ -25,6 +25,8 @@ public class DateUtils {
     return FORMATADOR_dd_MM_YYYY_hh_mm.parse(strDate);
   }
 
+
+
   public static String formatarParaYYYYMMDDHHMMSS(Date dateToFormat) {
 
     return FORMATADOR_YYYY_MM_DD_HH_MM_SS.format(dateToFormat);

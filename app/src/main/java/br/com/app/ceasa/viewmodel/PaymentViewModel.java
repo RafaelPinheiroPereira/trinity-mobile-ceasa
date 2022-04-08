@@ -155,7 +155,7 @@ public class PaymentViewModel extends AndroidViewModel {
   }
 
   public void printPayment() {
-    this.getPrinterDatecsUtil().printPayment(this.getPayment());
+    this.getPrinterDatecsUtil().printPayment(this.getPayment(),this.getClient());
   }
 
   public void closeConnection() {

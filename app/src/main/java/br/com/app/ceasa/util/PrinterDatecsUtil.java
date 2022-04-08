@@ -19,6 +19,7 @@ import java.util.UUID;
 
 import br.com.app.ceasa.R;
 import br.com.app.ceasa.listener.IPrinterRunnableListener;
+import br.com.app.ceasa.model.entity.Client;
 import br.com.app.ceasa.model.entity.Historic;
 import br.com.app.ceasa.model.entity.Payment;
 import br.com.app.ceasa.model.entity.PrinterDP;
@@ -68,13 +69,13 @@ public class PrinterDatecsUtil {
     closeConection();
   }
 
-  public void printPayment(final Payment payment) {
+  public void printPayment(final Payment payment, Client client) {
 
     runTask(
         (dialog, printer) -> {
           if (printer != null) {
 
-            StringBuffer textBuffer = configuratePrinterLayoutPayment(payment);
+            StringBuffer textBuffer = configuratePrinterLayoutPayment(payment,client);
 
             printer.reset();
             printer.printTaggedText(textBuffer.toString());
@@ -191,8 +192,10 @@ public class PrinterDatecsUtil {
         });
   }
 
-  private StringBuffer configuratePrinterLayoutPayment(final Payment payment) {
+  private StringBuffer configuratePrinterLayoutPayment(final Payment payment,
+                                                       Client client) {
     StringBuffer textBuffer = new StringBuffer();
+
     textBuffer.append("{center}{b}COHORTIFRUTI - MA ");
     textBuffer.append("{br}");
     textBuffer.append("{s}Cooperativa dos Hortifrutigranjeiros do MA");
@@ -209,13 +212,18 @@ public class PrinterDatecsUtil {
     textBuffer.append(
         "{b}" + DateUtils.convertDateToStringInFormat_dd_mm_yyyy(payment.getDate()) + "{br}");
     textBuffer.append("{b}Cliente:");
-    textBuffer.append("{b}" + payment.getIdClient() + "{br}");
+    textBuffer.append("{b}" + client.getName() + "{br}");
+    if(payment.getDescription()!=null && !payment.getDescription().isEmpty()){
+        textBuffer.append("{b}OBS:");
+        textBuffer.append("{b}" + payment.getDescription() + "{br}");
+        textBuffer.append("{br}");
+    }
     textBuffer.append("{br}");
-    textBuffer.append("{reset}{right}{h}TOTAL: {/w}" + String.format("%.2f", payment.getValue()));
+    textBuffer.append("{reset}{right}{h}TOTAL: {/w}" + "R$ "+String.format("%.2f", payment.getValue()));
     textBuffer.append("{br}");
     textBuffer.append("{s}------------------------------------------");
     textBuffer.append("{br}");
-    textBuffer.append("{s}" + "Trinity Mobile Ceasa");
+    textBuffer.append("{s}" +  DateUtils.convertDateToStringInFormat_dd_mm_yyyy(payment.getDate()).replace("/","")+payment.getId());
     textBuffer.append("{br}");
     textBuffer.append("{br}");
     return textBuffer;
@@ -240,7 +248,7 @@ public class PrinterDatecsUtil {
         historic -> {
 
           textBuffer.append(
-              "{b}" + getNameConfigured(historic.getName()) + "R$ "+String.format("% 9.2f",historic.getValue()) + "{br}");
+              "{b}" + getNameConfigured(historic.getName()) + "R$"+String.format("% 9.2f",historic.getValue()) + "{br}");
         });
     // Aqui vem um foreach
 
@@ -256,12 +264,12 @@ public class PrinterDatecsUtil {
   }
 
     private String getNameConfigured(String name) {
-      if(name.length()<25){
-          for(int i=name.length();i<25;i++){
+      if(name.length()<30){
+          for(int i=name.length();i<30;i++){
              name=name.concat(" ");
           }
       }else{
-          name=name.substring(0,25);
+          name=name.substring(0,30);
       }
       return name.concat(" ");
     }

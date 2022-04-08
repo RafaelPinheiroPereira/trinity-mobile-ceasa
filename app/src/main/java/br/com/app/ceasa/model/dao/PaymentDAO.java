@@ -5,6 +5,8 @@ import android.os.AsyncTask;
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Query;
+import androidx.room.Transaction;
+
 import br.com.app.ceasa.model.entity.Payment;
 
 import java.util.Date;
