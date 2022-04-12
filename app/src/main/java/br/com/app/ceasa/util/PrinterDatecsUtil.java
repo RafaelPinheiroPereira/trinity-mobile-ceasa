@@ -257,7 +257,6 @@ public class PrinterDatecsUtil {
         "{reset}{right}{h}TOTAL: {/w}"
             +"R$ "+ String.format("%.2f", historicList.stream().mapToDouble(Historic::getValue).sum()));
     textBuffer.append("{br}");
-    textBuffer.append("{s}" + "Trinity Mobile Ceasa");
     textBuffer.append("{br}");
 
     return textBuffer;
