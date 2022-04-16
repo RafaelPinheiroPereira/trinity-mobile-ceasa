@@ -186,6 +186,7 @@ public class PaymentActivity extends AbstractActivity {
     setSupportActionBar(toolbar);
     getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     cetPrice.setText("0.00");
+    cetPrice.requestFocus();
   }
 
   @Override
@@ -261,7 +262,9 @@ public class PaymentActivity extends AbstractActivity {
   }
 
   @Override
-  public void onBackPressed() {}
+  public void onBackPressed() {
+    NavUtils.navigateUpFromSameTask(this);
+  }
 
   @Override
   protected void onDestroy() {
