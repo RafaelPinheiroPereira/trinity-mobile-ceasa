@@ -11,5 +11,5 @@ O aplicativo conta com as seguintes funcionalidades :
 - Exclusão dos Dados do Dispositivo
 
 
-![](app/imagens/home.jpeg)
+![](app/imagens/home.png)
 
