@@ -8,6 +8,7 @@ O aplicativo conta com as seguintes funcionalidades :
 - Importação dos Dados
 - Exportação dos Dados
 - Impressão do Histórico de Pagamento
+- Exclusão dos Dados do Dispositivo
 
 
 ![](app/imagens/home.jpeg)
