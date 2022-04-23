@@ -146,7 +146,7 @@ public class ConfigurationDataActivity extends AbstractActivity {
             .getConfigurationData()
             .setBaseValue(this.viewModel.getValueBase());
 
-        if (DateUtils.isUpdateDataBase(
+        if (DateUtils.isTodayAfterDateBase(
             this.viewModel.getInitialDateBase(),
             this.viewModel.getConfigurationDataSalved().getBaseDate())) {
           this.viewModel

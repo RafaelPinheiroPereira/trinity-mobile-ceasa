@@ -23,7 +23,6 @@ public class Client implements Serializable {
   @ColumnInfo(name = "order")
   private int  order;
 
-
   @Ignore
   private List<Payment> payments;
 

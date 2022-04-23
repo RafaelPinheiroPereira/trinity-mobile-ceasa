@@ -36,7 +36,7 @@ public class DateUtils {
     return dataInicial.before(dataFinal) || dataInicial.equals(dataFinal);
   }
 
-  public static boolean isUpdateDataBase(Date today, Date baseDate) {
-    return today.after(baseDate) || today.equals(baseDate);
+  public static boolean isTodayAfterDateBase(Date today, Date baseDate) {
+    return today.after(baseDate);
   }
 }
