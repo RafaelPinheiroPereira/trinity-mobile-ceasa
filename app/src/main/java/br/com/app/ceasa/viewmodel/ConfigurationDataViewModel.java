@@ -27,12 +27,6 @@ public class ConfigurationDataViewModel extends AndroidViewModel {
   }
 
   public void insertConfigurationData() {
-    Long lastId = this.getLastId();
-    if (lastId != null) {
-      this.getConfigurationData().setId(lastId + 1);
-    } else {
-      this.getConfigurationData().setId(1L);
-    }
     this.configurationDataRepository.insertConfigurationData(this.getConfigurationData());
   }
 
@@ -57,10 +51,6 @@ public class ConfigurationDataViewModel extends AndroidViewModel {
 
   public ConfigurationData findConfigurationData() {
     return this.configurationDataRepository.findConfigurationData();
-  }
-
-  public Long getLastId() {
-    return this.configurationDataRepository.findLastId();
   }
 
   public ConfigurationData getConfigurationData() {

@@ -13,7 +13,7 @@ import br.com.app.ceasa.model.converter.Converters;
 
 @Entity(tableName = "ConfigurationData")
 public class ConfigurationData implements Serializable {
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
     @NonNull
     private Long id;
 

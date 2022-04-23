@@ -14,7 +14,7 @@ import br.com.app.ceasa.model.converter.Converters;
 @Entity(tableName = "Payment")
 public class Payment implements Serializable {
 
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
     @NonNull
     private Long id;
 
