@@ -206,7 +206,7 @@ public class HomeActivity extends AbstractActivity {
 
   private void configurationDateBase() throws ParseException {
 
-    if(this.viewModel.isExistCofigurationData()){
+    if(this.viewModel.isExistConfigurationData()){
          if(DateUtils.isTodayAfterDateBase(this.viewModel.getToday(),this.viewModel.getConfigurationData().getBaseDate())){
             this.viewModel.updateConfigurationData();
             showMessage(this,"Data Base atualizada com sucesso!");
