@@ -14,14 +14,10 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 
 import br.com.app.ceasa.R;
-import br.com.app.ceasa.model.entity.ConfigurationData;
-import br.com.app.ceasa.tasks.InsertConfigurationDataTask;
-import br.com.app.ceasa.tasks.UpdateConfigurationDataTask;
 import br.com.app.ceasa.util.Constants;
 import br.com.app.ceasa.ui.fragment.EmptyFragment;
 import br.com.app.ceasa.ui.fragment.HomeFragment;
 import br.com.app.ceasa.util.DateUtils;
-import br.com.app.ceasa.viewmodel.ConfigurationDataViewModel;
 import br.com.app.ceasa.viewmodel.HomeViewModel;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -31,9 +27,7 @@ import com.shreyaspatil.MaterialDialog.BottomSheetMaterialDialog;
 import com.shreyaspatil.MaterialDialog.BottomSheetMaterialDialog.Builder;
 
 import java.io.IOException;
-import java.text.DateFormat;
 import java.text.ParseException;
-import java.util.Date;
 
 public class HomeActivity extends AbstractActivity {
 
@@ -62,7 +56,7 @@ public class HomeActivity extends AbstractActivity {
     this.checkPermissions();
 
     try {
-      this.configurationDateToday();
+      this.configurationDateBase();
     } catch (ParseException e) {
       showErrorMessage(this, e.getMessage());
     }
@@ -210,9 +204,9 @@ public class HomeActivity extends AbstractActivity {
     }
   }
 
-  private void configurationDateToday() throws ParseException {
+  private void configurationDateBase() throws ParseException {
 
-    if(this.viewModel.isExistCofigurationData()){
+    if(this.viewModel.isExistConfigurationData()){
          if(DateUtils.isTodayAfterDateBase(this.viewModel.getToday(),this.viewModel.getConfigurationData().getBaseDate())){
             this.viewModel.updateConfigurationData();
             showMessage(this,"Data Base atualizada com sucesso!");

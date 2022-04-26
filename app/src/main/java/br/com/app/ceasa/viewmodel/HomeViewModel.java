@@ -166,7 +166,7 @@ public class HomeViewModel extends AndroidViewModel {
   }
 
 
-  public boolean isExistCofigurationData() {
+  public boolean isExistConfigurationData() {
     return this.getConfigurationData()!=null?true:false;
   }
 

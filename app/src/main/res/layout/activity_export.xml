@@ -22,64 +22,81 @@
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
     </com.google.android.material.appbar.AppBarLayout>
 
-    <ScrollView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_marginTop="20dp"
+        android:padding="20dp">
 
-        <LinearLayout
+
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:layout_height="wrap_content"
+            android:hint="Data Inicial"
+            app:endIconCheckable="true"
+            app:endIconDrawable="@mipmap/ic_calendar_48"
+            app:endIconMode="custom"
+            app:endIconTint="@color/colorPrimaryDark">
 
-            <TextView
-                android:layout_width="wrap_content"
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/edt_date_initial"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Data Inicial"
-                android:layout_gravity="center_horizontal"
-                android:textColor="@color/textColorPrimary"
-                android:textSize="20sp"
-                android:layout_marginTop="10dp"></TextView>
+                android:clickable="true"
+                android:editable="false"
+                android:enabled="true"
+                android:focusable="true"
+                android:padding="10dp"
+                android:textColor="@android:color/primary_text_light"
+                android:textSize="14sp" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-            <CalendarView
-                android:id="@+id/cv_initial_date"
-                android:layout_width="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="10dp"
 
-                android:layout_height="wrap_content" />
 
-            <TextView
-                android:layout_width="wrap_content"
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Data Final"
+            android:layout_marginTop="30dp"
+            app:endIconCheckable="true"
+            app:endIconDrawable="@mipmap/ic_calendar_48"
+            app:endIconMode="custom"
+            app:endIconTint="@color/colorPrimaryDark">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/edt_date_final"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Data Final"
-                android:layout_gravity="center_horizontal"
-                android:textColor="@color/textColorPrimary"
-                android:textSize="20sp"
-                android:layout_marginTop="10dp"></TextView>
+                android:clickable="true"
+                android:editable="false"
+                android:enabled="true"
+                android:focusable="true"
+                android:padding="10dp"
+                android:textColor="@android:color/primary_text_light"
+                android:textSize="14sp" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-            <CalendarView
-                android:id="@+id/cv_final_date"
-                android:layout_width="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_height="wrap_content" />
 
-            <com.google.android.material.button.MaterialButton
+
+        <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_export"
                 style="@style/Widget.MaterialComponents.Button"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="10dp"
+                android:layout_height="wrap_content"
                 android:textColor="#fff"
                 android:text="Exportar Dados"
-                android:layout_marginRight="10dp"
                 app:backgroundTint="@color/primary_dark"
+                android:layout_marginTop="30dp"
                 app:icon="@mipmap/ic_cloud_upload_white_48dp"
                 app:iconTint="@color/white"
                 app:iconGravity="textStart" />
 
 
         </LinearLayout>
-    </ScrollView>
+
 
 
 </LinearLayout>
