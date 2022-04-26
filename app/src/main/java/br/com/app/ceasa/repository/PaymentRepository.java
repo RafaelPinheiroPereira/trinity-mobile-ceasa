@@ -12,8 +12,6 @@ import java.util.List;
 public class PaymentRepository {
   private PaymentDAO paymentDAO;
 
-  private LiveData<List<Payment>> listLiveData;
-
   private AppDataBase appDataBase;
 
   public PaymentRepository(Application application) {
@@ -21,39 +19,23 @@ public class PaymentRepository {
     paymentDAO = appDataBase.paymentDAO();
   }
 
-  public List<Payment> getAll() {
-
-    return paymentDAO.getAll();
-  }
-
   public Payment findPaymentByDateAndClient(final Date datePayment, final Long clientId) {
     return this.paymentDAO.findPaymentByDateAndClient(datePayment, clientId);
   }
 
-  public List<Payment> findPaymentClient( final Long clientId) {
-    return this.paymentDAO.findPaymentClient( clientId);
+  public List<Payment> findPaymentClient(final Long clientId) {
+    return this.paymentDAO.findPaymentClient(clientId);
   }
 
   public LiveData<List<Payment>> findDataToExportByDate(Date initialDate, Date finalDate) {
     return this.paymentDAO.findDataToExportByDate(initialDate, finalDate);
   }
 
-
-
-  public void saveAll(final List<Payment> payments) {
-
-    this.paymentDAO.save(payments.toArray(new Payment[payments.size()]));
-  }
-
   public void insertPayment(Payment payment) {
     this.paymentDAO.insert(payment);
   }
 
-  public Long findLastId() {
-    return this.paymentDAO.findLastId();
-  }
-
   public void clearDatabaseByDates(Date initialDate, Date finalDate) {
-    this.paymentDAO.deletePaymentByDates(initialDate,finalDate);
+    this.paymentDAO.deletePaymentByDates(initialDate, finalDate);
   }
 }

@@ -1,13 +1,13 @@
 package br.com.app.ceasa.ui;
 
+import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.CalendarView;
 import android.widget.EditText;
 import android.widget.TextView;
-import androidx.appcompat.app.AppCompatActivity;
+
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.NavUtils;
 import androidx.lifecycle.ViewModelProvider;
@@ -21,7 +21,6 @@ import br.com.app.ceasa.util.CurrencyEditText;
 import br.com.app.ceasa.util.DateUtils;
 import br.com.app.ceasa.util.MonetaryFormatting;
 import br.com.app.ceasa.util.PrinterDatecsUtil;
-import br.com.app.ceasa.util.Singleton;
 import br.com.app.ceasa.viewmodel.PaymentViewModel;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -50,8 +49,8 @@ public class PaymentActivity extends AbstractActivity {
   @BindView(R.id.edt_description)
   EditText edtDescription;
 
-  @BindView(R.id.cv_base_date)
-  CalendarView cvDate;
+  @BindView(R.id.edt_date_base)
+  EditText edtBaseDate;
 
   @BindView(R.id.fb_save_sale)
   FloatingActionButton floatingActionButton;
@@ -79,35 +78,18 @@ public class PaymentActivity extends AbstractActivity {
         cetPrice.setText(
             MonetaryFormatting.convertToDolar(
                 this.viewModel.getConfigurationDataSalved().getBaseValue()));
-        // this.viewModel.setPaymentDate(this.viewModel.getConfigurationDataSalved().getBaseDate());
-        cvDate.setDate(this.viewModel.getConfigurationDataSalved().getBaseDate().getTime());
+
+        edtBaseDate.setText(
+            DateUtils.convertDateToStringInFormat_dd_mm_yyyy(
+                new Date(this.viewModel.getConfigurationDataSalved().getBaseDate().getTime())));
       }
 
     } catch (ParseException e) {
-     showErrorMessage(this,e.getMessage());
+      showErrorMessage(this, e.getMessage());
     }
 
     this.setClientData();
     this.checkInitialConfigure();
-
-    cvDate.setOnDateChangeListener(
-        (view, year, month, dayOfMonth) -> {
-          // display the selected date by using a toast
-
-          Calendar c = Calendar.getInstance();
-          c.set(Calendar.YEAR, year);
-          c.set(Calendar.MONTH, month);
-          c.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-          DateFormat f = DateFormat.getDateInstance(DateFormat.DATE_FIELD);
-          String formatedPaymentDate = f.format(c.getTime());
-          try {
-
-            Date datePayment = f.parse(formatedPaymentDate);
-            this.viewModel.setPaymentDate(datePayment);
-          } catch (ParseException e) {
-           showErrorMessage(this, e.getMessage());
-          }
-        });
 
     if (this.viewModel.isAtivedPrinter()) {
       try {
@@ -124,7 +106,8 @@ public class PaymentActivity extends AbstractActivity {
   private void configureCreate() {
     DateFormat format = DateFormat.getDateInstance(DateFormat.DATE_FIELD);
     try {
-      this.viewModel.setPaymentDate(format.parse(format.format(cvDate.getDate())));
+      this.viewModel.setPaymentDate(
+          format.parse(format.format(new Date(System.currentTimeMillis()))));
     } catch (ParseException e) {
       showErrorMessage(this, e.getMessage());
     }
@@ -150,11 +133,13 @@ public class PaymentActivity extends AbstractActivity {
   private void setDataPaymet() {
     edtDescription.setText(this.viewModel.getPayment().getDescription());
     cetPrice.setText(MonetaryFormatting.convertToDolar(this.viewModel.getPayment().getValue()));
-    cvDate.setDate(this.viewModel.getPayment().getDate().getTime());
+    edtBaseDate.setText(
+        DateUtils.convertDateToStringInFormat_dd_mm_yyyy(
+            new Date(this.viewModel.getPayment().getDate().getTime())));
   }
 
   private void disableForm() {
-    cvDate.setEnabled(false);
+    edtBaseDate.setEnabled(false);
     edtDescription.setEnabled(false);
     cetPrice.setEnabled(false);
   }
@@ -248,6 +233,36 @@ public class PaymentActivity extends AbstractActivity {
 
       this.viewModel.printPayment();
     }
+  }
+
+  @OnClick(R.id.edt_date_base)
+  public void setOnClickBaseDate() {
+    final Calendar c = Calendar.getInstance();
+    int mYear = c.get(Calendar.YEAR);
+    int mMonth = c.get(Calendar.MONTH);
+    int mDay = c.get(Calendar.DAY_OF_MONTH);
+    DatePickerDialog datePickerDialog =
+        new DatePickerDialog(
+            this,
+            (view, year, monthOfYear, dayOfMonth) -> {
+              String strMonth =
+                  (monthOfYear + 1) < 10
+                      ? "0" + (monthOfYear + 1)
+                      : String.valueOf(monthOfYear + 1);
+              String strDay = (dayOfMonth) < 10 ? "0" + (dayOfMonth) : String.valueOf(dayOfMonth);
+              edtBaseDate.setText(strDay + "/" + strMonth + "/" + year);
+              try {
+                viewModel.setPaymentDate(
+                    DateFormat.getDateInstance(DateFormat.DATE_FIELD)
+                        .parse(edtBaseDate.getText().toString()));
+              } catch (ParseException e) {
+                showErrorMessage(PaymentActivity.this, e.getMessage());
+              }
+            },
+            mYear,
+            mMonth,
+            mDay);
+    datePickerDialog.show();
   }
 
   /** Realiza a validacao dos itens antes da insercao */

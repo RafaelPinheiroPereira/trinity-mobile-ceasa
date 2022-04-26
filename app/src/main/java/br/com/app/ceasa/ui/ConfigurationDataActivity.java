@@ -4,11 +4,13 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.NavUtils;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.CalendarView;
+import android.widget.EditText;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -36,10 +38,8 @@ public class ConfigurationDataActivity extends AbstractActivity {
   @BindView(R.id.btn_save_configuration_data)
   Button btnSaveConfigurationData;
 
-
-
-  @BindView(R.id.cv_base_date)
-  CalendarView cvBaseDate;
+  @BindView(R.id.edt_date_base)
+  EditText edtBaseDate;
 
   ConfigurationDataViewModel viewModel;
 
@@ -61,43 +61,25 @@ public class ConfigurationDataActivity extends AbstractActivity {
     if (this.viewModel.existConfigurationData()) {
       this.viewModel.setConfigurationData(this.viewModel.getConfigurationDataSalved());
       cetPrice.setText(
-          MonetaryFormatting.convertToDolar(
-              this.viewModel.getConfigurationData().getBaseValue()));
-      cvBaseDate.setDate(this.viewModel.getConfigurationData().getBaseDate().getTime());
+          MonetaryFormatting.convertToDolar(this.viewModel.getConfigurationData().getBaseValue()));
+      edtBaseDate.setText(
+          DateUtils.convertDateToStringInFormat_dd_mm_yyyy(
+              new Date(this.viewModel.getConfigurationData().getBaseDate().getTime())));
       this.viewModel.setInitialDateBase(this.viewModel.getConfigurationData().getBaseDate());
     } else {
       cetPrice.setText("0.00");
-      Date dateToday =
-              null;
+      Date dateToday = null;
       try {
-        dateToday = DateFormat.getDateInstance(DateFormat.SHORT)
+        dateToday =
+            DateFormat.getDateInstance(DateFormat.SHORT)
                 .parse(
-                        DateUtils.convertDateToStringInFormat_dd_mm_yyyy(
-                                new Date(System.currentTimeMillis())));
+                    DateUtils.convertDateToStringInFormat_dd_mm_yyyy(
+                        new Date(System.currentTimeMillis())));
       } catch (ParseException e) {
-        showMessage(this,e.getMessage());
+        showMessage(this, e.getMessage());
       }
       this.viewModel.setInitialDateBase(dateToday);
     }
-
-    cvBaseDate.setOnDateChangeListener(
-        (view, year, month, dayOfMonth) -> {
-          // display the selected date by using a toast
-
-          Calendar c = Calendar.getInstance();
-          c.set(Calendar.YEAR, year);
-          c.set(Calendar.MONTH, month);
-          c.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-          DateFormat f = DateFormat.getDateInstance(DateFormat.DATE_FIELD);
-          String formatedInitialDate = f.format(c.getTime());
-          try {
-
-            Date initialDate = f.parse(formatedInitialDate);
-            this.viewModel.setInitialDateBase(initialDate);
-          } catch (ParseException e) {
-            e.printStackTrace();
-          }
-        });
   }
 
   private void initViews() {
@@ -129,6 +111,36 @@ public class ConfigurationDataActivity extends AbstractActivity {
     return super.onOptionsItemSelected(item);
   }
 
+  @OnClick(R.id.edt_date_base)
+  public void setOnClickBaseDate() {
+    final Calendar c = Calendar.getInstance();
+    int mYear = c.get(Calendar.YEAR);
+    int mMonth = c.get(Calendar.MONTH);
+    int mDay = c.get(Calendar.DAY_OF_MONTH);
+    DatePickerDialog datePickerDialog =
+        new DatePickerDialog(
+            this,
+            (view, year, monthOfYear, dayOfMonth) -> {
+              String strMonth =
+                  (monthOfYear + 1) < 10
+                      ? "0" + (monthOfYear + 1)
+                      : String.valueOf(monthOfYear + 1);
+              String strDay = (dayOfMonth) < 10 ? "0" + (dayOfMonth) : String.valueOf(dayOfMonth);
+              edtBaseDate.setText(strDay + "/" + strMonth + "/" + year);
+              try {
+                viewModel.setInitialDateBase(
+                    DateFormat.getDateInstance(DateFormat.DATE_FIELD)
+                        .parse(edtBaseDate.getText().toString()));
+              } catch (ParseException e) {
+                showErrorMessage(ConfigurationDataActivity.this, e.getMessage());
+              }
+            },
+            mYear,
+            mMonth,
+            mDay);
+    datePickerDialog.show();
+  }
+
   @OnClick(R.id.btn_save_configuration_data)
   public void saveConfigurationData() {
 
@@ -136,30 +148,21 @@ public class ConfigurationDataActivity extends AbstractActivity {
       this.viewModel.setValueBase(cetPrice.getCurrencyDouble());
 
       if (!this.viewModel.existConfigurationData()) {
-        this.viewModel.setConfigurationData(
-            this.viewModel.getConfigurationDataToInsert());
+        this.viewModel.setConfigurationData(this.viewModel.getConfigurationDataToInsert());
         new InsertConfigurationDataTask(this.viewModel).execute();
       } else {
-        this.viewModel.setConfigurationData(
-            this.viewModel.getConfigurationDataSalved());
-        this.viewModel
-            .getConfigurationData()
-            .setBaseValue(this.viewModel.getValueBase());
+        this.viewModel.setConfigurationData(this.viewModel.getConfigurationDataSalved());
+        this.viewModel.getConfigurationData().setBaseValue(this.viewModel.getValueBase());
 
         if (DateUtils.isTodayAfterDateBase(
             this.viewModel.getInitialDateBase(),
             this.viewModel.getConfigurationDataSalved().getBaseDate())) {
-          this.viewModel
-              .getConfigurationData()
-              .setBaseDate(this.viewModel.getInitialDateBase());
+          this.viewModel.getConfigurationData().setBaseDate(this.viewModel.getInitialDateBase());
           new UpdateConfigurationDataTask(this.viewModel).execute();
-        }else{
-          showMessage(this,"A nova data base não pode ser menor do que a cadastrada!");
-
+        } else {
+          showMessage(this, "A nova data base não pode ser menor do que a cadastrada!");
         }
       }
     }
   }
-
-
 }
