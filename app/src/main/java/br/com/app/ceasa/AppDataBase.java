@@ -18,7 +18,7 @@ import br.com.app.ceasa.model.entity.PrinterDP;
 
 @Database(
     entities = {Client.class, Payment.class, ConfigurationData.class, PrinterDP.class},
-    version = 1)
+    version = 3)
 @TypeConverters({Converters.class})
 public abstract class AppDataBase extends RoomDatabase {
 

@@ -14,14 +14,10 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 
 import br.com.app.ceasa.R;
-import br.com.app.ceasa.model.entity.ConfigurationData;
-import br.com.app.ceasa.tasks.InsertConfigurationDataTask;
-import br.com.app.ceasa.tasks.UpdateConfigurationDataTask;
 import br.com.app.ceasa.util.Constants;
 import br.com.app.ceasa.ui.fragment.EmptyFragment;
 import br.com.app.ceasa.ui.fragment.HomeFragment;
 import br.com.app.ceasa.util.DateUtils;
-import br.com.app.ceasa.viewmodel.ConfigurationDataViewModel;
 import br.com.app.ceasa.viewmodel.HomeViewModel;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -31,9 +27,7 @@ import com.shreyaspatil.MaterialDialog.BottomSheetMaterialDialog;
 import com.shreyaspatil.MaterialDialog.BottomSheetMaterialDialog.Builder;
 
 import java.io.IOException;
-import java.text.DateFormat;
 import java.text.ParseException;
-import java.util.Date;
 
 public class HomeActivity extends AbstractActivity {
 
@@ -44,7 +38,6 @@ public class HomeActivity extends AbstractActivity {
   BottomNavigationView bottomNavigationView;
 
   HomeViewModel viewModel;
-  private ConfigurationDataViewModel configurationDataViewModel;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -53,7 +46,6 @@ public class HomeActivity extends AbstractActivity {
     ButterKnife.bind(this);
     initViews();
     viewModel = new ViewModelProvider(this).get(HomeViewModel.class);
-    configurationDataViewModel = new ViewModelProvider(this).get(ConfigurationDataViewModel.class);
     viewModel.setContext(this);
   }
 
@@ -64,7 +56,7 @@ public class HomeActivity extends AbstractActivity {
     this.checkPermissions();
 
     try {
-      this.configurationData();
+      this.configurationDateBase();
     } catch (ParseException e) {
       showErrorMessage(this, e.getMessage());
     }
@@ -208,43 +200,19 @@ public class HomeActivity extends AbstractActivity {
             .show();
       }
     } else {
-
       super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
   }
 
-  private void configurationData() throws ParseException {
+  private void configurationDateBase() throws ParseException {
 
-    this.configurationDataViewModel.setContext(this.viewModel.getContext());
-    ConfigurationData configurationData = this.viewModel.getConfigurationData();
-
-    if (configurationData != null) {
-
-      Date dateToday =
-          DateFormat.getDateInstance(DateFormat.SHORT)
-              .parse(
-                  DateUtils.convertDateToStringInFormat_dd_mm_yyyy(
-                      new Date(System.currentTimeMillis())));
-
-      if (DateUtils.isUpdateDataBase(
-          dateToday, configurationData.getBaseDate())) {
-        this.configurationDataViewModel.setInitialDateBase(dateToday);
-        this.configurationDataViewModel.setValueBase(configurationData.getBaseValue());
-        this.configurationDataViewModel.setConfigurationData(configurationData);
-        new UpdateConfigurationDataTask(this.configurationDataViewModel).execute();
-      }
-
-    } else {
-
-      this.configurationDataViewModel.setInitialDateBase(
-          DateFormat.getDateInstance(DateFormat.SHORT)
-              .parse(
-                  DateUtils.convertDateToStringInFormat_dd_mm_yyyy(
-                      new Date(System.currentTimeMillis()))));
-      this.configurationDataViewModel.setValueBase(0.0);
-      this.configurationDataViewModel.setConfigurationData(
-          this.configurationDataViewModel.getConfigurationDataToInsert());
-      new InsertConfigurationDataTask(this.configurationDataViewModel).execute();
+    if(this.viewModel.isExistConfigurationData()){
+         if(DateUtils.isTodayAfterDateBase(this.viewModel.getToday(),this.viewModel.getConfigurationData().getBaseDate())){
+            this.viewModel.updateConfigurationData();
+            showMessage(this,"Data Base atualizada com sucesso!");
+         }
+    }else{
+      this.viewModel.createConfigurationDataDefault();
     }
   }
 }

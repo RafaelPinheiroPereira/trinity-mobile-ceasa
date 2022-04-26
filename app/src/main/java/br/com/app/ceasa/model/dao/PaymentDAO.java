@@ -27,7 +27,7 @@ public abstract class PaymentDAO extends GenericDAO<Payment> {
   @Query(value = "SELECT * FROM payment WHERE date= :datePayment and id_client = :clientId ")
   public abstract Payment findPaymentByDateAndClient(Date datePayment, Long clientId);
 
-  @Query(value = "SELECT * FROM payment WHERE date>= :initialDate and date<= :finalDate ")
+  @Query(value = "SELECT * FROM payment WHERE date>= :initialDate and date<= :finalDate order by date asc")
   public abstract LiveData<List<Payment>> findDataToExportByDate(Date initialDate, Date finalDate);
 
   @Query(value = "SELECT * FROM payment WHERE  id_client = :clientId ")

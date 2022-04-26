@@ -18,23 +18,12 @@ import java.util.Optional;
 
 public class PaymentViewModel extends AndroidViewModel {
 
-  /*Objetos da tela*/
   Client client;
-
   Date paymentDate;
-
-  Date dateInitial;
-
-  Date dateFinal;
-
   Payment payment;
-
   String description;
-
   Context context;
-
   Double paymentValue;
-
   PrinterDatecsUtil printerDatecsUtil;
 
   /*Repositorios de acesso ao dados */
@@ -46,7 +35,7 @@ public class PaymentViewModel extends AndroidViewModel {
     super(application);
     paymentRepository = new PaymentRepository(application);
     configurationDataRepository = new ConfigurationDataRepository(application);
-    printerDPRepository= new PrinterDPRepository(application);
+    printerDPRepository = new PrinterDPRepository(application);
   }
 
   public boolean existConfigurationData() {
@@ -59,9 +48,7 @@ public class PaymentViewModel extends AndroidViewModel {
     return client;
   }
 
-  public Long getLastId() {
-    return this.paymentRepository.findLastId();
-  }
+
 
   public Payment getPaymentByDateAndClient() {
     return this.paymentRepository.findPaymentByDateAndClient(
@@ -69,13 +56,6 @@ public class PaymentViewModel extends AndroidViewModel {
   }
 
   public void insertPayment() {
-    Long lastId = this.getLastId();
-    if (lastId != null) {
-      this.getPayment().setId(lastId + 1);
-    } else {
-      this.getPayment().setId(1L);
-    }
-
     this.paymentRepository.insertPayment(this.getPayment());
   }
 
@@ -147,7 +127,7 @@ public class PaymentViewModel extends AndroidViewModel {
   }
 
   public void waitForConnection() throws Throwable {
-        this.printerDatecsUtil.waitForConection(this.printerDPRepository.findActivedPrinter());
+    this.printerDatecsUtil.waitForConection(this.printerDPRepository.findActivedPrinter());
   }
 
   public boolean isAtivedPrinter() {
@@ -155,7 +135,7 @@ public class PaymentViewModel extends AndroidViewModel {
   }
 
   public void printPayment() {
-    this.getPrinterDatecsUtil().printPayment(this.getPayment(),this.getClient());
+    this.getPrinterDatecsUtil().printPayment(this.getPayment(), this.getClient());
   }
 
   public void closeConnection() {
