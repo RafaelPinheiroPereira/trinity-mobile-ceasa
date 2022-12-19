@@ -26,8 +26,8 @@ public abstract class ClientDAO extends GenericDAO<Client> {
   @Query(value = "select * from client  ORDER BY `order`")
   public abstract List<Client> getAll();
 
-//  @Query(value = "select * from client  ORDER BY `order`")
-//  public abstract LiveData<List<Client>> getAll();
+  @Query(value = "select * from client  ORDER BY `order`")
+  public abstract LiveData<List<Client>> getAllOnStart();
 
   @Query("DELETE FROM client")
   public abstract void deleteAll();

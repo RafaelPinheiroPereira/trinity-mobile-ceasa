@@ -94,6 +94,8 @@ public class HomeViewModel extends AndroidViewModel {
 
   public void importData() throws IllegalAccessException, IOException, InstantiationException {
     new ImportDataTask(this).execute();
+
+
   }
 
   public void saveData() {
@@ -191,5 +193,10 @@ public class HomeViewModel extends AndroidViewModel {
 
   public List<Client> getClientsAll() {
    return  this.clientRepository.getAll();
+  }
+
+
+  public LiveData<List<Client>> getAllClientsLiveData() {
+     return this.clientRepository.getAllClientsLiveData();
   }
 }

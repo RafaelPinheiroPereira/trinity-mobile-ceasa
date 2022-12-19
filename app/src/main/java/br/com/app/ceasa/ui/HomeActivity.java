@@ -65,15 +65,16 @@ public class HomeActivity extends AbstractActivity {
       showErrorMessage(this, e.getMessage());
     }
 
-    if (!this.viewModel.getClientsAll().isEmpty()) {
+    this.viewModel.getAllClientsLiveData().observe(this,clients -> {
+       if(!clients.isEmpty()){
+         HomeFragment homeFragment = new HomeFragment(this.viewModel);
+         this.loadFragment(homeFragment);
+       }else{
+         EmptyFragment emptyFragment = new EmptyFragment();
+         this.loadFragment(emptyFragment);
+       }
+    });
 
-      this.viewModel.setPayments(this.viewModel.getClientsAll());
-      HomeFragment homeFragment = new HomeFragment(this.viewModel);
-      this.loadFragment(homeFragment);
-    } else {
-      EmptyFragment emptyFragment = new EmptyFragment();
-      this.loadFragment(emptyFragment);
-    }
 
     bottomNavigationView.setOnNavigationItemSelectedListener(
         item -> {

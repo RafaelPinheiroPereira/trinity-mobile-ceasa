@@ -42,4 +42,8 @@ public class ClientRepository {
   public void deleteAll() {
     this.clientDAO.deleteAll();
   }
+
+  public LiveData<List<Client>> getAllClientsLiveData() {
+    return this.clientDAO.getAllOnStart();
+  }
 }
