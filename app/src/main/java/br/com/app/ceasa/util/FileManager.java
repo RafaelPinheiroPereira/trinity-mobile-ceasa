@@ -2,55 +2,45 @@ package br.com.app.ceasa.util;
 
 import android.content.Context;
 import android.media.MediaScannerConnection;
-import android.os.Environment;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.stream.Stream;
 
 public class FileManager implements IFileManager {
 
-  public FileManager() {
-  }
+  public FileManager() {}
 
   @Override
   public File createAppDirectory(Context context) throws FileNotFoundException {
-    File directory = Environment.getExternalStoragePublicDirectory(Constants.APP_FOLDER_NAME);
+    File directory = new File(context.getExternalMediaDirs()[0],Constants.APP_FOLDER_NAME);
     if (!directory.exists()) {
       directory.mkdirs();
-      File file = new File(Constants.APP_DIRECTORY, Constants.LOG_FILE);
+      File file = new File(directory.getPath(), Constants.LOG_FILE);
       FileOutputStream pen = new FileOutputStream(file);
       try {
-        pen.write("R&M-Alimentos LTDA".getBytes());
+        pen.write("CEASA".getBytes());
         pen.flush();
         pen.close();
       } catch (IOException e) {
         e.printStackTrace();
       }
-      MediaScannerConnection.scanFile(context, new String[]{file.toString()}, null, null);
+      MediaScannerConnection.scanFile(context, new String[] {file.toString()}, null, null);
     }
     return directory;
   }
 
   @Override
-  public File createOutputFile() throws IOException {
+  public File createOutputFile() {
 
     File outputFile = new File(Constants.APP_FOLDER_NAME + Constants.OUTPUT_FILE);
     return outputFile;
   }
 
   @Override
-  public boolean fileExists(final String inputFile) {
-    File file = new File(Constants.APP_DIRECTORY);
-
-    long count =
-        Arrays.asList(file.listFiles()).stream()
-                .filter(item->item.getName().equalsIgnoreCase(inputFile))
-            .count();
-
-    return count > 0;
+  public boolean fileExists(final Context context) {
+    return new File(context.getExternalMediaDirs()[0]+ Constants.APP_FOLDER_NAME, Constants.INPUT_FILE).exists();
   }
 
   @Override
@@ -59,27 +49,11 @@ public class FileManager implements IFileManager {
   }
 
   @Override
-  public void readFile(File file)
-      throws IOException, IllegalAccessException, InstantiationException {}
+  public void readFile(File file) throws IOException {}
 
   @Override
-  public boolean containsAllFiles() {
-
-    long countFilesInexists =
-        Arrays.asList((Constants.INPUT_FILES)).stream()
-            .filter(inputFileName -> !this.fileExists(inputFileName))
-            .count();
-    return countFilesInexists <= 0;
+  public boolean containsInputFile(Context context) {
+    return this.fileExists(context);
   }
 
-  @Override
-  public StringBuilder searchInexistsFilesNames() {
-
-    Stream<String> namesFiles =
-        Arrays.asList((Constants.INPUT_FILES)).stream()
-            .filter(inputFileName -> !this.fileExists(inputFileName));
-    StringBuilder nameStringBuilder = new StringBuilder();
-    namesFiles.forEach(nameFile -> nameStringBuilder.append(nameFile).append("\n"));
-    return nameStringBuilder;
-  }
 }

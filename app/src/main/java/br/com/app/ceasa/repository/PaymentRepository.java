@@ -31,8 +31,8 @@ public class PaymentRepository {
     return this.paymentDAO.findDataToExportByDate(initialDate, finalDate);
   }
 
-  public void insertPayment(Payment payment) {
-    this.paymentDAO.insert(payment);
+  public long insertPayment(Payment payment) {
+   return  this.paymentDAO.insert(payment);
   }
 
   public void clearDatabaseByDates(Date initialDate, Date finalDate) {

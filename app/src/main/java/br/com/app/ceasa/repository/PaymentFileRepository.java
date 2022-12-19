@@ -22,7 +22,7 @@ public class PaymentFileRepository {
 
     public void writeFile(
             final List<Payment> payments, Context context) throws FileNotFoundException {
-        File file = paymentFile.createFile(Constants.APP_DIRECTORY, Constants.OUTPUT_FILE);
+        File file = paymentFile.createFile(context.getExternalMediaDirs()[0]+Constants.APP_FOLDER_NAME, Constants.OUTPUT_FILE);
         paymentFile.writeFile(payments, file);
         MediaScannerConnection.scanFile(context, new String[]{file.toString()}, null, null);
     }

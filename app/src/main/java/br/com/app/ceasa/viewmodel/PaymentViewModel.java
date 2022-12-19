@@ -48,15 +48,15 @@ public class PaymentViewModel extends AndroidViewModel {
     return client;
   }
 
-
-
   public Payment getPaymentByDateAndClient() {
     return this.paymentRepository.findPaymentByDateAndClient(
         this.getPaymentDate(), this.getClient().getId());
   }
 
   public void insertPayment() {
-    this.paymentRepository.insertPayment(this.getPayment());
+    long paymentInsertedId=this.paymentRepository.insertPayment(this.getPayment());
+    this.getPayment().setId(paymentInsertedId);
+
   }
 
   public void setClient(final Client client) {

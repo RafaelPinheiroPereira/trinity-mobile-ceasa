@@ -11,10 +11,6 @@ public class AbstractActivity extends AppCompatActivity {
         runOnUiThread(()->Toast.makeText(context, msg, Toast.LENGTH_LONG).show());
     }
 
-    public static void navigateToActivity(Context context, Intent intent) {
-        context.startActivity(intent);
-    }
-
     public  void showMessage(Context context, String msg) {
         Toast.makeText(context, msg, Toast.LENGTH_LONG).show();
     }

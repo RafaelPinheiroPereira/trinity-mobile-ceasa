@@ -129,4 +129,11 @@ public class HomeAdapter extends RecyclerView.Adapter<MyViewHolder> implements F
   public void setRecyclerViewOnClickListenerHack(RecyclerViewOnClickListenerHack r) {
     recyclerViewOnClickListenerHack = r;
   }
+
+  public void setClients(List<Client> clients) {
+    this.clientOriginalList = clients;
+    this.clientsFiltereds = clients;
+    notifyDataSetChanged();
+  }
+
 }

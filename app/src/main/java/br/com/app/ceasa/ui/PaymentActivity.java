@@ -34,6 +34,7 @@ import java.text.ParseException;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Optional;
+import java.util.concurrent.ExecutionException;
 
 public class PaymentActivity extends AbstractActivity {
 
@@ -213,9 +214,8 @@ public class PaymentActivity extends AbstractActivity {
                         this.viewModel.setDescription(edtDescription.getText().toString());
                         this.viewModel.setPaymentValue(cetPrice.getCurrencyDouble());
                         this.viewModel.setPayment(this.viewModel.getPaymentToInsert());
+                        this.viewModel.insertPayment();
                         new InsertPaymentTask(this.viewModel).execute();
-
-                        this.viewModel.printPayment();
 
                         dialogInterface.dismiss();
                       })

@@ -1,5 +1,7 @@
 package br.com.app.ceasa.repository;
 
+import android.content.Context;
+
 import br.com.app.ceasa.model.entity.Client;
 import br.com.app.ceasa.util.Constants;
 import br.com.app.ceasa.util.ClientFile;
@@ -20,9 +22,7 @@ public class ClientFileRepository implements IFileRepository {
         clientFile = Singleton.getInstance(ClientFile.class);
     }
 
-    public boolean fileExists(final String inputFile) {
-        return clientFile.fileExists(inputFile);
-    }
+
 
     private void setCLients(final List<Client> cLients) {
         this.clients = cLients;
@@ -34,8 +34,8 @@ public class ClientFileRepository implements IFileRepository {
 
 
     @Override
-    public void readFile() throws IOException {
-        File file = clientFile.createFile(Constants.APP_DIRECTORY, Constants.INPUT_FILES[0]);
+    public void readFile(Context context) throws IOException {
+        File file = clientFile.createFile(context.getExternalMediaDirs()[0]+Constants.APP_FOLDER_NAME, Constants.INPUT_FILE);
         clientFile.readFile(file);
         this.setCLients(clientFile.getClients());
     }

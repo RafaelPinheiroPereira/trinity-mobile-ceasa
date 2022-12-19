@@ -88,7 +88,9 @@ public class HomeFragment extends Fragment
 
   private SearchView.OnQueryTextListener queryTextListener;
 
-
+  public HomeFragment(HomeViewModel viewModel) {
+    this.viewModel = viewModel;
+  }
 
   @Override
   public View onCreateView(
@@ -117,9 +119,6 @@ public class HomeFragment extends Fragment
   @Override
   public void onActivityCreated(@Nullable Bundle savedInstanceState) {
     super.onActivityCreated(savedInstanceState);
-
-    viewModel = new ViewModelProvider(requireActivity()).get(HomeViewModel.class);
-
   }
 
   @Override
@@ -169,8 +168,6 @@ public class HomeFragment extends Fragment
           }
         });
   }
-
-
 
   @Override
   public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
@@ -227,10 +224,7 @@ public class HomeFragment extends Fragment
         this,
         clients -> {
           Collections.sort(clients, Comparator.comparing(Client::getOrder));
-          homeAdapter = new HomeAdapter(getActivity(), clients);
-
-          rcvHome.setAdapter(homeAdapter);
-          homeAdapter.setRecyclerViewOnClickListenerHack(this);
+          homeAdapter.setClients(clients);
         });
   }
 
@@ -253,10 +247,7 @@ public class HomeFragment extends Fragment
         this,
         clients -> {
           Collections.sort(clients, Comparator.comparing(Client::getOrder));
-          homeAdapter = new HomeAdapter(getActivity(), clients);
-
-          rcvHome.setAdapter(homeAdapter);
-          homeAdapter.setRecyclerViewOnClickListenerHack(this);
+          homeAdapter.setClients(clients);
         });
   }
 
@@ -265,19 +256,13 @@ public class HomeFragment extends Fragment
     rcvHome.setLayoutManager(linearLayoutManager);
     homeAdapter = new HomeAdapter(getActivity(), new ArrayList<>());
     rcvHome.setAdapter(homeAdapter);
+    homeAdapter.setRecyclerViewOnClickListenerHack(this);
   }
 
   private void loadClientsAll() throws ExecutionException, InterruptedException {
-    this.viewModel
-        .getClientsAll()
-        .observe(
-            this,
-            clients -> {
-              Collections.sort(clients, Comparator.comparing(Client::getOrder));
-              homeAdapter = new HomeAdapter(getActivity(), clients);
-              rcvHome.setAdapter(homeAdapter);
-              homeAdapter.setRecyclerViewOnClickListenerHack(this);
-            });
+    List<Client> clients = this.viewModel.getClientsAll();
+    Collections.sort(clients, Comparator.comparing(Client::getOrder));
+    homeAdapter.setClients(clients);
   }
 
   private void configInitialRecycle() {

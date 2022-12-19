@@ -24,7 +24,13 @@ public abstract class ClientDAO extends GenericDAO<Client> {
   public abstract LiveData<List<Client>> findNotPositivedClient(final Date dateSale);
 
   @Query(value = "select * from client  ORDER BY `order`")
-  public abstract LiveData<List<Client>> getAll();
+  public abstract List<Client> getAll();
+
+//  @Query(value = "select * from client  ORDER BY `order`")
+//  public abstract LiveData<List<Client>> getAll();
+
+  @Query("DELETE FROM client")
+  public abstract void deleteAll();
 
   private class OperationsAsyncTask extends AsyncTask<Client, Void, Void> {
 

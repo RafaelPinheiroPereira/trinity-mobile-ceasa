@@ -20,7 +20,7 @@ public abstract class GenericDAO<T extends Serializable> {
     public abstract void insert(T... objs);
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    public abstract void insert(T obj);
+    public abstract long insert(T obj);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     public abstract void save(T... objs);

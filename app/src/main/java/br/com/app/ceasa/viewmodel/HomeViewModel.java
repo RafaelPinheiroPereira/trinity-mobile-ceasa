@@ -17,7 +17,6 @@ import br.com.app.ceasa.repository.ConfigurationDataRepository;
 import br.com.app.ceasa.repository.FileManagerRepository;
 import br.com.app.ceasa.repository.PaymentRepository;
 import br.com.app.ceasa.tasks.ImportDataTask;
-import br.com.app.ceasa.tasks.InsertConfigurationDataTask;
 import br.com.app.ceasa.util.DateUtils;
 import br.com.app.ceasa.util.Singleton;
 
@@ -48,7 +47,7 @@ public class HomeViewModel extends AndroidViewModel {
 
   ProgressDialog progressDialog;
 
-  List<Home> homes= new ArrayList<>();
+  List<Home> homes = new ArrayList<>();
 
   public HomeViewModel(@NonNull final Application application)
       throws IllegalAccessException, InstantiationException {
@@ -57,10 +56,10 @@ public class HomeViewModel extends AndroidViewModel {
     clientRepository = new ClientRepository(application);
     paymentRepository = new PaymentRepository(application);
     fileManagerRepository = Singleton.getInstance(FileManagerRepository.class);
-    configurationDataRepository= new ConfigurationDataRepository(application);
+    configurationDataRepository = new ConfigurationDataRepository(application);
 
-    if(today==null){
-       this.today= new Date(System.currentTimeMillis());
+    if (today == null) {
+      this.today = new Date(System.currentTimeMillis());
     }
   }
 
@@ -84,7 +83,8 @@ public class HomeViewModel extends AndroidViewModel {
             });
   }
 
-  public LiveData<List<Client>> getPositivedClients(final String datePayment) throws ParseException {
+  public LiveData<List<Client>> getPositivedClients(final String datePayment)
+      throws ParseException {
 
     LiveData<List<Client>> clients =
         this.clientRepository.findPositivedClient(
@@ -107,23 +107,21 @@ public class HomeViewModel extends AndroidViewModel {
 
   private void saveClients() {
     this.clientRepository.saveAll(this.fileManagerRepository.getClients());
+
+  }
+
+  public void deleteClients() {
+    this.clientRepository.deleteAll();
   }
 
   public FileManagerRepository getFileManagerRepository() {
     return fileManagerRepository;
   }
 
-  public LiveData<List<Client>> getClientsAll() {
 
-    return this.clientRepository.getAll();
-  }
 
-  public boolean containsAllFiles() {
-    return fileManagerRepository.containsAllFiles();
-  }
-
-  public StringBuilder searchInexistsFilesNames() {
-    return fileManagerRepository.searchInexistsFilesNames();
+  public boolean containsInputFile() {
+    return fileManagerRepository.containsInputFile(this.context);
   }
 
   public ProgressDialog getProgressDialog() {
@@ -161,35 +159,37 @@ public class HomeViewModel extends AndroidViewModel {
   public ConfigurationData getConfigurationData() {
     return this.configurationDataRepository.findConfigurationData();
   }
+
   public Date getToday() throws ParseException {
     return (getParseToday(DateUtils.convertDateToStringInFormat_dd_mm_yyyy(this.today)));
   }
 
-
   public boolean isExistConfigurationData() {
-    return this.getConfigurationData()!=null?true:false;
+    return this.getConfigurationData() != null ? true : false;
   }
 
   public void createConfigurationDataDefault() throws ParseException {
-    ConfigurationData configurationData= new ConfigurationData();
+    ConfigurationData configurationData = new ConfigurationData();
 
     configurationData.setBaseValue(0.0);
-    configurationData.setBaseDate(getParseToday(DateUtils.convertDateToStringInFormat_dd_mm_yyyy(
-            this.getToday())));
+    configurationData.setBaseDate(
+        getParseToday(DateUtils.convertDateToStringInFormat_dd_mm_yyyy(this.getToday())));
 
     this.configurationDataRepository.insertConfigurationData(configurationData);
-
   }
 
   private Date getParseToday(String s) throws ParseException {
-    return DateFormat.getDateInstance(DateFormat.SHORT)
-            .parse(
-                    s);
+    return DateFormat.getDateInstance(DateFormat.SHORT).parse(s);
   }
 
   public void updateConfigurationData() throws ParseException {
-    ConfigurationData configurationData= this.getConfigurationData();
-    configurationData.setBaseDate(getParseToday(DateUtils.convertDateToStringInFormat_dd_mm_yyyy(this.getToday())));
+    ConfigurationData configurationData = this.getConfigurationData();
+    configurationData.setBaseDate(
+        getParseToday(DateUtils.convertDateToStringInFormat_dd_mm_yyyy(this.getToday())));
     this.configurationDataRepository.updateConfigurationData(configurationData);
+  }
+
+  public List<Client> getClientsAll() {
+   return  this.clientRepository.getAll();
   }
 }

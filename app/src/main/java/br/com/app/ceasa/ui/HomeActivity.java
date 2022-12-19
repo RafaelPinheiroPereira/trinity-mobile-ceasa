@@ -11,9 +11,11 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import br.com.app.ceasa.R;
+import br.com.app.ceasa.model.entity.Client;
 import br.com.app.ceasa.util.Constants;
 import br.com.app.ceasa.ui.fragment.EmptyFragment;
 import br.com.app.ceasa.ui.fragment.HomeFragment;
@@ -28,6 +30,8 @@ import com.shreyaspatil.MaterialDialog.BottomSheetMaterialDialog.Builder;
 
 import java.io.IOException;
 import java.text.ParseException;
+import java.util.Arrays;
+import java.util.List;
 
 public class HomeActivity extends AbstractActivity {
 
@@ -61,31 +65,26 @@ public class HomeActivity extends AbstractActivity {
       showErrorMessage(this, e.getMessage());
     }
 
-    this.viewModel
-        .getClientsAll()
-        .observe(
-            this,
-            clients -> {
-              if (clients.size() > 0) {
-                this.viewModel.setPayments(clients);
-                HomeFragment homeFragment = new HomeFragment();
-                this.loadFragment(homeFragment);
+    if (!this.viewModel.getClientsAll().isEmpty()) {
 
-              } else {
-
-                EmptyFragment emptyFragment = new EmptyFragment();
-                this.loadFragment(emptyFragment);
-              }
-            });
+      this.viewModel.setPayments(this.viewModel.getClientsAll());
+      HomeFragment homeFragment = new HomeFragment(this.viewModel);
+      this.loadFragment(homeFragment);
+    } else {
+      EmptyFragment emptyFragment = new EmptyFragment();
+      this.loadFragment(emptyFragment);
+    }
 
     bottomNavigationView.setOnNavigationItemSelectedListener(
         item -> {
           switch (item.getItemId()) {
             case R.id.page_1:
-              if (viewModel.containsAllFiles()) {
+              if (viewModel.containsInputFile()) {
 
                 try {
+
                   viewModel.importData();
+
                 } catch (IllegalAccessException e) {
                   showErrorMessage(getApplicationContext(), e.getMessage());
                 } catch (IOException e) {
@@ -96,19 +95,17 @@ public class HomeActivity extends AbstractActivity {
 
               } else {
 
-                StringBuilder message = viewModel.searchInexistsFilesNames();
-
                 BottomSheetMaterialDialog mBottomSheetDialog =
                     new Builder(HomeActivity.this)
                         .setTitle("Atenção, não foram localizados os arquivos abaixo:")
-                        .setMessage(message.toString())
+                        .setMessage(Constants.INPUT_FILE)
                         .setCancelable(false)
                         .setPositiveButton(
                             "OK",
                             (dialogInterface, which) -> {
                               showMessage(
                                   getApplicationContext(),
-                                  "Por favor, realize a inclusão dos arquivos");
+                                  "Por favor, realize a inclusão do arquivo");
 
                               dialogInterface.dismiss();
                             })
@@ -148,25 +145,34 @@ public class HomeActivity extends AbstractActivity {
 
   private void checkPermissions() {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-      if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+      if (checkSelfPermission(Manifest.permission.BLUETOOTH) != PackageManager.PERMISSION_GRANTED
+          || checkSelfPermission(Manifest.permission.BLUETOOTH_ADMIN)
               != PackageManager.PERMISSION_GRANTED
-          || checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
+          || checkSelfPermission(Manifest.permission.BLUETOOTH_PRIVILEGED)
+              != PackageManager.PERMISSION_GRANTED
+          || checkSelfPermission(Manifest.permission.BLUETOOTH_CONNECT)
+              != PackageManager.PERMISSION_GRANTED
+          || checkSelfPermission(Manifest.permission.BLUETOOTH_SCAN)
               != PackageManager.PERMISSION_GRANTED) {
         if (ActivityCompat.shouldShowRequestPermissionRationale(
-            HomeActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+            HomeActivity.this, Manifest.permission.BLUETOOTH)) {
           Toast.makeText(
                   HomeActivity.this,
-                  "As permissões são necessárias para as operações de importação e exportação.",
+                  "As permissões são necessárias para o correto funcionamento da impressora.",
                   Toast.LENGTH_LONG)
               .show();
           ActivityCompat.requestPermissions(
-              HomeActivity.this, Constants.PERMISSIONS_STORAGE, Constants.REQUEST_STORAGE);
+              HomeActivity.this, Constants.PERMISSIONS, Constants.REQUEST_STORAGE);
 
         } else {
           // Solicita a permissao
           ActivityCompat.requestPermissions(
-              HomeActivity.this, Constants.PERMISSIONS_STORAGE, Constants.REQUEST_STORAGE);
+              HomeActivity.this, Constants.PERMISSIONS, Constants.REQUEST_STORAGE);
         }
+      } else {
+        // Solicita a permissao
+        ActivityCompat.requestPermissions(
+            HomeActivity.this, Constants.PERMISSIONS, Constants.REQUEST_STORAGE);
       }
     }
   }
@@ -181,7 +187,11 @@ public class HomeActivity extends AbstractActivity {
       int requestCode, String[] permissions, int[] grantResults) {
 
     if (requestCode == Constants.REQUEST_STORAGE) {
-      if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+      if (Arrays.stream(grantResults)
+              .filter(item -> item == PackageManager.PERMISSION_GRANTED)
+              .count()
+          == Constants.PERMISSIONS.length) {
 
         Toast.makeText(this, "Permissões concedidas.", Toast.LENGTH_LONG).show();
         try {
@@ -206,12 +216,13 @@ public class HomeActivity extends AbstractActivity {
 
   private void configurationDateBase() throws ParseException {
 
-    if(this.viewModel.isExistConfigurationData()){
-         if(DateUtils.isTodayAfterDateBase(this.viewModel.getToday(),this.viewModel.getConfigurationData().getBaseDate())){
-            this.viewModel.updateConfigurationData();
-            showMessage(this,"Data Base atualizada com sucesso!");
-         }
-    }else{
+    if (this.viewModel.isExistConfigurationData()) {
+      if (DateUtils.isTodayAfterDateBase(
+          this.viewModel.getToday(), this.viewModel.getConfigurationData().getBaseDate())) {
+        this.viewModel.updateConfigurationData();
+        showMessage(this, "Data Base atualizada com sucesso!");
+      }
+    } else {
       this.viewModel.createConfigurationDataDefault();
     }
   }

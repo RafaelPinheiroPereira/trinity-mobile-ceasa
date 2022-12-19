@@ -23,19 +23,19 @@ public class FileManagerRepository {
     fileManager = Singleton.getInstance(FileManager.class);
   }
 
-  public boolean containsAllFiles() {
+  public boolean containsInputFile(Context context) {
 
-    return fileManager.containsAllFiles();
+    return fileManager.containsInputFile(context);
   }
 
   public void createAppDirectory(final Context context) throws FileNotFoundException {
     this.fileManager.createAppDirectory(context);
   }
 
-  public void downloadFiles() throws IOException, IllegalAccessException, InstantiationException {
+  public void downloadFiles(final Context context) throws IOException, IllegalAccessException, InstantiationException {
 
     clientFileRepository = Singleton.getInstance(ClientFileRepository.class);
-    readFiles();
+    clientFileRepository.readFile(context);
   }
 
   public void uploadFile(List<Payment> payments, Context context)
@@ -44,17 +44,9 @@ public class FileManagerRepository {
     paymentFileRepository.writeFile(payments, context);
   }
 
-  private void readFiles() throws IOException {
-    clientFileRepository.readFile();
-  }
 
-  public boolean fileExists(final String inputFile) {
-    return fileManager.fileExists(inputFile);
-  }
 
-  public StringBuilder searchInexistsFilesNames() {
-    return fileManager.searchInexistsFilesNames();
-  }
+
 
   public List<Client> getClients() {
     return clientFileRepository.getClients();

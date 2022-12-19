@@ -9,16 +9,17 @@ public interface IFileManager {
 
     File createAppDirectory(Context context) throws FileNotFoundException;
 
-    boolean fileExists(final String inputFile);
+
+
+    boolean fileExists(Context context);
 
     File createFile(String nameDirectory, String nameFile);
 
-    void readFile(File file)
-      throws IOException, IllegalAccessException, InstantiationException;
+    void readFile(File file) throws IOException;
 
-    boolean containsAllFiles();
+    File createOutputFile() ;
 
-    StringBuilder searchInexistsFilesNames();
+    boolean containsInputFile(Context context);
 
-    File createOutputFile() throws IOException;
+
 }

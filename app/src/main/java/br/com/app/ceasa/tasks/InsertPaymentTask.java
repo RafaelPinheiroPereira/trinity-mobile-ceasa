@@ -3,6 +3,9 @@ package br.com.app.ceasa.tasks;
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.widget.Toast;
+
+import androidx.room.Query;
+
 import br.com.app.ceasa.ui.PaymentActivity;
 import br.com.app.ceasa.viewmodel.PaymentViewModel;
 
@@ -22,6 +25,7 @@ public class InsertPaymentTask extends AsyncTask<Void, Void, Boolean> {
   protected Boolean doInBackground(final Void... voids) {
 
     this.paymentViewModel.insertPayment();
+
 
     return true;
   }
@@ -49,6 +53,7 @@ public class InsertPaymentTask extends AsyncTask<Void, Void, Boolean> {
               Toast.LENGTH_LONG)
           .show();
 
+      this.paymentViewModel.printPayment();
 
     } else {
 

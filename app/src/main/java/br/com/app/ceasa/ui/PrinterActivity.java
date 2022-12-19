@@ -4,9 +4,11 @@ import static br.com.app.ceasa.util.Constants.PREF_DEVICE_ADDRESS;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
 import androidx.core.app.NavUtils;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.Manifest;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.BroadcastReceiver;
@@ -14,6 +16,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.KeyEvent;
@@ -58,38 +61,53 @@ public class PrinterActivity extends AbstractActivity {
   private PrinterDPViewModel viewModel;
 
   private final BroadcastReceiver mReceiver =
-      new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-          String action = intent.getAction();
+          new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+              String action = intent.getAction();
 
-          // When discovery finds a device
-          if (BluetoothDevice.ACTION_FOUND.equals(action)) {
-            // Get the BluetoothDevice object from the Intent
-            BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
-            boolean bonded = device.getBondState() == BluetoothDevice.BOND_BONDED;
-            int iconId =
-                bonded
-                    ? R.mipmap.ic_bluetooth_connected_black_48dp
-                    : R.mipmap.ic_bluetooth_black_48dp;
-            // Find is device is already exists
-            PrinterDP printerDP = deviceAdapter.find(device.getAddress());
-            // Skip if device is already in list
-            if (printerDP == null) {
-              deviceAdapter.add(device.getName(), device.getAddress());
-            } else {
-              printerDP.setName(device.getName());
-              printerDP.setMac(device.getAddress());
+              // When discovery finds a device
+              if (BluetoothDevice.ACTION_FOUND.equals(action)) {
+                // Get the BluetoothDevice object from the Intent
+                BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+                if (ActivityCompat.checkSelfPermission(PrinterActivity.this,
+                        Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
+                  // TODO: Consider calling
+                  //    ActivityCompat#requestPermissions
+                  // here to request the missing permissions, and then
+                  // overriding
+                  //   public void onRequestPermissionsResult(int
+                  //   requestCode, String[] permissions,
+                  //                                          int[]
+                  //                                          grantResults)
+                  // to handle the case where the user grants the permission.
+                  // See the documentation
+                  // for ActivityCompat#requestPermissions for more details.
+                  return;
+                }
+                boolean bonded = device.getBondState() == BluetoothDevice.BOND_BONDED;
+                int iconId =
+                        bonded
+                                ? R.mipmap.ic_bluetooth_connected_black_48dp
+                                : R.mipmap.ic_bluetooth_black_48dp;
+                // Find is device is already exists
+                PrinterDP printerDP = deviceAdapter.find(device.getAddress());
+                // Skip if device is already in list
+                if (printerDP == null) {
+                  deviceAdapter.add(device.getName(), device.getAddress());
+                } else {
+                  printerDP.setName(device.getName());
+                  printerDP.setMac(device.getAddress());
+                }
+
+                // When discovery is finished, change the Activity title
+              } else if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)) {
+                setProgressBarIndeterminateVisibility(false);
+                setTitle(R.string.title_select_device);
+                findViewById(R.id.lnlScan).setVisibility(View.VISIBLE);
+              }
             }
-
-            // When discovery is finished, change the Activity title
-          } else if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)) {
-            setProgressBarIndeterminateVisibility(false);
-            setTitle(R.string.title_select_device);
-            findViewById(R.id.lnlScan).setVisibility(View.VISIBLE);
-          }
-        }
-      };
+          };
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -115,16 +133,29 @@ public class PrinterActivity extends AbstractActivity {
     lvDevices.setAdapter(deviceAdapter);
 
     lvDevices.setOnItemClickListener(
-        (parent, view, position, id) -> {
-          mBtAdapter.cancelDiscovery();
+            (parent, view, position, id) -> {
+              if (ActivityCompat.checkSelfPermission(this,
+                      Manifest.permission.BLUETOOTH_SCAN) != PackageManager.PERMISSION_GRANTED) {
+                // TODO: Consider calling
+                //    ActivityCompat#requestPermissions
+                // here to request the missing permissions, and then overriding
+                //   public void onRequestPermissionsResult(int requestCode,
+                //   String[] permissions,
+                //                                          int[] grantResults)
+                // to handle the case where the user grants the permission.
+                // See the documentation
+                // for ActivityCompat#requestPermissions for more details.
+                return;
+              }
+              mBtAdapter.cancelDiscovery();
 
-          PrinterDP printerDPScanned = deviceAdapter.getItem(position);
-          if (BluetoothAdapter.checkBluetoothAddress(printerDPScanned.getMac())) {
-            this.selectPrinter(printerDPScanned.getMac(), printerDPScanned.getName());
-            showMessage(this, "Impressora Selecionada:".concat(printerDPScanned.getName()));
-            NavUtils.navigateUpFromSameTask(this);
-          }
-        });
+              PrinterDP printerDPScanned = deviceAdapter.getItem(position);
+              if (BluetoothAdapter.checkBluetoothAddress(printerDPScanned.getMac())) {
+                this.selectPrinter(printerDPScanned.getMac(), printerDPScanned.getName());
+                showMessage(this, "Impressora Selecionada:".concat(printerDPScanned.getName()));
+                NavUtils.navigateUpFromSameTask(this);
+              }
+            });
 
     IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
     registerReceiver(mReceiver, filter);
@@ -135,6 +166,32 @@ public class PrinterActivity extends AbstractActivity {
 
     if (mBtAdapter != null && mBtAdapter.isEnabled()) {
       // Get a set of currently paired devices
+      if (ActivityCompat.checkSelfPermission(this,
+              Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
+        // TODO: Consider calling
+        //    ActivityCompat#requestPermissions
+        // here to request the missing permissions, and then overriding
+        //   public void onRequestPermissionsResult(int requestCode, String[]
+        //   permissions,
+        //                                          int[] grantResults)
+        // to handle the case where the user grants the permission. See the
+        // documentation
+        // for ActivityCompat#requestPermissions for more details.
+        return;
+      }
+      if (ActivityCompat.checkSelfPermission(this,
+              Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
+        // TODO: Consider calling
+        //    ActivityCompat#requestPermissions
+        // here to request the missing permissions, and then overriding
+        //   public void onRequestPermissionsResult(int requestCode, String[]
+        //   permissions,
+        //                                          int[] grantResults)
+        // to handle the case where the user grants the permission. See the
+        // documentation
+        // for ActivityCompat#requestPermissions for more details.
+        return;
+      }
       Set<BluetoothDevice> pairedDevices = mBtAdapter.getBondedDevices();
 
       // If there are paired devices, add each one to the ArrayAdapter
@@ -181,6 +238,19 @@ public class PrinterActivity extends AbstractActivity {
     findViewById(R.id.lnlScan).setVisibility(View.GONE);
 
     // If we're already discovering, stop it
+    if (ActivityCompat.checkSelfPermission(this,
+            Manifest.permission.BLUETOOTH_SCAN) != PackageManager.PERMISSION_GRANTED) {
+      // TODO: Consider calling
+      //    ActivityCompat#requestPermissions
+      // here to request the missing permissions, and then overriding
+      //   public void onRequestPermissionsResult(int requestCode, String[]
+      //   permissions,
+      //                                          int[] grantResults)
+      // to handle the case where the user grants the permission. See the
+      // documentation
+      // for ActivityCompat#requestPermissions for more details.
+      return;
+    }
     if (mBtAdapter.isDiscovering()) {
       mBtAdapter.cancelDiscovery();
     }
@@ -253,6 +323,19 @@ public class PrinterActivity extends AbstractActivity {
 
   private void cancelDiscovery() {
     if (mBtAdapter != null) {
+      if (ActivityCompat.checkSelfPermission(this,
+              Manifest.permission.BLUETOOTH_SCAN) != PackageManager.PERMISSION_GRANTED) {
+        // TODO: Consider calling
+        //    ActivityCompat#requestPermissions
+        // here to request the missing permissions, and then overriding
+        //   public void onRequestPermissionsResult(int requestCode, String[]
+        //   permissions,
+        //                                          int[] grantResults)
+        // to handle the case where the user grants the permission. See the
+        // documentation
+        // for ActivityCompat#requestPermissions for more details.
+        return;
+      }
       mBtAdapter.cancelDiscovery();
     }
   }

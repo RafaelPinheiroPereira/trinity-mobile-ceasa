@@ -17,8 +17,12 @@ public class ImportDataTask extends AsyncTask<Void, Void, Boolean> {
   @Override
   protected Boolean doInBackground(final Void... voids) {
     try {
-      this.homeViewModel.getFileManagerRepository().downloadFiles();
+      if(!this.homeViewModel.getClientsAll().isEmpty()){
+          this.homeViewModel.deleteClients();
+      }
+      this.homeViewModel.getFileManagerRepository().downloadFiles(this.homeViewModel.getContext());
       this.homeViewModel.saveData();
+
 
       return true;
     } catch (IOException e) {

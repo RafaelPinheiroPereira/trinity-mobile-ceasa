@@ -4,8 +4,9 @@ import android.os.AsyncTask;
 
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
+import androidx.room.Insert;
+import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
-import androidx.room.Transaction;
 
 import br.com.app.ceasa.model.entity.Payment;
 
@@ -32,6 +33,10 @@ public abstract class PaymentDAO extends GenericDAO<Payment> {
 
   @Query(value = "SELECT * FROM payment WHERE  id_client = :clientId ")
   public abstract List<Payment> findPaymentClient(Long clientId);
+
+
+  @Insert(onConflict = OnConflictStrategy.REPLACE)
+  public abstract long insert(Payment payment);
 
   private class OperationsAsyncTask extends AsyncTask<Payment, Void, Void> {
 
